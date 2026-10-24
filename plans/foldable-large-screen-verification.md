@@ -4,20 +4,20 @@
 
 ## 可安装 APK
 
-当前 release 包包含本次横屏右栏、竖屏底栏与听书浮层调整：
+当前 release 包包含本次横屏右栏、竖屏底栏、书库变列锚点、阅读辅助区与听书浮层调整：
 
 | 项目 | 值 |
 | --- | --- |
-| 文件 | `~/Downloads/readany-1.3.7-arm64-production-2026-10-24.apk`（85.6MB） |
+| 文件 | `~/Downloads/readany-1.3.7-arm64-production-2026-10-24-review.apk`（85.6MB） |
 | 构建产物 | `packages/app-expo/android/app/build/outputs/apk/release/app-release.apk` |
 | 包名 / 名称 | `com.readany.app` / ReadAny 1.3.7（production 变体） |
 | 架构 | 仅 `arm64-v8a`；targetSdk 36 |
 | 签名 | 本地 debug keystore |
-| SHA-256 | `8f4dccdd1c1a9c8a0fcba0366278932e099f426dd08bb808385b56d2ef9091df` |
-| 构建命令 | `JAVA_HOME=<temurin-21> APP_VARIANT=production ./gradlew :app:assembleRelease -PreactNativeArchitectures=arm64-v8a`（sdk.dir 指向 `/opt/homebrew/share/android-commandlinetools`；Gradle 8.14.3，47 秒完成） |
-| JS 一致性 | APK 内 `assets/index.android.bundle` 与 Gradle 生成的 bundle SHA-256 相同（`15d9eb25…5827`），bundle 生成时间晚于全部源码修改 |
+| SHA-256 | `34c6e4a7c7c8197a8e1ac6600e3a9b3bf428e3d7dd9c6808423b56edcfe73134` |
+| 构建命令 | `JAVA_HOME=<temurin-21> APP_VARIANT=production ./gradlew :app:assembleRelease -PreactNativeArchitectures=arm64-v8a`（sdk.dir 指向 `/opt/homebrew/share/android-commandlinetools`；Gradle 8.14.3，清掉 development autolinking 生成缓存后 3 分 21 秒完成） |
+| JS 一致性 | APK 内 `assets/index.android.bundle`、`createBundleReleaseJsAndAssets` 与合并后 assets 的 SHA-256 均为 `2ad6ea38…5fdb` |
 
-此前的大屏布局版本仍为 `~/Downloads/readany-1.3.7-arm64-production.apk`（SHA-256 `ed3f0766…96c0`），不包含本次导航调整，仅留作对照。
+`aapt2 dump badging` 复核：`package: com.readany.app`、`versionName 1.3.7`、`native-code: 'arm64-v8a'`、launcher 为 `com.readany.app.MainActivity`。此前同日版本 `readany-1.3.7-arm64-production-2026-10-24.apk`（SHA-256 `8f4dccdd…91df`）不含本次严格质量审查改动，仅留作对照。
 
 安装注意：debug 签名与商店/EAS 正式包不兼容，设备上若已装其他签名的 `com.readany.app` 需先卸载；仅支持 arm64 设备。`android/` 是 gitignored 的 prebuild 产物，本次未改动原生配置，插件产出的 `screenOrientation=unspecified`、`resizeableActivity=true` 已在 APK manifest 中确认（另一个 portrait 项属条码扫描 activity，不是主界面）。
 
