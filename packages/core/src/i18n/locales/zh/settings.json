@@ -1,6 +1,9 @@
 {
   "settings": {
     "title": "设置",
+    "unsavedTitle": "有尚未保存的修改",
+    "unsavedMessage": "离开前如何处理当前修改？",
+    "discardChanges": "放弃修改",
     "realtimeHint": "所有改动实时生效，无需手动保存",
     "general": "通用",
     "reading": "阅读",

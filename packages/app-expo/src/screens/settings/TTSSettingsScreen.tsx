@@ -1,5 +1,4 @@
 import { KeyboardAwareScrollView } from "@/components/ui/KeyboardAwareScrollView";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
 import {
   DEFAULT_SYSTEM_VOICE_VALUE,
   type NativeSystemVoiceOption,
@@ -60,7 +59,6 @@ export default function TTSSettingsScreen() {
   const colors = useColors();
   const styles = makeStyles(colors);
   const { t, i18n } = useTranslation();
-  const layout = useResponsiveLayout();
   const { config, updateConfig, stop } = useTTSStore();
   const [systemVoices, setSystemVoices] = useState<NativeSystemVoiceOption[]>([]);
   const [isPreviewing, setIsPreviewing] = useState(false);
@@ -196,7 +194,7 @@ export default function TTSSettingsScreen() {
         style={styles.scroll}
         contentContainerStyle={[styles.scrollContent, { alignItems: "center" }]}
       >
-          <View style={[styles.contentColumn, { width: "100%", maxWidth: layout.centeredContentWidth }]}>
+          <View style={[styles.contentColumn, { width: "100%", maxWidth: 720 }]}>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>{t("tts.voiceProfile", "朗读方案")}</Text>
               <View style={styles.profileList}>

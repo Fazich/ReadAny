@@ -1,5 +1,6 @@
-import { useColors, radius } from "@/styles/theme";
+import { useColors } from "@/styles/theme";
 import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   DEFAULT_SYSTEM_VOICE_VALUE,
   findSystemVoiceLabel,
@@ -43,8 +44,9 @@ export function VoicePickerModal({
   onUpdateConfig,
 }: VoicePickerModalProps) {
   const colors = useColors();
-  const s = makeStyles(colors);
   const layout = useResponsiveLayout();
+  const insets = useSafeAreaInsets();
+  const s = makeStyles(colors, layout.height, layout.width);
   const { t, i18n } = useTranslation();
   const [systemVoices, setSystemVoices] = useState<NativeSystemVoiceOption[]>([]);
   const displayLocale = i18n.resolvedLanguage || i18n.language;
@@ -65,21 +67,11 @@ export function VoicePickerModal({
   );
 
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      transparent
-      onRequestClose={onClose}
-    >
-      <View style={s.voicePickerContainer}>
+    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
+      <View style={[s.voicePickerContainer, { paddingLeft: insets.left, paddingRight: insets.right, paddingTop: insets.top }]}>
         <Pressable style={StyleSheet.absoluteFillObject} onPress={onClose} />
         <View
-          style={[
-            s.voicePickerSheet,
-            layout.isTablet && {
-              width: "100%",
-            },
-          ]}
+          style={[s.voicePickerSheet, { paddingBottom: Math.max(insets.bottom, 16) }]}
         >
           {/* Handle bar */}
           <View style={s.voicePickerHandle} />
@@ -89,17 +81,19 @@ export function VoicePickerModal({
             <Text style={s.voicePickerTitle}>{t("tts.ttsEngine")}</Text>
           </View>
 
-          {/* Engine selector */}
-          <View style={s.engineSection}>
+          {/* 引擎选择与语音列表在同一受约束的滚动区：低窗口时整体可滚动，
+              取消按钮固定在 sheet 底部可达。 */}
+          <ScrollView style={s.voicePickerList} nestedScrollEnabled showsVerticalScrollIndicator={false}>
+            <View style={s.engineSection}>
             {(["edge", "dashscope", "xiaomi", "openai-compatible", "system"] as const).map((eng) => {
-              const isActive = config.engine === eng;
-              const label =
-                eng === "edge"
-                  ? "Edge TTS"
-                  : eng === "dashscope"
-                    ? "DashScope"
-                    : eng === "xiaomi"
-                      ? "Xiaomi MiMo"
+                const isActive = config.engine === eng;
+                const label =
+                  eng === "edge"
+                    ? "Edge TTS"
+                    : eng === "dashscope"
+                      ? "DashScope"
+                      : eng === "xiaomi"
+                        ? "Xiaomi MiMo"
                       : eng === "openai-compatible"
                         ? "OpenAI"
                         : t("tts.system");
@@ -143,9 +137,7 @@ export function VoicePickerModal({
             </View>
           )}
 
-          <ScrollView style={s.voicePickerList} showsVerticalScrollIndicator={false}>
-            {/* DashScope voices */}
-            {config.engine === "dashscope" &&
+          {config.engine === "dashscope" &&
               DASHSCOPE_VOICES.map((v) => {
                 const isSelected = config.dashscopeVoice === v.id;
                 return (
@@ -281,7 +273,7 @@ export function VoicePickerModal({
             )}
           </ScrollView>
 
-          {/* Cancel button */}
+          {/* 取消按钮固定在 sheet 底部：低窗口时始终可达 */}
           <TouchableOpacity
             style={s.voicePickerCancel}
             onPress={onClose}

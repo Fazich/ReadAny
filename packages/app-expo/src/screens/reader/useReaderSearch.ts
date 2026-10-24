@@ -1,109 +1,122 @@
-/**
- * useReaderSearch — handles in-book search state, debouncing, and navigation.
- */
-import { useCallback, useRef, useState } from "react";
+import type { ReaderSearchMatch } from "@/hooks/use-reader-bridge";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export interface ReaderSearchBridge {
-  search?: (query: string) => void;
-  clearSearch?: () => void;
-  navigateSearch?: (index: number) => void;
-  goToCFI?: (cfi: string) => void;
+  search: (query: string, requestId: string) => void;
+  clearSearch: (requestId: string) => void;
+  navigateSearch: (index: number, requestId: string) => void;
 }
 
 export interface UseReaderSearchOptions {
+  bookId: string;
   currentCfi: string;
   bridge: ReaderSearchBridge;
 }
 
-export interface UseReaderSearchResult {
-  searchQuery: string;
-  searchResultCount: number;
-  searchIndex: number;
-  isSearching: boolean;
-  searchStartCfi: string | null;
-  setSearchStartCfi: (cfi: string | null) => void;
-  handleSearchInput: (query: string) => void;
-  navigateSearch: (direction: "prev" | "next") => void;
-  clearSearch: () => void;
-  onSearchResult: (index: number, count: number) => void;
-  onSearchComplete: (count: number) => void;
-}
-
-export function useReaderSearch({
-  currentCfi,
-  bridge,
-}: UseReaderSearchOptions): UseReaderSearchResult {
+export function useReaderSearch({ bookId, currentCfi, bridge }: UseReaderSearchOptions) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResultCount, setSearchResultCount] = useState(0);
+  const [searchResults, setSearchResults] = useState<ReaderSearchMatch[]>([]);
   const [searchIndex, setSearchIndex] = useState(0);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
   const [searchStartCfi, setSearchStartCfi] = useState<string | null>(null);
-  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const latest = useRef({ bridge, currentCfi });
+  latest.current = { bridge, currentCfi };
+  const session = useRef(`search-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+  const revision = useRef(0);
+  const requestId = useRef("");
+  const debounce = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const invalidate = useCallback(() => {
+    if (debounce.current) clearTimeout(debounce.current);
+    requestId.current = `${session.current}:${++revision.current}`;
+    latest.current.bridge.clearSearch(requestId.current);
+    return requestId.current;
+  }, []);
+
+  const closeSearch = useCallback(() => {
+    invalidate();
+    setSearchQuery("");
+    setSearchResults([]);
+    setSearchIndex(0);
+    setIsSearching(false);
+    setSearchError(null);
+    setSearchStartCfi(null);
+  }, [invalidate]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 换书时重置查询并作废上一书籍的回传。
+  useEffect(() => {
+    closeSearch();
+    return () => {
+      invalidate();
+    };
+  }, [bookId, closeSearch, invalidate]);
 
   const handleSearchInput = useCallback(
     (query: string) => {
+      // 输入变化即作废旧任务，不能等到 debounce 结束才隔离旧回传。
+      const id = invalidate();
+      const trimmed = query.trim();
       setSearchQuery(query);
-      if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
-      searchDebounceRef.current = setTimeout(() => {
-        const trimmed = query.trim();
-        if (trimmed) {
-          if (!searchStartCfi && currentCfi) {
-            setSearchStartCfi(currentCfi);
-          }
-          setIsSearching(true);
-          bridge.search?.(trimmed);
-        } else {
-          setSearchResultCount(0);
-          setSearchIndex(0);
-          bridge.clearSearch?.();
-        }
+      setSearchResults([]);
+      setSearchIndex(0);
+      setSearchError(null);
+      setIsSearching(Boolean(trimmed));
+      if (!trimmed) return;
+      setSearchStartCfi((previous) => previous || latest.current.currentCfi || null);
+      debounce.current = setTimeout(() => {
+        latest.current.bridge.search(trimmed, id);
       }, 300);
     },
-    [bridge, searchStartCfi, currentCfi],
+    [invalidate],
+  );
+
+  const selectSearchResult = useCallback(
+    (index: number) => {
+      if (index < 0 || index >= searchResults.length) return;
+      setSearchIndex(index);
+      latest.current.bridge.navigateSearch(index, requestId.current);
+    },
+    [searchResults.length],
   );
 
   const navigateSearch = useCallback(
     (direction: "prev" | "next") => {
-      if (searchResultCount === 0) return;
-      const newIdx =
-        direction === "next"
-          ? (searchIndex + 1) % searchResultCount
-          : (searchIndex - 1 + searchResultCount) % searchResultCount;
-      setSearchIndex(newIdx);
-      bridge.navigateSearch?.(newIdx);
+      if (!searchResults.length) return;
+      selectSearchResult(
+        (searchIndex + (direction === "next" ? 1 : -1) + searchResults.length) %
+          searchResults.length,
+      );
     },
-    [searchIndex, searchResultCount, bridge],
+    [searchIndex, searchResults.length, selectSearchResult],
   );
 
-  const clearSearch = useCallback(() => {
-    setSearchQuery("");
-    setSearchResultCount(0);
-    setSearchIndex(0);
-    setIsSearching(false);
-    bridge.clearSearch?.();
-  }, [bridge]);
-
-  // Bridge callbacks for onSearchResult / onSearchComplete
-  const onSearchResult = useCallback((index: number, count: number) => {
-    setSearchIndex(index);
-    setSearchResultCount(count);
+  const onSearchResult = useCallback((index: number, _count: number, id: string) => {
+    if (id === requestId.current) setSearchIndex(index);
   }, []);
 
-  const onSearchComplete = useCallback((count: number) => {
-    setSearchResultCount(count);
-    setIsSearching(false);
-  }, []);
+  const onSearchComplete = useCallback(
+    (_: number, results: ReaderSearchMatch[], id: string, error?: string) => {
+      if (id !== requestId.current) return;
+      setSearchResults(results);
+      setSearchError(error || null);
+      setIsSearching(false);
+    },
+    [],
+  );
 
   return {
     searchQuery,
-    searchResultCount,
+    searchResults,
+    searchResultCount: searchResults.length,
     searchIndex,
     isSearching,
+    searchError,
     searchStartCfi,
-    setSearchStartCfi,
     handleSearchInput,
     navigateSearch,
-    clearSearch,
+    selectSearchResult,
+    closeSearch,
     onSearchResult,
     onSearchComplete,
   };

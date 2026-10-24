@@ -16,7 +16,7 @@
  * - Longest streak card
  */
 import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, SearchIcon } from "@/components/ui/Icon";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
+import { useContentLayout } from "@/hooks/use-responsive-layout";
 import { useReadingSessionStore } from "@/stores";
 import { useColors, withOpacity } from "@/styles/theme";
 import {
@@ -106,17 +106,14 @@ export default function StatsScreen() {
   const { t, i18n } = useTranslation();
   const isZh = i18n.language.startsWith("zh");
   const nav = useNavigation<NavigationProp<ParamListBase>>();
-  const layout = useResponsiveLayout();
-  const statsContentWidth = Math.min(
-    layout.centeredContentWidth,
-    layout.isTabletLandscape ? 1040 : layout.isTablet ? 860 : layout.centeredContentWidth,
-  );
-  const useTabletSectionGrid = layout.isTablet;
+  const layout = useContentLayout();
+  const statsContentWidth = Math.min(layout.contentWidth, 1200);
+  const useTabletSectionGrid = layout.supportsStatsSplit;
   const sectionGap = 12;
   const halfSectionWidth = Math.floor((statsContentWidth - sectionGap) / 2);
   const primarySectionWidth = Math.floor((statsContentWidth - sectionGap) * 0.58);
   const secondarySectionWidth = statsContentWidth - sectionGap - primarySectionWidth;
-  const metricColumns = layout.isTabletLandscape ? 5 : layout.isTablet ? 4 : 2;
+  const metricColumns = Math.min(5, Math.max(2, Math.floor(statsContentWidth / 160)));
   const metricTileSlotWidth = `${100 / metricColumns}%` as `${number}%`;
   const s = makeStyles(colors);
   const saveCurrentSession = useReadingSessionStore((ss) => ss.saveCurrentSession);
@@ -464,7 +461,7 @@ export default function StatsScreen() {
   /* ━━━━━━━━━━ Render ━━━━━━━━━━ */
 
   return (
-    <SafeAreaView style={s.container} edges={["top"]}>
+    <SafeAreaView style={s.container} edges={["top", "left", "right", "bottom"]}>
       {/* Header */}
       <View style={[s.header, { paddingHorizontal: layout.horizontalPadding }]}>
         <View style={[s.headerInner, { maxWidth: statsContentWidth }]}>
@@ -494,7 +491,10 @@ export default function StatsScreen() {
         stickyHeaderIndices={[0]}
       >
         {/* Dimension tabs — sticky */}
-        <View style={[s.dimTabsSticky, { width: "100%", maxWidth: statsContentWidth }]}>
+        <View
+          onLayout={layout.onContentLayout}
+          style={[s.dimTabsSticky, { width: "100%", maxWidth: 1200 }]}
+        >
           <View style={s.dimTabs}>
             {DIMENSIONS.map((dim) => (
               <TouchableOpacity

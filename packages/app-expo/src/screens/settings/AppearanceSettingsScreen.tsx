@@ -1,5 +1,4 @@
 import { BookOpenIcon, CheckIcon, ChevronDownIcon, MoonIcon, SunIcon } from "@/components/ui/Icon";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
 import { useTheme } from "@/styles/ThemeContext";
 import type { ThemeMode } from "@/styles/ThemeContext";
 import { fontSize, fontWeight, radius, spacing } from "@/styles/theme";
@@ -38,7 +37,6 @@ const LANGUAGES = [
 export default function AppearanceSettingsScreen() {
   const { t, i18n } = useTranslation();
   const { mode, setMode, colors } = useTheme();
-  const layout = useResponsiveLayout();
   const [lang, setLang] = useState(() => i18n.language || "en");
   const [showLangPicker, setShowLangPicker] = useState(false);
 
@@ -68,7 +66,7 @@ export default function AppearanceSettingsScreen() {
         style={s.scroll}
         contentContainerStyle={[s.scrollContent, { alignItems: "center" }]}
       >
-        <View style={{ width: "100%", maxWidth: layout.centeredContentWidth, gap: 24 }}>
+        <View style={{ width: "100%", maxWidth: 720, gap: 24 }}>
           {/* Theme */}
           <View style={s.section}>
             <Text style={[s.sectionTitle, { color: colors.mutedForeground }]}>

@@ -1,4 +1,5 @@
 import { BookOpenIcon, MessageSquareIcon, NotebookPenIcon, UserIcon } from "@/components/ui/Icon";
+import { getNavigationBottomInset, NAVIGATION_RAIL_WIDTH } from "@/hooks/responsive-layout";
 import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
 import { ChatScreen } from "@/screens/ChatScreen";
 import { LibraryScreen } from "@/screens/LibraryScreen";
@@ -6,7 +7,7 @@ import { NotesScreen } from "@/screens/NotesScreen";
 import { ProfileScreen } from "@/screens/ProfileScreen";
 import { useTheme } from "@/styles/ThemeContext";
 /**
- * TabNavigator — bottom tab bar matching the Tauri mobile app's 4 tabs.
+ * TabNavigator — four tabs on a right rail in landscape and a bottom bar otherwise.
  * Icons: BookOpen, MessageSquare, NotebookPen, User (matching BottomTabBar.tsx)
  */
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -29,17 +30,10 @@ export function TabNavigator() {
   const insets = useSafeAreaInsets();
   const layout = useResponsiveLayout();
 
-  const androidNavigationFallback =
-    Platform.OS === "android" ? (insets.bottom > 0 ? 28 : layout.isTablet ? 32 : 40) : 0;
+  const bottomInset = getNavigationBottomInset(insets.bottom, Platform.OS === "android", layout.isTablet);
 
-  // Some Android devices under-report or completely miss the bottom inset when
-  // classic three-button navigation is enabled, so we keep a larger fallback
-  // reserve in that case to stop the system bar from covering the tab bar.
-  const bottomInset =
-    Platform.OS === "android" ? Math.max(insets.bottom, androidNavigationFallback) : insets.bottom;
-
-  const baseTabBarHeight = layout.isTabletLandscape ? 72 : layout.isTablet ? 76 : 60;
-  const tabBarHeight = baseTabBarHeight + bottomInset;
+  const rail = layout.useNavigationRail;
+  const tabBarHeight = 60 + bottomInset;
 
   return (
     <Tab.Navigator
@@ -47,24 +41,37 @@ export function TabNavigator() {
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: false,
+        tabBarPosition: rail ? "right" : "bottom",
+        tabBarVariant: rail ? "material" : "uikit",
+        tabBarLabelPosition: "below-icon",
+        tabBarActiveBackgroundColor: rail ? colors.muted : "transparent",
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.mutedForeground,
         tabBarLabelStyle: {
-          fontSize: layout.isTablet ? 13 : 12,
+          fontSize: 12,
           fontWeight: "500",
-          marginBottom: layout.isTabletLandscape ? 2 : 0,
         },
-        tabBarItemStyle: layout.isTabletLandscape ? { paddingHorizontal: 10 } : undefined,
+        tabBarItemStyle: rail ? { minHeight: 64, marginVertical: 4 } : { minHeight: 44 },
         tabBarStyle: {
           backgroundColor: colors.background,
           borderTopColor: colors.border,
-          borderTopWidth: 0.5,
-          paddingTop: layout.isTabletLandscape ? 8 : 4,
-          paddingBottom: bottomInset,
-          height: tabBarHeight,
+          borderTopWidth: rail ? 0 : 0.5,
+          borderLeftColor: colors.border,
+          ...(rail
+            ? {
+                width: NAVIGATION_RAIL_WIDTH + insets.right,
+                paddingStart: 8,
+                paddingEnd: 8 + insets.right,
+              }
+            : { paddingTop: 4, paddingBottom: bottomInset, height: tabBarHeight }),
         },
         sceneStyle: {
-          paddingBottom: Platform.OS === "android" && insets.bottom === 0 ? 4 : 0,
+          paddingLeft: rail ? insets.left : 0,
+          paddingBottom: rail
+            ? bottomInset
+            : Platform.OS === "android" && insets.bottom === 0
+              ? 4
+              : 0,
         },
       }}
     >

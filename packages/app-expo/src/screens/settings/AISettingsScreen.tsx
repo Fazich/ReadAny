@@ -1,5 +1,4 @@
 import { KeyboardAwareScrollView } from "@/components/ui/KeyboardAwareScrollView";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
 import { useSettingsStore } from "@/stores";
 import type { AIConfig, AIEndpoint } from "@readany/core/types";
 import { PROVIDER_CONFIGS, getDefaultBaseUrl } from "@readany/core/utils";
@@ -25,7 +24,6 @@ export default function AISettingsScreen() {
   const colors = useColors();
   const styles = makeStyles(colors);
   const { t } = useTranslation();
-  const layout = useResponsiveLayout();
   const {
     aiConfig,
     addEndpoint,
@@ -111,7 +109,7 @@ export default function AISettingsScreen() {
         overScrollMode="never"
         bounces={true}
       >
-          <View style={[styles.contentColumn, { width: "100%", maxWidth: layout.centeredContentWidth }]}>
+          <View style={[styles.contentColumn, { width: "100%", maxWidth: 720 }]}>
             {/* Endpoints */}
             <View style={styles.endpointList}>
               {aiConfig.endpoints.map((ep) => {

@@ -12,7 +12,7 @@ import {
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
-export const makeSheetStyles = (colors: ThemeColors) =>
+export const makeSheetStyles = (colors: ThemeColors, windowHeight = SCREEN_HEIGHT) =>
   StyleSheet.create({
     // ── Generic bottom sheet ──────────────────────────────────────────────────
     modalBackdrop: { flex: 1, backgroundColor: "rgba(0,0,0,0.4)" },
@@ -33,7 +33,7 @@ export const makeSheetStyles = (colors: ThemeColors) =>
       fontWeight: fontWeight.semibold,
       color: colors.foreground,
     },
-    sheetScroll: { maxHeight: SCREEN_HEIGHT * 0.5 },
+    sheetScroll: { maxHeight: windowHeight * 0.5 },
     sheetEmpty: {
       fontSize: fontSize.sm,
       color: colors.mutedForeground,

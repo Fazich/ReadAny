@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, EditIcon, PlusIcon, PuzzleIcon, Trash2Icon } from "@/components/ui/Icon";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
+import { useContentLayout } from "@/hooks/use-responsive-layout";
 import { type ThemeColors, fontSize, fontWeight, radius, useColors } from "@/styles/theme";
 import { useNavigation } from "@react-navigation/native";
 import { builtinSkills } from "@readany/core/ai/skills/builtin-skills";
@@ -42,7 +42,7 @@ const SKILL_ICONS: Record<string, string> = {
 export default function SkillsScreen() {
   const colors = useColors();
   const s = makeStyles(colors);
-  const layout = useResponsiveLayout();
+  const layout = useContentLayout();
   const nav = useNavigation();
   const { t } = useTranslation();
   const [skills, setSkills] = useState<Skill[]>([]);
@@ -175,7 +175,7 @@ export default function SkillsScreen() {
 
   const builtInList = skills.filter((s) => s.builtIn);
   const customList = skills.filter((s) => !s.builtIn);
-  const useTwoColumnLayout = layout.isTabletLandscape;
+  const useTwoColumnLayout = layout.supportsSplitView;
 
   if (loading) {
     return (
@@ -260,10 +260,13 @@ export default function SkillsScreen() {
   );
 
   return (
-    <SafeAreaView style={[s.container, { backgroundColor: colors.background }]} edges={["top"]}>
+    <SafeAreaView
+      style={[s.container, { backgroundColor: colors.background }]}
+      edges={["top", "left", "right", "bottom"]}
+    >
       {/* Header */}
       <View style={s.header}>
-        <View style={[s.headerInner, { maxWidth: layout.centeredContentWidth }]}>
+        <View style={[s.headerInner, { maxWidth: 1200 }]}>
           <View style={s.headerLeft}>
             <TouchableOpacity
               style={s.backBtn}
@@ -291,7 +294,7 @@ export default function SkillsScreen() {
         contentContainerStyle={s.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={[s.contentInner, { maxWidth: layout.centeredContentWidth }]}>
+        <View onLayout={layout.onContentLayout} style={[s.contentInner, { maxWidth: 1200 }]}>
           {useTwoColumnLayout ? (
             <View style={s.sectionGrid}>
               <View style={s.sectionColumn}>{builtInSection}</View>
@@ -319,7 +322,7 @@ export default function SkillsScreen() {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <Pressable style={s.editorOverlay} onPress={() => setEditorOpen(false)} />
-          <View style={[s.editorSheet, layout.isTablet && s.editorSheetTablet]}>
+          <View style={[s.editorSheet, { width: "100%", maxWidth: 720, alignSelf: "center" }]}>
             <View style={s.editorHandle} />
             <Text style={s.editorTitle}>
               {editingSkill

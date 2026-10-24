@@ -1,4 +1,3 @@
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
 import { useUpdateStore } from "@/stores/update-store";
 import { useWebviewLabel } from "@/stores/webview-info-store";
 import { getPlatformService } from "@readany/core/services";
@@ -57,7 +56,6 @@ export default function AboutScreen() {
   const colors = useColors();
   const styles = makeStyles(colors);
   const { t } = useTranslation();
-  const layout = useResponsiveLayout();
   const [version, setVersion] = useState("1.0.0");
   const [checking, setChecking] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -120,7 +118,7 @@ export default function AboutScreen() {
         style={styles.scroll}
         contentContainerStyle={[styles.scrollContent, { alignItems: "center" }]}
       >
-        <View style={{ width: "100%", maxWidth: layout.centeredContentWidth }}>
+        <View style={{ width: "100%", maxWidth: 720 }}>
           {/* Logo & Version */}
           <View style={styles.logoSection}>
             <View style={styles.logoBadge}>

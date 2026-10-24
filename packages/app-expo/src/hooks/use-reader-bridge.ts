@@ -67,6 +67,12 @@ function withJustifiedTextSetting(settings: ReaderInitialSettings = {}): ReaderI
   };
 }
 
+export interface ReaderSearchMatch {
+  cfi: string;
+  chapter: string;
+  excerpt: string;
+}
+
 export interface ReaderBridgeCallbacks {
   onRelocate?: (detail: RelocateEvent) => void;
   onBookTextMetrics?: (detail: { totalCharacters: number }) => void;
@@ -74,8 +80,13 @@ export interface ReaderBridgeCallbacks {
   onSelection?: (detail: SelectionEvent) => void;
   onSelectionCleared?: () => void;
   onTap?: () => void;
-  onSearchResult?: (index: number, count: number) => void;
-  onSearchComplete?: (count: number) => void;
+  onSearchResult?: (index: number, count: number, requestId: string) => void;
+  onSearchComplete?: (
+    count: number,
+    results: ReaderSearchMatch[],
+    requestId: string,
+    error?: string,
+  ) => void;
   onError?: (message: string) => void;
   onReady?: () => void;
   onLoaded?: () => void;
@@ -207,19 +218,22 @@ export function useReaderBridge(callbacks: ReaderBridgeCallbacks) {
   );
 
   const search = useCallback(
-    (query: string) => {
-      inject(`window.search(${JSON.stringify(query)})`);
+    (query: string, requestId: string) => {
+      inject(`window.search(${JSON.stringify(query)}, ${JSON.stringify(requestId)})`);
     },
     [inject],
   );
 
-  const clearSearch = useCallback(() => {
-    inject("window.clearSearch()");
-  }, [inject]);
+  const clearSearch = useCallback(
+    (requestId: string) => {
+      inject(`window.clearSearch(${JSON.stringify(requestId)})`);
+    },
+    [inject],
+  );
 
   const navigateSearch = useCallback(
-    (index: number) => {
-      inject(`window.navigateSearch(${index})`);
+    (index: number, requestId: string) => {
+      inject(`window.navigateSearch(${index}, ${JSON.stringify(requestId)})`);
     },
     [inject],
   );
@@ -746,10 +760,10 @@ export function useReaderBridge(callbacks: ReaderBridgeCallbacks) {
           cb.onTap?.();
           break;
         case "searchResult":
-          cb.onSearchResult?.(msg.index || 0, msg.count || 0);
+          cb.onSearchResult?.(msg.index || 0, msg.count || 0, msg.requestId);
           break;
         case "searchComplete":
-          cb.onSearchComplete?.(msg.count || 0);
+          cb.onSearchComplete?.(msg.count || 0, msg.results || [], msg.requestId, msg.error);
           break;
         case "error":
           console.error("[ReaderBridge] Error from WebView:", msg.message);

@@ -7,6 +7,7 @@ import {
 import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
 import { fontSize, fontWeight, radius, useColors, withOpacity } from "@/styles/theme";
 import { useMemo } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import {
   Modal,
@@ -51,8 +52,12 @@ export function WebDavImportSourceSheet({
   const { t } = useTranslation();
   const colors = useColors();
   const layout = useResponsiveLayout();
-  const popoverWidth = Math.min(layout.width - 24, layout.isTablet ? 300 : 248);
+  const insets = useSafeAreaInsets();
   const screenPadding = 12;
+  const popoverWidth = Math.max(0, Math.min(layout.safeWidth - screenPadding * 2, 300));
+  const safeTop = insets.top + screenPadding;
+  const safeBottom = layout.height - insets.bottom - screenPadding;
+  const popoverHeight = Math.min(230, Math.max(0, safeBottom - safeTop));
   const fallbackAnchor = {
     x: layout.width - screenPadding - 44,
     y: 96,
@@ -62,14 +67,15 @@ export function WebDavImportSourceSheet({
   const activeAnchor = anchor ?? fallbackAnchor;
   const preferredLeft = activeAnchor.x + activeAnchor.width - popoverWidth;
   const popoverLeft = Math.min(
-    Math.max(screenPadding, preferredLeft),
-    layout.width - popoverWidth - screenPadding,
+    Math.max(insets.left + screenPadding, preferredLeft),
+    layout.width - insets.right - popoverWidth - screenPadding,
   );
   const showBelow =
-    activeAnchor.y + activeAnchor.height + 12 + 230 < layout.height - screenPadding;
-  const popoverTop = showBelow
-    ? activeAnchor.y + activeAnchor.height + 10
-    : Math.max(screenPadding, activeAnchor.y - 230);
+    activeAnchor.y + activeAnchor.height + 10 + popoverHeight <= safeBottom;
+  const popoverTop = Math.max(safeTop, Math.min(
+    showBelow ? activeAnchor.y + activeAnchor.height + 10 : activeAnchor.y - popoverHeight,
+    safeBottom - popoverHeight,
+  ));
 
   const s = useMemo(
     () =>
@@ -97,11 +103,12 @@ export function WebDavImportSourceSheet({
           elevation: 8,
         },
         options: {
-          maxHeight: 240,
+          maxHeight: Math.max(0, popoverHeight - 12),
         },
         optionCard: {
           paddingHorizontal: 14,
           paddingVertical: 12,
+          minHeight: 44,
           flexDirection: "row",
           alignItems: "center",
           gap: 10,
@@ -131,7 +138,7 @@ export function WebDavImportSourceSheet({
           marginHorizontal: 14,
         },
       }),
-    [colors, layout.height, popoverLeft, popoverTop, popoverWidth],
+    [colors, popoverHeight, popoverLeft, popoverTop, popoverWidth],
   );
 
   return (

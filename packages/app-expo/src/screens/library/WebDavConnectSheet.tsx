@@ -6,7 +6,6 @@ import {
   WEBDAV_IMPORT_TEMPORARY_SECRET_KEY,
   type WebDavImportSource,
 } from "@readany/core";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
 import { fontSize, fontWeight, radius, useColors, withOpacity } from "@/styles/theme";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -40,7 +39,6 @@ export function WebDavConnectSheet({
   const { t } = useTranslation();
   const colors = useColors();
   const insets = useSafeAreaInsets();
-  const layout = useResponsiveLayout();
 
   const [url, setUrl] = useState("");
   const [username, setUsername] = useState("");
@@ -92,6 +90,10 @@ export function WebDavConnectSheet({
           flex: 1,
           backgroundColor: "rgba(0,0,0,0.36)",
           justifyContent: "flex-end",
+          alignItems: "center",
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+          paddingTop: insets.top,
         },
         sheet: {
           backgroundColor: colors.background,
@@ -105,6 +107,8 @@ export function WebDavConnectSheet({
         },
         keyboardWrap: {
           width: "100%",
+          maxWidth: 600,
+          maxHeight: "95%",
           justifyContent: "flex-end",
         },
         handle: {
@@ -232,7 +236,7 @@ export function WebDavConnectSheet({
           color: colors.primaryForeground,
         },
       }),
-    [canSubmit, colors, insets.bottom],
+    [canSubmit, colors, insets.bottom, insets.left, insets.right, insets.top],
   );
 
   const handleConnect = async () => {
@@ -278,14 +282,17 @@ export function WebDavConnectSheet({
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <Pressable
-            style={[
-              s.sheet,
-              layout.isTablet && {
-                width: "100%",
-              },
-            ]}
+            style={s.sheet}
             onPress={(event) => event.stopPropagation()}
           >
+            <ScrollView
+              style={s.scroll}
+              contentContainerStyle={s.scrollContent}
+              automaticallyAdjustKeyboardInsets={Platform.OS === "ios"}
+              keyboardDismissMode="on-drag"
+              keyboardShouldPersistTaps="handled"
+              showsVerticalScrollIndicator={false}
+            >
             <View style={s.handle} />
             <View>
               <Text style={s.title}>
@@ -299,14 +306,6 @@ export function WebDavConnectSheet({
               </Text>
             </View>
 
-            <ScrollView
-              style={s.scroll}
-              contentContainerStyle={s.scrollContent}
-              automaticallyAdjustKeyboardInsets={Platform.OS === "ios"}
-              keyboardDismissMode="on-drag"
-              keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator={false}
-            >
               <View style={s.form}>
                 <View style={s.field}>
                   <Text style={s.label}>{t("settings.webdavUrl", "WebDAV Server URL")}</Text>

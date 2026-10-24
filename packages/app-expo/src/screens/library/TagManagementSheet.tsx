@@ -5,7 +5,6 @@ import {
   Trash2Icon,
   XIcon,
 } from "@/components/ui/Icon";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
 import { useColors, fontSize, fontWeight, radius, withOpacity } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
 import {
@@ -54,7 +53,6 @@ export function TagManagementSheet({
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const s = makeStyles(colors, insets.bottom);
-  const layout = useResponsiveLayout();
 
   const [newTagInput, setNewTagInput] = useState("");
   const [editingTag, setEditingTag] = useState<string | null>(null);
@@ -81,20 +79,21 @@ export function TagManagementSheet({
       onRequestClose={onClose}
     >
       <KeyboardAvoidingView
-        style={s.modalRoot}
+        style={[s.modalRoot, { paddingLeft: insets.left, paddingRight: insets.right, paddingTop: insets.top }]}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <Pressable style={s.overlay} onPress={onClose} />
         <View
-          style={[
-            s.sheet,
-            layout.isTablet && {
-              width: "100%",
-            },
-          ]}
+          style={s.sheet}
         >
           <View style={s.handle} />
-          <Text style={s.title}>{t("home.manageTags", "管理标签")}</Text>
+          <View style={s.header}>
+            <Text style={s.title}>{t("home.manageTags", "管理标签")}</Text>
+            <TouchableOpacity style={s.actionBtn} onPress={onClose}
+              accessibilityRole="button" accessibilityLabel={t("common.close")}>
+              <XIcon size={18} color={colors.mutedForeground} />
+            </TouchableOpacity>
+          </View>
 
           <ScrollView
             style={s.list}
@@ -222,14 +221,17 @@ export function TagManagementSheet({
 
 const makeStyles = (colors: ReturnType<typeof useColors>, bottomInset: number) =>
   StyleSheet.create({
-    modalRoot: { flex: 1 },
-    overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.4)" },
+    modalRoot: { flex: 1, justifyContent: "flex-end", alignItems: "center", backgroundColor: "rgba(0,0,0,0.4)" },
+    overlay: { ...StyleSheet.absoluteFillObject },
+    header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20 },
     sheet: {
+      width: "100%",
+      maxWidth: 600,
       backgroundColor: colors.background,
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
       paddingBottom: Math.max(34, bottomInset + 18),
-      maxHeight: "70%",
+      maxHeight: "85%",
     },
     handle: {
       width: 40,
@@ -244,10 +246,9 @@ const makeStyles = (colors: ReturnType<typeof useColors>, bottomInset: number) =
       fontSize: fontSize.md,
       fontWeight: fontWeight.semibold,
       color: colors.foreground,
-      paddingHorizontal: 20,
-      marginBottom: 8,
+      flex: 1,
     },
-    list: { paddingHorizontal: 8 },
+    list: { paddingHorizontal: 8, flexShrink: 1 },
     listContent: { paddingBottom: 8 },
     item: {
       flexDirection: "row",
@@ -284,7 +285,7 @@ const makeStyles = (colors: ReturnType<typeof useColors>, bottomInset: number) =
       borderBottomColor: colors.primary,
     },
     actionRow: { flexDirection: "row", alignItems: "center", gap: 4 },
-    actionBtn: { padding: 6, borderRadius: radius.sm },
+    actionBtn: { width: 44, height: 44, alignItems: "center", justifyContent: "center", borderRadius: radius.sm },
     empty: {
       textAlign: "center",
       paddingVertical: 16,

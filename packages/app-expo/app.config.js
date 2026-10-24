@@ -81,6 +81,7 @@ module.exports = {
       "./plugins/withOnnxruntimePackage",
       "onnxruntime-react-native",
       "./plugins/withVolumeKeyPaging",
+      "./plugins/withAndroidAdaptiveWindow",
       [
         "expo-camera",
         {

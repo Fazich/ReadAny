@@ -265,6 +265,11 @@ export default function App() {
 function AppInner() {
   const { colors, isDark } = useTheme();
   const loadBooks = useLibraryStore((s) => s.loadBooks);
+  const [tabsVisible, setTabsVisible] = useState(false);
+  const updateNavigationLayout = useCallback(() => {
+    const state = navigationRef.getRootState();
+    setTabsVisible(state?.routes[state.index]?.name === "Tabs");
+  }, []);
   useUpdateChecker();
   useAutoSync(loadBooks);
 
@@ -287,12 +292,13 @@ function AppInner() {
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }}>
       <KeyboardProvider>
         <SafeAreaProvider>
-          <NavigationContainer theme={navTheme} ref={navigationRef}>
+          <NavigationContainer theme={navTheme} ref={navigationRef}
+            onReady={updateNavigationLayout} onStateChange={updateNavigationLayout}>
             <StatusBar style={isDark ? "light" : "dark"} />
             <RootNavigator />
           </NavigationContainer>
           <UpdateDialog />
-          <FloatingTTSBubble />
+          <FloatingTTSBubble tabsVisible={tabsVisible} />
           <UAProbe />
         </SafeAreaProvider>
       </KeyboardProvider>

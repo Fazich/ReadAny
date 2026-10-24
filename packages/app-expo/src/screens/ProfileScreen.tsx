@@ -3,22 +3,16 @@ import {
   BookOpenIcon,
   ChevronRightIcon,
   ClockIcon,
-  CloudIcon,
-  CpuIcon,
-  DatabaseIcon,
+
   FlameIcon,
   HelpCircleIcon,
-  InfoIcon,
-  LanguagesIcon,
-  MessageSquareIcon,
-  PaletteIcon,
+
   PuzzleIcon,
   Trash2Icon,
   TypeIcon,
-  Volume2Icon,
 } from "@/components/ui/Icon";
 import { SyncButton } from "@/components/ui/SyncButton";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
+import { useContentLayout } from "@/hooks/use-responsive-layout";
 import { clearMobileRuntimeCache, formatCacheSize } from "@/lib/platform/mobile-cache";
 import { stopTTSPreview } from "@/lib/platform/tts-preview";
 import {
@@ -27,6 +21,8 @@ import {
 } from "@/lib/stats/live-reading-stats";
 import type { RootStackParamList } from "@/navigation/RootNavigator";
 import { formatCharacterCount, formatTimeLocalized } from "@/screens/stats/stats-utils";
+import { SETTINGS_ICONS } from "@/screens/settings/settings-icons";
+import { SETTINGS_ENTRIES, type SettingsRoute } from "@/screens/settings/settings-navigation";
 import { useReadingSessionStore, useTTSStore } from "@/stores";
 import {
   type ThemeColors,
@@ -160,9 +156,7 @@ function MiniHeatmap({ dailyStats }: { dailyStats: DailyStats[] }) {
     y: number;
   } | null>(null);
 
-  // Calculate cell size based on container width
-  // containerWidth = WEEKS * CELL + (WEEKS - 1) * GAP
-  const CELL = containerWidth > 0 ? Math.floor((containerWidth - (WEEKS - 1) * GAP) / WEEKS) : 8;
+  const CELL = Math.max(1, Math.min(18, Math.floor((containerWidth - (WEEKS - 1) * GAP) / WEEKS)));
   const gridWidth = WEEKS * CELL + (WEEKS - 1) * GAP;
   const gridHeight = DAYS_PER_WEEK * CELL + (DAYS_PER_WEEK - 1) * GAP;
 
@@ -228,7 +222,7 @@ function MiniHeatmap({ dailyStats }: { dailyStats: DailyStats[] }) {
     const TOOLTIP_WIDTH = 80;
     const TOOLTIP_HEIGHT = 24;
 
-    let left = selectedCell.x - TOOLTIP_WIDTH / 2;
+    let left = (containerWidth - gridWidth) / 2 + selectedCell.x - TOOLTIP_WIDTH / 2;
     let top = selectedCell.y - TOOLTIP_HEIGHT - 8;
 
     // Boundary detection
@@ -260,6 +254,9 @@ function MiniHeatmap({ dailyStats }: { dailyStats: DailyStats[] }) {
                 borderRadius: Math.max(2, CELL * 0.25),
                 backgroundColor: getColor(cell.intensity),
               }}
+              accessibilityRole="button"
+              accessibilityLabel={`${cell.date}, ${formatTime(cell.time)}`}
+              onFocus={() => handleCellPress(cell, cell.col, cell.row)}
               onPress={() => handleCellPress(cell, cell.col, cell.row)}
               activeOpacity={0.7}
             />
@@ -317,8 +314,8 @@ export function ProfileScreen() {
   const colors = useColors();
   const s = makeStyles(colors);
   const { t, i18n } = useTranslation();
-  const layout = useResponsiveLayout();
-  const statsGridColumns = layout.isTablet ? 4 : 2;
+  const layout = useContentLayout();
+  const statsGridColumns = layout.statsColumns;
   const statCardSlotWidth = `${100 / statsGridColumns}%` as `${number}%`;
   const nav = useNavigation<Nav>();
   const [overall, setOverall] = useState<OverallStats | null>(null);
@@ -418,23 +415,20 @@ export function ProfileScreen() {
     );
   }, [stopTTS, t]);
 
-  // Settings menu — matching Tauri ProfilePage exactly
+  const settingItem = useCallback((route: SettingsRoute): ProfileMenuItem => {
+    const entry = SETTINGS_ENTRIES.find((item) => item.route === route);
+    if (!entry) throw new Error(`Unknown settings route: ${route}`);
+    return { icon: SETTINGS_ICONS[entry.icon], label: t(entry.label), route, showDot: route === "Feedback" && unreadFeedback > 0 };
+  }, [t, unreadFeedback]);
+
   const menuSections = useMemo<{ title: string; items: ProfileMenuItem[] }[]>(
     () => [
       {
         title: t("settings.general", "通用"),
         items: [
-          {
-            icon: PaletteIcon,
-            label: t("settings.general", "通用"),
-            route: "AppearanceSettings" as const,
-          },
-          {
-            icon: TypeIcon,
-            label: t("fonts.title", "字体"),
-            route: "FontSettings" as const,
-          },
-          { icon: CloudIcon, label: t("settings.sync", "同步"), route: "SyncSettings" as const },
+          settingItem("AppearanceSettings"),
+          settingItem("FontSettings"),
+          settingItem("SyncSettings"),
         ],
       },
       {
@@ -453,44 +447,27 @@ export function ProfileScreen() {
       {
         title: t("settings.skills", "能力"),
         items: [
-          {
-            icon: DatabaseIcon,
-            label: t("settings.ai_title", "AI 模型"),
-            route: "AISettings" as const,
-          },
-          { icon: Volume2Icon, label: t("tts.title", "语音朗读"), route: "TTSSettings" as const },
-          {
-            icon: LanguagesIcon,
-            label: t("settings.translationTab", "翻译"),
-            route: "TranslationSettings" as const,
-          },
+          settingItem("AISettings"),
+          settingItem("TTSSettings"),
+          settingItem("TranslationSettings"),
           { icon: PuzzleIcon, label: t("skills.title", "技能"), route: "Skills" as const },
-          {
-            icon: CpuIcon,
-            label: t("settings.vm_title", "向量模型"),
-            route: "VectorModelSettings" as const,
-          },
+          settingItem("VectorModelSettings"),
         ],
       },
       {
         title: t("settings.other", "更多"),
         items: [
-          {
-            icon: MessageSquareIcon,
-            label: t("feedback.title", "反馈建议"),
-            route: "Feedback" as const,
-            showDot: unreadFeedback > 0,
-          },
+          settingItem("Feedback"),
           {
             icon: HelpCircleIcon,
             label: t("about.supportCenter", "帮助中心"),
             url: `https://codedogqby.github.io/ReadAny/${i18n.language === "zh" ? "zh/" : ""}support/`,
           },
-          { icon: InfoIcon, label: t("settings.about", "关于"), route: "About" as const },
+          settingItem("About"),
         ],
       },
     ],
-    [t, i18n.language, unreadFeedback, clearingCache, handleClearCache],
+    [t, i18n.language, clearingCache, handleClearCache, settingItem],
   );
 
   const booksRead = liveOverall?.totalBooks ?? 0;
@@ -543,113 +520,149 @@ export function ProfileScreen() {
 
       <ScrollView
         style={s.scrollView}
-        contentContainerStyle={{ paddingTop: 20, paddingBottom: 12 }}
+        contentContainerStyle={{
+          paddingHorizontal: layout.horizontalPadding,
+          paddingTop: 16,
+          paddingBottom: 24,
+          alignItems: "center",
+        }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Stats cards */}
-        <View style={s.statsSection}>
-          {statsLoading ? (
-            <View style={s.statsLoading}>
-              <ActivityIndicator size="small" color={colors.mutedForeground} />
-            </View>
-          ) : (
-            <View style={s.statsGrid}>
-              {overviewCards.map((card) => (
-                <View
-                  key={card.key}
-                  style={{
-                    width: statCardSlotWidth,
-                    paddingHorizontal: 6,
-                    paddingBottom: 12,
-                  }}
-                >
-                  <StatCard
-                    icon={card.icon}
-                    title={card.title}
-                    value={card.value}
-                    unit={card.unit}
+        <View
+          onLayout={layout.onContentLayout}
+          style={{ width: "100%", maxWidth: layout.contentMaxWidth }}
+        >
+          {/* Stats cards */}
+          <View style={s.statsSection}>
+            {statsLoading ? (
+              <View style={s.statsLoading}>
+                <ActivityIndicator size="small" color={colors.mutedForeground} />
+              </View>
+            ) : (
+              <View style={s.statsGrid}>
+                {overviewCards.map((card) => (
+                  <View
+                    key={card.key}
+                    style={{
+                      width: statCardSlotWidth,
+                      paddingHorizontal: 6,
+                      paddingBottom: 12,
+                    }}
+                  >
+                    <StatCard
+                      icon={card.icon}
+                      title={card.title}
+                      value={card.value}
+                      unit={card.unit}
+                      onPress={() => nav.navigate("Stats")}
+                      style={{ width: "100%" }}
+                    />
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+
+          <View
+            style={{
+              flexDirection: layout.supportsProfileSplit ? "row" : "column",
+              gap: 20,
+              alignItems: "flex-start",
+            }}
+          >
+            <View
+              style={{
+                flex: layout.supportsProfileSplit ? 1 : undefined,
+                width: layout.supportsProfileSplit ? undefined : "100%",
+                minWidth: 0,
+              }}
+            >
+              <View style={s.heatmapSection}>
+                <View style={s.heatmapHeader}>
+                  <Text style={s.heatmapTitle} numberOfLines={1} maxFontSizeMultiplier={1.5}>
+                    {t("profile.readingActivity", "阅读活动")}
+                  </Text>
+                  <TouchableOpacity
+                    style={s.heatmapDetailBtn}
                     onPress={() => nav.navigate("Stats")}
-                    style={{ width: "100%" }}
-                  />
+                  >
+                    <BarChart3Icon size={14} color={colors.primary} />
+                    <Text style={s.heatmapDetailText} numberOfLines={1} maxFontSizeMultiplier={1.4}>
+                      {t("profile.viewDetails", "查看详情")}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <MiniHeatmap dailyStats={liveDailyStats} />
+              </View>
+            </View>
+            <View
+              style={{
+                width: layout.supportsProfileSplit ? "44%" : "100%",
+                minWidth: layout.supportsProfileSplit ? 248 : 0,
+              }}
+            >
+              {/* Settings menu */}
+              {menuSections.map((section) => (
+                <View key={section.title} style={s.menuSection}>
+                  <Text style={s.menuSectionTitle} maxFontSizeMultiplier={1.5}>
+                    {section.title}
+                  </Text>
+                  <View style={s.menuCard}>
+                    {section.items.map((item, idx) => {
+                      const Icon = item.icon;
+                      const itemKey =
+                        "route" in item ? item.route : "url" in item ? item.url : item.label;
+                      const handlePress = () => {
+                        if ("disabled" in item && item.disabled) {
+                          return;
+                        }
+                        if ("action" in item && item.action) {
+                          item.action();
+                        } else if ("url" in item && item.url) {
+                          Linking.openURL(item.url);
+                        } else if ("route" in item) {
+                          nav.navigate(item.route);
+                        }
+                      };
+                      return (
+                        <TouchableOpacity
+                          key={itemKey}
+                          style={[s.menuItem, idx < section.items.length - 1 && s.menuItemBorder]}
+                          onPress={handlePress}
+                          disabled={"disabled" in item && item.disabled}
+                          activeOpacity={0.7}
+                        >
+                          <Icon size={20} color={colors.mutedForeground} />
+                          <Text style={s.menuItemLabel} maxFontSizeMultiplier={1.7}>
+                            {item.label}
+                          </Text>
+                          {"showDot" in item && item.showDot ? (
+                            <View style={s.menuItemDot} />
+                          ) : null}
+                          <ChevronRightIcon size={16} color={colors.mutedForeground} />
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
                 </View>
               ))}
-            </View>
-          )}
-        </View>
 
-        {/* Compact heatmap */}
-        <View style={s.heatmapSection}>
-          <View style={s.heatmapHeader}>
-            <Text style={s.heatmapTitle} numberOfLines={1} maxFontSizeMultiplier={1.5}>
-              {t("profile.readingActivity", "阅读活动")}
-            </Text>
-            <TouchableOpacity style={s.heatmapDetailBtn} onPress={() => nav.navigate("Stats")}>
-              <BarChart3Icon size={14} color={colors.primary} />
-              <Text style={s.heatmapDetailText} numberOfLines={1} maxFontSizeMultiplier={1.4}>
-                {t("profile.viewDetails", "查看详情")}
+              {/* Version */}
+              <Text style={s.version} maxFontSizeMultiplier={1.4}>
+                {t("profile.version", { version: Constants.expoConfig?.version ?? "1.0.0" })}
               </Text>
-            </TouchableOpacity>
-          </View>
-          <MiniHeatmap dailyStats={liveDailyStats} />
-        </View>
-
-        {/* Settings menu */}
-        {menuSections.map((section) => (
-          <View key={section.title} style={s.menuSection}>
-            <Text style={s.menuSectionTitle} maxFontSizeMultiplier={1.5}>
-              {section.title}
-            </Text>
-            <View style={s.menuCard}>
-              {section.items.map((item, idx) => {
-                const Icon = item.icon;
-                const itemKey =
-                  "route" in item ? item.route : "url" in item ? item.url : item.label;
-                const handlePress = () => {
-                  if ("disabled" in item && item.disabled) {
-                    return;
-                  }
-                  if ("action" in item && item.action) {
-                    item.action();
-                  } else if ("url" in item && item.url) {
-                    Linking.openURL(item.url);
-                  } else if ("route" in item) {
-                    nav.navigate(item.route);
-                  }
-                };
-                return (
-                  <TouchableOpacity
-                    key={itemKey}
-                    style={[s.menuItem, idx < section.items.length - 1 && s.menuItemBorder]}
-                    onPress={handlePress}
-                    disabled={"disabled" in item && item.disabled}
-                    activeOpacity={0.7}
-                  >
-                    <Icon size={20} color={colors.mutedForeground} />
-                    <Text style={s.menuItemLabel} maxFontSizeMultiplier={1.7}>
-                      {item.label}
-                    </Text>
-                    {"showDot" in item && item.showDot ? <View style={s.menuItemDot} /> : null}
-                    <ChevronRightIcon size={16} color={colors.mutedForeground} />
-                  </TouchableOpacity>
-                );
-              })}
+              <TouchableOpacity
+                style={s.icpLink}
+                onPress={() => Linking.openURL(ICP_URL)}
+                activeOpacity={0.7}
+              >
+                <Text style={s.icpText} maxFontSizeMultiplier={1.4}>
+                  {ICP_NUMBER}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
-        ))}
-
-        {/* Version */}
-        <Text style={s.version} maxFontSizeMultiplier={1.4}>
-          {t("profile.version", { version: Constants.expoConfig?.version ?? "1.0.0" })}
-        </Text>
-        <TouchableOpacity
-          style={s.icpLink}
-          onPress={() => Linking.openURL(ICP_URL)}
-          activeOpacity={0.7}
-        >
-          <Text style={s.icpText} maxFontSizeMultiplier={1.4}>
-            {ICP_NUMBER}
-          </Text>
-        </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -681,7 +694,7 @@ const makeStyles = (colors: ThemeColors) =>
     },
     scrollView: { flex: 1 },
     // Stats
-    statsSection: { paddingHorizontal: 16, paddingTop: 16 },
+    statsSection: { paddingBottom: 4 },
     statsLoading: { alignItems: "center", justifyContent: "center", paddingVertical: 32 },
     statsGrid: { flexDirection: "row", flexWrap: "wrap", marginHorizontal: -6 },
     statCard: {
@@ -692,7 +705,7 @@ const makeStyles = (colors: ThemeColors) =>
       paddingHorizontal: 12,
       paddingTop: 12,
       paddingBottom: 10,
-      minHeight: 102,
+      minHeight: 96,
     },
     statCardHeader: {
       marginBottom: 10,
@@ -753,8 +766,7 @@ const makeStyles = (colors: ThemeColors) =>
     },
     // Heatmap
     heatmapSection: {
-      marginHorizontal: 16,
-      marginTop: 16,
+      width: "100%",
       backgroundColor: colors.card,
       borderRadius: radius.xl,
       borderWidth: 0.5,
@@ -780,6 +792,7 @@ const makeStyles = (colors: ThemeColors) =>
       flexDirection: "row",
       alignItems: "center",
       gap: 4,
+      minHeight: 44,
     },
     heatmapDetailText: {
       fontSize: fontSize.xs,
@@ -798,7 +811,7 @@ const makeStyles = (colors: ThemeColors) =>
     heatmapLegendText: { fontSize: 9, color: colors.mutedForeground },
     heatmapLegendCell: { width: 8, height: 8, borderRadius: 2 },
     // Menu
-    menuSection: { paddingHorizontal: 16, marginTop: 16 },
+    menuSection: { marginBottom: 16 },
     menuSectionTitle: {
       fontSize: fontSize.xs,
       lineHeight: fontSize.xs * 1.5,

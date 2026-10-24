@@ -189,6 +189,9 @@
     let view = null;
     let currentBook = null;
     let searchGenerator = null;
+    let searchCancellation = Promise.resolve();
+    let searchGeneration = 0;
+    let searchRequestId = null;
     let searchResults = [];
     let searchIndex = 0;
     let currentSectionIndex = 0;
@@ -212,6 +215,19 @@
     let tapNavigationInFlight = false;
     let tapNavigationResetTimer = null;
     let readerElement = null;
+    // 自适应窗口（折叠屏/分屏）：当前生效页边距(px)与容器尺寸监听状态。
+    // currentPageMarginPx 记录经字号缩放后的实际边距，窗口尺寸变化时复用。
+    let currentPageMarginPx = null;
+    // 原始页边距设置值（未缩放），字号变化时按它重算生效边距。
+    let currentPageMarginSetting = null;
+    let lastAppliedWindowWidth = 0;
+    let lastAppliedMarginPx = null;
+    let lastAppliedReflowMode = null;
+    let readerResizeObserver = null;
+    let readerResizeRafId = 0;
+    let readerResizeGeneration = 0;
+    let readerResizeCleanup = null;
+    let restoreReaderTextAnchor = null;
     let bookTextMetricsJobId = 0;
     let bookTextMetricsTimer = null;
     let bookmarkPullGestureActive = false;
@@ -298,27 +314,34 @@
 
     function applyMobileReflowRendererSizing(renderer) {
       if (!renderer) return;
-      renderer.setAttribute('max-column-count', '1');
       renderer.setAttribute('max-block-size', '1440px');
     }
 
-    // Mobile is always single-page (no spread), so there is no column gutter to
-    // balance — the foliate gap only contributes the page's internal side
-    // padding. Same derivation as the desktop reader: paper = 99% of the window
-    // (breathing room even at margin 0), outer text inset = margin + 0.5%·H.
-    // All against renderer.clientWidth (foliate resolves the gap % against it).
+    // 双页沿用桌面的中缝公式；先保证每页正文至少 18em/280px，再允许两栏。
     function applyMobileReflowMargins(renderer, margin) {
       if (!renderer) return;
       const windowWidth =
         renderer.clientWidth || window.innerWidth || document.documentElement.clientWidth || 393;
+      const mode = `${currentPaginatedLayout}:${currentFontSize}:${currentSectionUsesVerticalWriting}`;
+      if (windowWidth === lastAppliedWindowWidth && margin === lastAppliedMarginPx &&
+          mode === lastAppliedReflowMode) return;
       const paper = windowWidth * 0.99;
-      const g = margin / paper;
+      const double = currentPaginatedLayout !== 'single' && !currentSectionUsesVerticalWriting &&
+        (paper - 3 * margin) / 2 >= Math.max(280, 18 * currentFontSize);
+      const g = double ? 2 * margin / (paper + margin) : margin / paper;
+      const inline = double ? (paper - margin + g * windowWidth) / 2 :
+        Math.min(paper - margin + g * windowWidth, Math.max(560, 36 * currentFontSize) + 2 * margin);
+      renderer.setAttribute('max-column-count', double ? '2' : '1');
       renderer.setAttribute('margin-top', margin + 'px');
       renderer.setAttribute('margin-bottom', margin + 'px');
       renderer.setAttribute('margin-left', '0px');
       renderer.setAttribute('margin-right', '0px');
       renderer.setAttribute('gap', g * 100 + '%');
-      renderer.setAttribute('max-inline-size', paper - margin + g * windowWidth + 'px');
+      renderer.setAttribute('max-inline-size', inline + 'px');
+      lastAppliedWindowWidth = windowWidth;
+      lastAppliedMarginPx = margin;
+      lastAppliedReflowMode = mode;
+      currentPageMarginPx = margin;
     }
 
     function applyRendererFlowMode(renderer) {
@@ -332,11 +355,13 @@
       if (currentViewMode === 'scroll') {
         renderer.removeAttribute('no-continuous-scroll');
         renderer.setAttribute('flow', 'scrolled');
+        renderer.setAttribute('max-column-count', '1');
         renderer.setAttribute('max-inline-size', '9999px');
         return;
       }
 
       applyMobileReflowRendererSizing(renderer);
+      if (currentPageMarginPx != null) applyMobileReflowMargins(renderer, currentPageMarginPx);
       if (currentSectionUsesVerticalWriting) {
         renderer.setAttribute('flow', 'scrolled');
         renderer.setAttribute('no-continuous-scroll', '');
@@ -344,6 +369,72 @@
         renderer.removeAttribute('no-continuous-scroll');
         renderer.removeAttribute('flow');
       }
+    }
+
+    // 折叠屏/分屏自适应：监听阅读容器尺寸，仅在可重排书籍的分页模式下
+    // 重设页宽。滚动模式沿原流式宽度（max-inline-size 9999px），固定排版走
+    // 原缩放，均不套分页规则；容器尺寸变化本身由 paginator 自带的
+    // ResizeObserver 触发 render()，这里只需让页宽属性跟随新尺寸。
+    function stopReaderResizeObserver() {
+      // 代数推进使旧 observer 回调与已入队 rAF 自行失效。
+      readerResizeGeneration++;
+      if (readerResizeRafId) {
+        cancelAnimationFrame(readerResizeRafId);
+        readerResizeRafId = 0;
+      }
+      if (readerResizeObserver) {
+        readerResizeObserver.disconnect();
+        readerResizeObserver = null;
+      }
+      readerResizeCleanup?.();
+      readerResizeCleanup = null;
+      restoreReaderTextAnchor = null;
+      lastAppliedWindowWidth = 0;
+      lastAppliedMarginPx = null;
+    }
+
+    function startReaderResizeObserver(container) {
+      if (typeof ResizeObserver === 'undefined' || !container) return;
+      stopReaderResizeObserver();
+      // 代数标记：stop 后旧 observer 的回调（含已入队 rAF 内闭包引用的
+      // 旧 observer）凭 generation 不匹配自行失效，不会作用于新 view。
+      const generation = ++readerResizeGeneration;
+      const isCurrent = () => generation === readerResizeGeneration;
+      const target = view;
+      const renderer = target && target.renderer;
+      let anchor = null;
+      let restoring = false;
+      const rememberAnchor = ({ detail }) => {
+        // 重排及其滚动回调不能把页首覆盖为下一次重排的文本锚点。
+        if (restoring || detail.reason === 'anchor' || detail.reason === 'container-scroll' || !detail.range) return;
+        anchor = detail.range.cloneRange();
+        anchor.collapse(true);
+      };
+      const restoreAnchor = () => {
+        if (!isCurrent() || !anchor || target.isFixedLayout || currentViewMode !== 'paginated') return;
+        restoring = true;
+        Promise.resolve(renderer.scrollToAnchor(anchor))
+          .catch((error) => console.warn('[Reader] Failed to restore text anchor:', error))
+          .finally(() => { restoring = false; });
+      };
+      renderer?.addEventListener('relocate', rememberAnchor);
+      readerResizeCleanup = () => renderer?.removeEventListener('relocate', rememberAnchor);
+      restoreReaderTextAnchor = restoreAnchor;
+      readerResizeObserver = new ResizeObserver(() => {
+        if (!isCurrent()) return;
+        // rAF 合并连续 resize 回调，只保留最后一次待执行。
+        if (readerResizeRafId) return;
+        readerResizeRafId = requestAnimationFrame(() => {
+          readerResizeRafId = 0;
+          if (!isCurrent()) return;
+          const renderer = view && view.renderer;
+          if (!renderer || view.isFixedLayout || currentViewMode !== 'paginated') return;
+          if (currentPageMarginPx == null) return;
+          applyMobileReflowMargins(renderer, currentPageMarginPx);
+          restoreAnchor();
+        });
+      });
+      readerResizeObserver.observe(container);
     }
 
     // Smooth reading ("平滑阅读"): one toggle drives both the foliate
@@ -1320,15 +1411,13 @@
           if (view && msg.cfi) await view.goTo(msg.cfi);
           break;
         case 'search':
-          await handleSearch(msg.query);
+          await handleSearch(msg.query, msg.requestId);
           break;
         case 'clearSearch':
-          if (view) view.clearSearch();
-          searchResults = [];
-          searchIndex = 0;
+          clearReaderSearch(msg.requestId);
           break;
         case 'navigateSearch':
-          if (msg.index != null) navigateToSearchResult(msg.index);
+          if (msg.index != null) navigateToSearchResult(msg.index, msg.requestId);
           break;
         case 'addAnnotation':
           if (view && msg.annotation) {
@@ -1419,6 +1508,13 @@
     async function openBook(msg) {
       const container = document.getElementById('reader-container');
       const loading = document.getElementById('loading');
+      // 换书前清理旧书的尺寸监听与待执行 rAF，避免残留回调作用于新书。
+      stopReaderResizeObserver();
+      clearReaderSearch(null);
+      currentViewMode = msg.settings?.viewMode || 'paginated';
+      currentPaginatedLayout = msg.settings?.paginatedLayout || msg.paginatedLayout || 'double';
+      currentPageMarginPx = null;
+      currentPageMarginSetting = null;
       currentBookIsPdf = isPDFBookMessage(msg);
       pdfPageLightCache = {};
       pdfDocIndexMap = new WeakMap();
@@ -1726,8 +1822,9 @@
         container.appendChild(el);
         view = el;
         currentSectionUsesVerticalWriting = false;
-
         await el.open(book);
+        // renderer 创建后订阅定位，尺寸变化时保留同一文本锚点。
+        startReaderResizeObserver(container);
 
         if (book.sections) {
           totalSections = book.sections.length;
@@ -1749,7 +1846,12 @@
         if (renderer && !el.isFixedLayout) {
           applyMobileReflowRendererSizing(renderer);
           // Default margins (synchronized with the desktop reader formula)
-          applyMobileReflowMargins(renderer, msg.pageMargin || 16);
+          currentPageMarginSetting = msg.pageMargin ?? 16;
+          const BASELINE_FONT_SIZE = 16;
+          const margin = Math.round(
+            (msg.pageMargin ?? 16) * (currentFontSize / BASELINE_FONT_SIZE),
+          );
+          applyMobileReflowMargins(renderer, margin);
         } else if (renderer && el.isFixedLayout) {
           const paginatedLayout =
             msg.paginatedLayout === 'single' || msg.paginatedLayout === 'double'
@@ -1787,48 +1889,71 @@
     }
 
     // ─── Search ───
-    async function handleSearch(query) {
-      if (!view || !query) return;
+    function clearReaderSearch(requestId) {
+      searchGeneration++;
+      searchRequestId = requestId;
       searchResults = [];
       searchIndex = 0;
+      const iterator = searchGenerator;
+      const target = view;
+      searchGenerator = null;
+      // 等待旧生成器退出后再清理其标记，新查询随后开始，避免旧书/旧查询继续写入。
+      searchCancellation = searchCancellation.then(async () => {
+        if (iterator?.return) await iterator.return();
+        target?.clearSearch();
+      }).catch((err) => console.warn('[WebView] Search cleanup failed:', err));
+      return searchCancellation;
+    }
 
+    async function handleSearch(query, requestId) {
+      const cancellation = clearReaderSearch(requestId);
+      const generation = searchGeneration;
+      const target = view;
+      const isCurrent = () => generation === searchGeneration && target === view;
+      await cancellation;
+      if (!target || !query || !isCurrent()) return;
       try {
-        const iter = view.search({ query });
-        let totalResults = 0;
-        for await (const result of iter) {
+        const iterator = target.search({ query });
+        searchGenerator = iterator;
+        const results = [];
+        for await (const result of iterator) {
+          if (!isCurrent()) return;
           if (result === 'done') break;
-          if (result.subitems) {
-            totalResults += result.subitems.length;
-            for (const sub of result.subitems) {
-              searchResults.push(sub);
-            }
-          } else if (result.cfi) {
-            totalResults++;
-            searchResults.push(result);
-          }
-          if (result.progress != null) {
-            postToRN('searchProgress', { progress: result.progress });
+          for (const match of result.subitems || (result.cfi ? [result] : [])) {
+            const excerpt = match.excerpt;
+            results.push({
+              cfi: match.cfi,
+              chapter: result.label || '',
+              excerpt: typeof excerpt === 'string' ? excerpt :
+                `${excerpt?.pre || ''}${excerpt?.match || ''}${excerpt?.post || ''}`,
+            });
           }
         }
-        postToRN('searchComplete', { count: totalResults });
-        // Navigate to first result
-        if (searchResults.length > 0) {
-          await view.goTo(searchResults[0].cfi);
-          postToRN('searchResult', { index: 0, count: totalResults });
-        }
+        if (!isCurrent()) return;
+        searchGenerator = null;
+        searchResults = results;
+        postToRN('searchComplete', { requestId, count: results.length, results });
+        if (results.length) await navigateToSearchResult(0, requestId);
       } catch (err) {
-        postToRN('error', { message: 'Search failed: ' + String(err) });
+        if (isCurrent()) {
+          postToRN('searchComplete', { requestId, count: 0, results: [], error: String(err) });
+        }
       }
     }
 
-    async function navigateToSearchResult(index) {
-      if (index < 0 || index >= searchResults.length) return;
+    async function navigateToSearchResult(index, requestId) {
+      if (requestId !== searchRequestId || index < 0 || index >= searchResults.length) return;
+      const generation = searchGeneration;
+      const target = view;
       searchIndex = index;
       try {
-        await view.goTo(searchResults[index].cfi);
-        postToRN('searchResult', { index, count: searchResults.length });
+        await target.goTo(searchResults[index].cfi);
+        if (generation !== searchGeneration || target !== view) return;
+        postToRN('searchResult', { requestId, index, count: searchResults.length });
       } catch (err) {
-        postToRN('error', { message: 'Navigate search failed: ' + String(err) });
+        if (generation === searchGeneration) {
+          postToRN('searchComplete', { requestId, count: searchResults.length, results: searchResults, error: String(err) });
+        }
       }
     }
 
@@ -1836,6 +1961,7 @@
     function applySettings(settings) {
       if (!view || !view.renderer) return;
       const renderer = view.renderer;
+      restoreReaderTextAnchor?.();
       if (settings.justifyBodyText !== undefined) {
         currentJustifyBodyText = settings.justifyBodyText !== false;
       }
@@ -2045,10 +2171,23 @@
         // Scale pageMargin with fontSize so the page edges stay
         // proportionally placed at large font sizes. Same baseline (16) as
         // the paragraphSpacing scaling above.
+        currentPageMarginSetting = settings.pageMargin;
+      }
+      if (settings.pageMargin != null || settings.fontSize !== undefined || settings.paginatedLayout !== undefined) {
         const BASELINE_FONT_SIZE = 16;
         const layoutScale = currentFontSize / BASELINE_FONT_SIZE;
-        const margin = Math.round(settings.pageMargin * layoutScale);
-        applyMobileReflowMargins(renderer, margin);
+        const margin = Math.round((currentPageMarginSetting ?? 16) * layoutScale);
+        // 仅可重排且分页模式需要重设页宽；滚动模式沿流式宽度（9999px）、
+        // 固定排版走自缩放，不能被分页边距规则覆盖。
+        if (currentViewMode === 'paginated' && !view.isFixedLayout) {
+          // 重置去重基准，确保设置变化后必重新应用（字号不变时 margin 不变
+          // 也会因基准重置而重设一次，属性相同时 foliate 不触发重排）。
+          lastAppliedWindowWidth = 0;
+          applyMobileReflowMargins(renderer, margin);
+        } else {
+          // 只更新记录，不触碰 renderer 属性（切回分页时按新值恢复）。
+          currentPageMarginPx = margin;
+        }
       }
 
       if (view && view.isFixedLayout) {
@@ -2058,6 +2197,16 @@
       if (settings.viewMode) {
         currentViewMode = settings.viewMode;
         applyRendererFlowMode(renderer);
+        // 从滚动切回分页时，scroll 模式曾把 max-inline-size 改为
+        // 9999px，需按当前窗口尺寸与生效边距恢复分页页宽。
+        if (
+          currentViewMode === 'paginated' &&
+          !view.isFixedLayout &&
+          currentPageMarginPx != null
+        ) {
+          lastAppliedWindowWidth = 0;
+          applyMobileReflowMargins(renderer, currentPageMarginPx);
+        }
       }
     }
 
@@ -4161,9 +4310,9 @@ html, body {
     };
     window.goToCFI = function (cfi) { if (view) view.goTo(cfi); };
     window.goToProgress = function (p) { if (view) view.goToFraction(p); };
-    window.search = function (q) { handleSearch(q); };
-    window.navigateSearch = function (idx) { navigateToSearchResult(idx); };
-    window.clearSearch = function () { if (view) view.clearSearch(); searchResults = []; };
+    window.search = function (q, requestId) { handleSearch(q, requestId); };
+    window.navigateSearch = function (idx, requestId) { navigateToSearchResult(idx, requestId); };
+    window.clearSearch = function (requestId) { clearReaderSearch(requestId); };
     window.setFontSize = function (s) { applySettings({ fontSize: s }); };
     window.setLineHeight = function (lh) { applySettings({ lineHeight: lh }); };
     window.setParagraphSpacing = function (s) { applySettings({ paragraphSpacing: s }); };

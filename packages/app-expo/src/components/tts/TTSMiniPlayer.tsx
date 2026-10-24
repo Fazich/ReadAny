@@ -6,6 +6,7 @@ import {
   PlayIcon,
   ScrollTextIcon,
   SquareIcon,
+  XIcon,
 } from "@/components/ui/Icon";
 import { pushRoute } from "@/lib/navigationRef";
 import { useReaderStore } from "@/stores/reader-store";
@@ -16,35 +17,37 @@ import { useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Animated,
-  Dimensions,
   Easing,
   type LayoutChangeEvent,
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useState } from "react";
 import { TTSSleepTimerSheet } from "./TTSSleepTimerSheet";
 
 const BUBBLE_SIZE = 56;
 
+export interface TTSBubbleAnchor {
+  left: number;
+  top: number;
+  size: number;
+}
+
 interface TTSMiniPlayerProps {
   visible: boolean;
   onClose: () => void;
-  anchorLayout: {
-    left: number;
-    top: number;
-    size: number;
-    screenWidth: number;
-    screenHeight: number;
-  } | null;
+  navigationInsets: { right: number; bottom: number };
+  anchorLayout: TTSBubbleAnchor | null;
 }
 
-export function TTSMiniPlayer({ visible, onClose, anchorLayout }: TTSMiniPlayerProps) {
+export function TTSMiniPlayer({ visible, onClose, anchorLayout, navigationInsets }: TTSMiniPlayerProps) {
   const { t } = useTranslation();
   const colors = useColors();
   const insets = useSafeAreaInsets();
@@ -135,24 +138,34 @@ export function TTSMiniPlayer({ visible, onClose, anchorLayout }: TTSMiniPlayerP
     : playState === "paused" ? t("tts.paused")
     : t("tts.stopped");
 
-  const panelWidth = Math.min(388, Math.max(320, (anchorLayout?.screenWidth || 360) - 16));
+  // Clamp the measured anchor against the current window, safe area, and navigation.
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const [panelHeight, setPanelHeight] = useState(152);
   const [panelMeasured, setPanelMeasured] = useState(false);
   const [timerSheetVisible, setTimerSheetVisible] = useState(false);
   const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
   const anchor = anchorLayout ?? {
     left: 16, top: 120, size: BUBBLE_SIZE,
-    screenWidth: Dimensions.get("window").width,
-    screenHeight: Dimensions.get("window").height,
   };
-  const left = clamp(anchor.left + anchor.size / 2 - panelWidth / 2, 10, anchor.screenWidth - panelWidth - 10);
+  // 面板宽度 = 当前安全宽度减两侧必要边距，不再用 320 下限把 panel 顶出小窗口。
+  const safeWidth = Math.max(0, windowWidth - insets.left - insets.right - navigationInsets.right);
+  const panelWidth = Math.max(0, Math.min(388, safeWidth - 16));
+  const left = clamp(
+    anchor.left + anchor.size / 2 - panelWidth / 2,
+    insets.left,
+    insets.left + Math.max(0, safeWidth - panelWidth),
+  );
   const safeTop = (insets.top || 12) + 8;
-  const safeBottom = anchor.screenHeight - panelHeight - Math.max(insets.bottom, 16) - 8;
-  const aboveTop = anchor.top - panelHeight - 10;
+  // 容器高度上限：top + 实际高度 ≤ 当前窗口高度 - insets.bottom - 8。
+  const maxPanelHeight = Math.max(0, windowHeight - insets.bottom - navigationInsets.bottom - 8 - safeTop);
+  const layoutPanelHeight = Math.min(panelHeight, maxPanelHeight);
+  const safeBottom = windowHeight - insets.bottom - navigationInsets.bottom - layoutPanelHeight - 8;
+  const aboveTop = anchor.top - layoutPanelHeight - 10;
   const belowTop = anchor.top + anchor.size + 10;
   const canPlaceAbove = aboveTop >= safeTop;
-  const canPlaceBelow = belowTop <= safeBottom;
-  const top = canPlaceAbove ? aboveTop : canPlaceBelow ? belowTop : clamp(belowTop, safeTop, safeBottom);
+  const maxTop = Math.max(safeTop, safeBottom);
+  // 统一 clamp 到有效区间：旧窗口的 anchor.top 不再把 panel 放到屏外。
+  const top = clamp(canPlaceAbove ? aboveTop : belowTop, safeTop, maxTop);
 
   const handlePanelLayout = useCallback((event: LayoutChangeEvent) => {
     const nextHeight = Math.ceil(event.nativeEvent.layout.height || 0);
@@ -174,117 +187,127 @@ export function TTSMiniPlayer({ visible, onClose, anchorLayout }: TTSMiniPlayerP
             left,
             top,
             width: panelWidth,
+            maxHeight: maxPanelHeight,
             opacity: panelMeasured || !visible ? 1 : 0,
           },
         ]}
         pointerEvents="box-none"
         onLayout={handlePanelLayout}
       >
-        {/* Header row */}
-        <View style={styles.header}>
-          <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
-            <HeadphonesIcon size={18} color={colors.primary} />
-          </Animated.View>
-          <View style={styles.titleGroup}>
-            <Text style={[styles.bookText, { color: colors.foreground }]} numberOfLines={1}>
-              {currentBookTitle || t("tts.listeningToBook")}
-            </Text>
-            {!!currentChapterTitle && (
-              <Text style={[styles.chapterText, { color: colors.mutedForeground }]} numberOfLines={1}>
-                {currentChapterTitle}
+        {/* 低窗口时内容纵向滚动，控件始终可达 */}
+        <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled>
+          {/* Header row */}
+          <View style={styles.header}>
+            <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
+              <HeadphonesIcon size={18} color={colors.primary} />
+            </Animated.View>
+            <View style={styles.titleGroup}>
+              <Text style={[styles.bookText, { color: colors.foreground }]} numberOfLines={1}>
+                {currentBookTitle || t("tts.listeningToBook")}
               </Text>
+              {!!currentChapterTitle && (
+                <Text style={[styles.chapterText, { color: colors.mutedForeground }]} numberOfLines={1}>
+                  {currentChapterTitle}
+                </Text>
+              )}
+            </View>
+            <Text style={[styles.statusText, { color: colors.mutedForeground }]}>{statusText}</Text>
+            <TouchableOpacity style={styles.iconBtn} onPress={onClose}
+              accessibilityRole="button" accessibilityLabel={t("common.close")}>
+              <XIcon size={18} color={colors.mutedForeground} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={[styles.divider, { backgroundColor: colors.border }]} />
+
+          {/* Controls row：窄窗下横向滚动，按钮始终可达 */}
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.controls}>
+            <TouchableOpacity
+              style={[styles.rateBtn, { backgroundColor: colors.muted }]}
+              onPress={() => adjustRate(-0.1)}
+              accessibilityRole="button"
+              accessibilityLabel={t("tts.decreaseRate")}
+            >
+              <Text style={[styles.rateBtnText, { color: colors.foreground }]}>−</Text>
+            </TouchableOpacity>
+            <Text style={[styles.rateValue, { color: colors.mutedForeground }]}>
+              {config.rate.toFixed(1)}x
+            </Text>
+            <TouchableOpacity
+              style={[styles.rateBtn, { backgroundColor: colors.muted }]}
+              onPress={() => adjustRate(0.1)}
+              accessibilityRole="button"
+              accessibilityLabel={t("tts.increaseRate")}
+            >
+              <Text style={[styles.rateBtnText, { color: colors.foreground }]}>+</Text>
+            </TouchableOpacity>
+
+            <View style={[styles.dividerV, { backgroundColor: colors.border }]} />
+
+            <TouchableOpacity
+              style={[styles.playBtn, { backgroundColor: colors.primary }]}
+              onPress={handlePlayPause}
+              disabled={playState === "stopped"}
+              accessibilityRole="button"
+              accessibilityLabel={
+                playState === "playing" || playState === "loading" ? t("tts.pause") : t("tts.play")
+              }
+            >
+              {playState === "playing" || playState === "loading" ? (
+                <PauseIcon size={20} color={colors.primaryForeground} />
+              ) : (
+                <PlayIcon size={20} color={colors.primaryForeground} />
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.iconBtn, { backgroundColor: colors.muted }]}
+              onPress={handleStop}
+              accessibilityRole="button"
+              accessibilityLabel={t("tts.stop", "停止")}
+            >
+              <SquareIcon size={16} color={colors.foreground} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.iconBtn,
+                { backgroundColor: sleepTimerEndsAt ? withOpacity(colors.primary, 0.14) : colors.muted },
+              ]}
+              onPress={() => setTimerSheetVisible(true)}
+              accessibilityRole="button"
+              accessibilityLabel={t("tts.sleepTimer", "定时停止")}
+            >
+              <ClockIcon size={16} color={sleepTimerEndsAt ? colors.primary : colors.foreground} />
+            </TouchableOpacity>
+
+            {!!currentBookId && <View style={[styles.dividerV, { backgroundColor: colors.border }]} />}
+
+            {!!currentBookId && (
+              <TouchableOpacity
+                style={[styles.iconBtn, { backgroundColor: colors.muted }]}
+                onPress={handleJumpToCurrentLocation}
+                accessibilityRole="button"
+                accessibilityLabel={t("tts.jumpToCurrentLocation")}
+              >
+                <BookOpenIcon size={16} color={colors.foreground} />
+              </TouchableOpacity>
+            )}
+
+            {!!currentBookId && (
+              <TouchableOpacity
+                style={[styles.iconBtn, { backgroundColor: colors.muted }]}
+                onPress={handleOpenLyricsPage}
+                accessibilityRole="button"
+                accessibilityLabel={t("tts.openLyricsPage", "跳到歌词页")}
+              >
+                <ScrollTextIcon size={16} color={colors.foreground} />
+              </TouchableOpacity>
             )}
           </View>
-          <Text style={[styles.statusText, { color: colors.mutedForeground }]}>{statusText}</Text>
-        </View>
-
-        <View style={[styles.divider, { backgroundColor: colors.border }]} />
-
-        {/* Controls row */}
-        <View style={styles.controls}>
-          <TouchableOpacity
-            style={[styles.rateBtn, { backgroundColor: colors.muted }]}
-            onPress={() => adjustRate(-0.1)}
-            accessibilityRole="button"
-            accessibilityLabel={t("tts.decreaseRate")}
-          >
-            <Text style={[styles.rateBtnText, { color: colors.foreground }]}>−</Text>
-          </TouchableOpacity>
-          <Text style={[styles.rateValue, { color: colors.mutedForeground }]}>
-            {config.rate.toFixed(1)}x
-          </Text>
-          <TouchableOpacity
-            style={[styles.rateBtn, { backgroundColor: colors.muted }]}
-            onPress={() => adjustRate(0.1)}
-            accessibilityRole="button"
-            accessibilityLabel={t("tts.increaseRate")}
-          >
-            <Text style={[styles.rateBtnText, { color: colors.foreground }]}>+</Text>
-          </TouchableOpacity>
-
-          <View style={[styles.dividerV, { backgroundColor: colors.border }]} />
-
-          <TouchableOpacity
-            style={[styles.playBtn, { backgroundColor: colors.primary }]}
-            onPress={handlePlayPause}
-            disabled={playState === "stopped"}
-            accessibilityRole="button"
-            accessibilityLabel={
-              playState === "playing" || playState === "loading" ? t("tts.pause") : t("tts.play")
-            }
-          >
-            {playState === "playing" || playState === "loading" ? (
-              <PauseIcon size={20} color={colors.primaryForeground} />
-            ) : (
-              <PlayIcon size={20} color={colors.primaryForeground} />
-            )}
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.iconBtn, { backgroundColor: colors.muted }]}
-            onPress={handleStop}
-            accessibilityRole="button"
-            accessibilityLabel={t("tts.stop", "停止")}
-          >
-            <SquareIcon size={16} color={colors.foreground} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.iconBtn,
-              { backgroundColor: sleepTimerEndsAt ? withOpacity(colors.primary, 0.14) : colors.muted },
-            ]}
-            onPress={() => setTimerSheetVisible(true)}
-            accessibilityRole="button"
-            accessibilityLabel={t("tts.sleepTimer", "定时停止")}
-          >
-            <ClockIcon size={16} color={sleepTimerEndsAt ? colors.primary : colors.foreground} />
-          </TouchableOpacity>
-
-          {!!currentBookId && <View style={[styles.dividerV, { backgroundColor: colors.border }]} />}
-
-          {!!currentBookId && (
-            <TouchableOpacity
-              style={[styles.iconBtn, { backgroundColor: colors.muted }]}
-              onPress={handleJumpToCurrentLocation}
-              accessibilityRole="button"
-              accessibilityLabel={t("tts.jumpToCurrentLocation")}
-            >
-              <BookOpenIcon size={16} color={colors.foreground} />
-            </TouchableOpacity>
-          )}
-
-          {!!currentBookId && (
-            <TouchableOpacity
-              style={[styles.iconBtn, { backgroundColor: colors.muted }]}
-              onPress={handleOpenLyricsPage}
-              accessibilityRole="button"
-              accessibilityLabel={t("tts.openLyricsPage", "跳到歌词页")}
-            >
-              <ScrollTextIcon size={16} color={colors.foreground} />
-            </TouchableOpacity>
-          )}
-        </View>
+        </ScrollView>
+        </ScrollView>
       </View>
       <TTSSleepTimerSheet visible={timerSheetVisible} onClose={() => setTimerSheetVisible(false)} />
     </Modal>
@@ -323,8 +346,8 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   rateBtn: {
-    width: 32,
-    height: 32,
+    width: 44,
+    height: 44,
     borderRadius: radius.md,
     alignItems: "center",
     justifyContent: "center",
@@ -340,8 +363,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   iconBtn: {
-    width: 36,
-    height: 36,
+    width: 44,
+    height: 44,
     borderRadius: radius.lg,
     alignItems: "center",
     justifyContent: "center",

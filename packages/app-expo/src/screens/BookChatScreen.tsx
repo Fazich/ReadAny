@@ -26,7 +26,7 @@ import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useStreamingChat } from "@/hooks";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
+import { useContentLayout } from "@/hooks/use-responsive-layout";
 import { resolveActiveAIConfig } from "@/lib/ai/resolve-active-ai-config";
 import { useLibraryStore } from "@/stores";
 import { useChatStore } from "@/stores/chat-store";
@@ -82,11 +82,11 @@ export function BookChatScreen({ route, navigation }: Props) {
   const colors = useColors();
   const { isDark } = useTheme();
   const insets = useSafeAreaInsets();
-  const layout = useResponsiveLayout();
-  const isTabletLandscape = layout.isTabletLandscape;
+  const layout = useContentLayout();
+  const isTabletLandscape = layout.supportsSplitView;
   const sidebarWidth = isTabletLandscape
-    ? Math.min(360, layout.width * 0.28)
-    : Math.min(layout.width * 0.75, 300);
+    ? layout.sidebarWidth
+    : Math.min(layout.contentWidth * 0.85, 300);
   const s = useMemo(
     () => makeStyles(colors, { isTabletLandscape, sidebarWidth }),
     [colors, isTabletLandscape, sidebarWidth],
@@ -444,14 +444,13 @@ export function BookChatScreen({ route, navigation }: Props) {
 
   return (
     <SafeAreaView style={s.container} edges={["top", "bottom"]}>
-      <View style={s.shell}>
-        {isTabletLandscape && (
-          <View style={[s.sidebarDocked, { paddingTop: insets.top }]}>
-            {renderSidebarContent(false)}
-          </View>
-        )}
+      <View
+        style={[s.shell, { marginHorizontal: layout.horizontalPadding }]}
+        onLayout={layout.onContentLayout}
+      >
+        {isTabletLandscape && <View style={s.sidebarDocked}>{renderSidebarContent(false)}</View>}
 
-        <View style={s.mainColumn}>
+        <View key="conversation" style={s.mainColumn}>
           <View style={s.header}>
             <View style={s.headerLeft}>
               <TouchableOpacity
@@ -529,7 +528,7 @@ export function BookChatScreen({ route, navigation }: Props) {
           </View>
 
           <KeyboardAvoidingView
-            style={s.content}
+            style={[s.content, { width: "100%", maxWidth: 760, alignSelf: "center" }]}
             behavior="height"
             enabled={Platform.OS === "android"}
             keyboardVerticalOffset={insets.top}
@@ -640,7 +639,7 @@ const makeStyles = (
       paddingHorizontal: 12,
       paddingBottom: 12,
     },
-    mainColumn: { flex: 1 },
+    mainColumn: { flex: 1, minWidth: 0 },
     header: {
       flexDirection: "row",
       alignItems: "center",

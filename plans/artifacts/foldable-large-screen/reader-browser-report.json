@@ -1,0 +1,458 @@
+{
+  "scenarios": [
+    {
+      "name": "reader-960-double",
+      "width": 960,
+      "height": 720,
+      "fixed": false,
+      "maxColumns": "2",
+      "page": 0,
+      "pages": 9,
+      "cfi": "epubcfi(/6/2!/4,/2,/18[p8]/1:70)",
+      "text": "第1章 · 海边的清晨第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应",
+      "frames": [
+        {
+          "width": 8392,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "430px",
+          "columnGap": "17.9998px"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": []
+    },
+    {
+      "name": "reader-640x720",
+      "width": 640,
+      "height": 720,
+      "fixed": false,
+      "maxColumns": "1",
+      "page": 9,
+      "pages": 11,
+      "cfi": "epubcfi(/6/2!/4,/120[p59],/132[p65]/1:65)",
+      "text": "第59段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。第60段",
+      "frames": [
+        {
+          "width": 6772,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "597px",
+          "columnGap": "17.9998px"
+        },
+        {
+          "width": 6772,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "597px",
+          "columnGap": "17.9998px"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": [],
+      "originalAnchor": {
+        "x": 129.671875,
+        "y": 587.09375,
+        "width": 18,
+        "height": 22,
+        "text": "找",
+        "visible": true
+      }
+    },
+    {
+      "name": "reader-520x720",
+      "width": 520,
+      "height": 720,
+      "fixed": false,
+      "maxColumns": "1",
+      "page": 12,
+      "pages": 14,
+      "cfi": "epubcfi(/6/2!/4,/122[p60]/1:51,/132[p65]/1:51)",
+      "text": "人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。第61段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一",
+      "frames": [
+        {
+          "width": 6955,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "478px",
+          "columnGap": "17.9999px"
+        },
+        {
+          "width": 6955,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "478px",
+          "columnGap": "17.9999px"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": [],
+      "originalAnchor": {
+        "x": 388.984375,
+        "y": 547.5,
+        "width": 18.453125,
+        "height": 22,
+        "text": "找",
+        "visible": true
+      }
+    },
+    {
+      "name": "reader-390x844",
+      "width": 390,
+      "height": 844,
+      "fixed": false,
+      "maxColumns": "1",
+      "page": 15,
+      "pages": 18,
+      "cfi": "epubcfi(/6/2!/4,/122[p60]/1:75,/130[p64]/1:75)",
+      "text": "屏幕的尺寸会变化，书中的位置应当留在原处。第61段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺",
+      "frames": [
+        {
+          "width": 6626,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "350px",
+          "columnGap": "17.9997px"
+        },
+        {
+          "width": 6626,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "350px",
+          "columnGap": "17.9997px"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": [],
+      "originalAnchor": {
+        "x": 297.34375,
+        "y": 761.65625,
+        "width": 18.46875,
+        "height": 22,
+        "text": "找",
+        "visible": true
+      }
+    },
+    {
+      "name": "reader-840x390",
+      "width": 840,
+      "height": 390,
+      "fixed": false,
+      "maxColumns": "2",
+      "page": 16,
+      "pages": 18,
+      "cfi": "epubcfi(/6/2!/4,/130[p64]/1:62,/138[p68]/1:62)",
+      "text": "有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。第65段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着",
+      "frames": [
+        {
+          "width": 14238,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "370px",
+          "columnGap": "17.9999px"
+        },
+        {
+          "width": 14238,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "370px",
+          "columnGap": "17.9999px"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": [],
+      "originalAnchor": {
+        "x": 197.828125,
+        "y": 22,
+        "width": 19.546875,
+        "height": 22,
+        "text": "找",
+        "visible": true
+      }
+    },
+    {
+      "name": "reader-1280x800",
+      "width": 1280,
+      "height": 800,
+      "fixed": false,
+      "maxColumns": "2",
+      "page": 4,
+      "pages": 5,
+      "cfi": "epubcfi(/6/2!/4,/116[p57],/140[p69]/1:96)",
+      "text": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。第58段",
+      "frames": [
+        {
+          "width": 6246,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px"
+        },
+        {
+          "width": 6246,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px"
+        },
+        {
+          "width": 6246,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": [],
+      "originalAnchor": {
+        "x": 756.875,
+        "y": 83.1875,
+        "width": 18,
+        "height": 22,
+        "text": "找",
+        "visible": true
+      }
+    },
+    {
+      "name": "reader-960x720",
+      "width": 960,
+      "height": 720,
+      "fixed": false,
+      "maxColumns": "2",
+      "page": 8,
+      "pages": 9,
+      "cfi": "epubcfi(/6/2!/4,/130[p64]/1:71,/140[p69]/1:96)",
+      "text": "找线索。屏幕的尺寸会变化，书中的位置应当留在原处。第65段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。",
+      "frames": [
+        {
+          "width": 8392,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "430px",
+          "columnGap": "17.9998px"
+        },
+        {
+          "width": 8392,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "430px",
+          "columnGap": "17.9998px"
+        },
+        {
+          "width": 8392,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "430px",
+          "columnGap": "17.9998px"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": [],
+      "originalAnchor": {
+        "x": 23.03125,
+        "y": 22,
+        "width": 19.5625,
+        "height": 22,
+        "text": "找",
+        "visible": true
+      }
+    },
+    {
+      "name": "reader-960-large-font",
+      "width": 960,
+      "height": 720,
+      "fixed": false,
+      "maxColumns": "1",
+      "page": 25,
+      "pages": 28,
+      "cfi": "epubcfi(/6/2!/4,/128[p63],/132[p65]/1:53)",
+      "text": "第63段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。第64段",
+      "frames": [
+        {
+          "width": 25715,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "886px",
+          "columnGap": "31.9997px"
+        },
+        {
+          "width": 25715,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "886px",
+          "columnGap": "31.9997px"
+        },
+        {
+          "width": 25715,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "886px",
+          "columnGap": "31.9997px"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": []
+    },
+    {
+      "name": "reader-960-forced-single",
+      "width": 960,
+      "height": 720,
+      "fixed": false,
+      "maxColumns": "1",
+      "page": 9,
+      "pages": 11,
+      "cfi": "epubcfi(/6/2!/4,/120[p59],/132[p65]/1:71)",
+      "text": "第59段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。第60段",
+      "frames": [
+        {
+          "width": 7324,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "652px",
+          "columnGap": "12.8535px"
+        },
+        {
+          "width": 7324,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "652px",
+          "columnGap": "12.8535px"
+        },
+        {
+          "width": 7324,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "652px",
+          "columnGap": "12.8535px"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": []
+    },
+    {
+      "name": "reader-960-search",
+      "width": 960,
+      "height": 720,
+      "fixed": false,
+      "maxColumns": "2",
+      "page": 0,
+      "pages": 9,
+      "cfi": "epubcfi(/6/2!/4,/2,/18[p8]/1:70)",
+      "text": "第1章 · 海边的清晨第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应",
+      "frames": [
+        {
+          "width": 8392,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "430px",
+          "columnGap": "17.9998px"
+        },
+        {
+          "width": 8392,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "430px",
+          "columnGap": "17.9998px"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": []
+    },
+    {
+      "name": "reader-960-scroll",
+      "width": 960,
+      "height": 720,
+      "fixed": false,
+      "maxColumns": "1",
+      "page": 0,
+      "pages": 7,
+      "cfi": "epubcfi(/6/2!/4,/2,/22[p10]/1:96)",
+      "text": "第1章 · 海边的清晨第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应",
+      "frames": [
+        {
+          "width": 960,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "auto",
+          "columnGap": "17.9998px"
+        },
+        {
+          "width": 960,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "auto",
+          "columnGap": "17.9998px"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": []
+    },
+    {
+      "name": "reader-960-vertical-source",
+      "width": 960,
+      "height": 720,
+      "fixed": false,
+      "maxColumns": "2",
+      "page": 0,
+      "pages": 9,
+      "cfi": "epubcfi(/6/2!/4,/2,/18[p8]/1:70)",
+      "text": "第1章 · 海边的清晨第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应",
+      "frames": [
+        {
+          "width": 8392,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "430px",
+          "columnGap": "17.9998px"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": []
+    },
+    {
+      "name": "reader-960-fixed",
+      "width": 960,
+      "height": 720,
+      "fixed": true,
+      "maxColumns": null,
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "auto",
+          "columnGap": "normal"
+        },
+        {
+          "width": 600,
+          "writingMode": "horizontal-tb",
+          "columnCount": "auto",
+          "columnWidth": "auto",
+          "columnGap": "normal"
+        }
+      ],
+      "loadedCount": 1,
+      "failures": []
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "navigation": {
+    "nextPageChangesLocation": true,
+    "previousPageRestoresText": true,
+    "chapterNavigation": "第2章 阅读时光",
+    "cfiReturn": true
+  },
+  "search": {
+    "count": 210,
+    "first": {
+      "cfi": "epubcfi(/6/2!/4/2,/1:6,/1:8)",
+      "chapter": "第1章 阅读时光",
+      "excerpt": "第1章 · 海边的清晨"
+    },
+    "navigationAndResize": true
+  },
+  "passed": true
+}

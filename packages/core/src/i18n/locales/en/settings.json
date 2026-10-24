@@ -1,6 +1,9 @@
 {
   "settings": {
     "title": "Settings",
+    "unsavedTitle": "Unsaved changes",
+    "unsavedMessage": "What would you like to do with your changes before leaving?",
+    "discardChanges": "Discard changes",
     "realtimeHint": "All changes are applied in real-time",
     "general": "General",
     "reading": "Reading",

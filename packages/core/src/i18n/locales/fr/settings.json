@@ -1,6 +1,9 @@
 {
   "settings": {
     "title": "Paramètres",
+    "unsavedTitle": "Modifications non enregistrées",
+    "unsavedMessage": "Que souhaitez-vous faire de vos modifications avant de quitter ?",
+    "discardChanges": "Ignorer les modifications",
     "realtimeHint": "Toutes les modifications sont appliquées en temps réel",
     "general": "Général",
     "reading": "Lecture",

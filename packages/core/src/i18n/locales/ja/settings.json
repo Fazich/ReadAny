@@ -1,6 +1,9 @@
 {
   "settings": {
     "title": "設定",
+    "unsavedTitle": "未保存の変更があります",
+    "unsavedMessage": "移動する前に変更をどうしますか？",
+    "discardChanges": "変更を破棄",
     "realtimeHint": "すべての変更はリアルタイムで反映されます",
     "general": "一般",
     "reading": "読書",

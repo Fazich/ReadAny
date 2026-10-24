@@ -10,7 +10,6 @@ import {
   BookmarkIcon,
   BotIcon,
   ChevronLeftIcon,
-  ChevronRightIcon,
   HeadphonesIcon,
   LanguagesIcon,
   NotebookPenIcon,
@@ -58,14 +57,12 @@ import {
   Animated,
   AppState,
   type AppStateStatus,
+  BackHandler,
   Easing,
-  Modal,
   Platform,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
   useWindowDimensions,
@@ -74,7 +71,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
 
 // ── Extracted modules ──
+import { NotesView } from "./NotesView";
+import { ReaderAuxiliaryPane, type ReaderAuxiliaryPanel } from "./reader/ReaderAuxiliaryPane";
 import { ReaderNoteViewModal } from "./reader/ReaderNoteViewModal";
+import { ReaderSearchPanel } from "./reader/ReaderSearchPanel";
 
 const REFLOWABLE_CHARACTERS_PER_LOCATION = 1500;
 const MAX_TRACKED_LOCATION_DELTA = 20;
@@ -149,11 +149,7 @@ const NOTE_TOOLTIP_TOP_THRESHOLD = 180;
 import { useRubyStore } from "@readany/core/stores/ruby-store";
 import { ReaderSettingsPanel } from "./reader/ReaderSettingsPanel";
 import { ReaderTOCPanel } from "./reader/ReaderTOCPanel";
-import {
-  CONTROLS_TIMEOUT,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-} from "./reader/reader-constants";
+import { CONTROLS_TIMEOUT } from "./reader/reader-constants";
 import { BatteryIcon, ListIcon, SettingsIcon } from "./reader/reader-icons";
 import { makeStyles, noteTooltipMdStyles } from "./reader/reader-styles";
 import { useReaderBookmark } from "./reader/useReaderBookmark";
@@ -207,10 +203,13 @@ function buildCustomFontFaceCSS(
 export function ReaderScreen({ route, navigation }: Props) {
   const colors = useColors();
   const { mode: themeMode } = useTheme();
-  const s = makeStyles(colors);
+  // 当前窗口尺寸：折叠/旋转/分屏时工具栏、选区提示与面板均按当前窗口算。
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+  const s = makeStyles(colors, windowHeight);
   const { bookId, cfi, highlight: shouldHighlight, openTTS } = route.params;
   const { t, i18n } = useTranslation();
-  const isWideLayout = SCREEN_WIDTH >= 768;
+  const [readerSize, setReaderSize] = useState({ width: windowWidth, height: windowHeight });
+  const isWideLayout = readerSize.width >= 600;
   const isIPadLayout = Platform.OS === "ios" && Platform.isPad;
   const shouldToggleSystemStatusBar = !isIPadLayout;
   const baseTopInset = Platform.OS === "ios" ? 20 : 24;
@@ -219,11 +218,12 @@ export function ReaderScreen({ route, navigation }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showControls, setShowControls] = useState(false);
-  const [showTOC, setShowTOC] = useState(false);
+  const [auxiliaryPanel, setAuxiliaryPanel] = useState<ReaderAuxiliaryPanel | null>(null);
+  const showTOC = auxiliaryPanel === "toc";
+  const showNotebook = auxiliaryPanel === "notebook";
+  const showSearch = auxiliaryPanel === "search";
   const [tocActiveTab, setTocActiveTab] = useState<"toc" | "bookmarks">("toc");
   const [showSettings, setShowSettings] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
-  const [showNotebook, setShowNotebook] = useState(false);
   const [showTranslation, setShowTranslation] = useState(false);
   const [translationText, setTranslationText] = useState("");
   const [showTTS, setShowTTS] = useState(false);
@@ -269,9 +269,9 @@ export function ReaderScreen({ route, navigation }: Props) {
   const bridgeRef = useRef<{
     requestPageSnippet: () => void;
     goNext: () => void;
-    search: (query: string) => void;
-    clearSearch: () => void;
-    navigateSearch: (index: number) => void;
+    search: (query: string, requestId: string) => void;
+    clearSearch: (requestId: string) => void;
+    navigateSearch: (index: number, requestId: string) => void;
     getVisibleText: () => Promise<string>;
     getVisibleTTSSegments: (alignCfi?: string | null) => Promise<TTSSegment[]>;
     getChapterParagraphs: () => Promise<Array<{ id: string; text: string; tagName: string }>>;
@@ -387,6 +387,10 @@ export function ReaderScreen({ route, navigation }: Props) {
   // ── System info (clock/battery/statusBar/SafeArea) ─────────────────────────
   const { readerClock, batteryLevel, isBatteryCharging, stableTopInset, insets } =
     useReaderSystemInfo({ showSearch, isIPadLayout, shouldToggleSystemStatusBar, baseTopInset });
+  const safeReaderWidth = Math.max(0, windowWidth - insets.left - insets.right);
+  const dockedTools = safeReaderWidth >= 680;
+  const auxiliaryOpen = auxiliaryPanel !== null;
+  const auxiliaryWidth = Math.min(320, Math.max(280, safeReaderWidth * 0.32));
 
   // ── Bookmark ───────────────────────────────────────────────────────────────
   const bookmark = useReaderBookmark({
@@ -425,14 +429,40 @@ export function ReaderScreen({ route, navigation }: Props) {
   // ── Search ─────────────────────────────────────────────────────────────────
   // Use bridgeRef for lazy access (bridge is initialized later)
   const search = useReaderSearch({
+    bookId,
     currentCfi,
     bridge: {
-      search: (q) => bridgeRef.current?.search?.(q),
-      clearSearch: () => bridgeRef.current?.clearSearch?.(),
-      navigateSearch: (idx) => bridgeRef.current?.navigateSearch?.(idx),
-      goToCFI: (cfi) => goToCFISafely(cfi),
+      search: (q, id) => bridgeRef.current?.search(q, id),
+      clearSearch: (id) => bridgeRef.current?.clearSearch(id),
+      navigateSearch: (idx, id) => {
+        suppressProgressTracking();
+        bridgeRef.current?.navigateSearch(idx, id);
+      },
     },
   });
+
+  const closeAuxiliaryPanel = useCallback(() => {
+    if (auxiliaryPanel === "search") search.closeSearch();
+    setAuxiliaryPanel(null);
+  }, [auxiliaryPanel, search.closeSearch]);
+
+  const closeSearchWithPrompt = useCallback(() => {
+    const original = search.searchStartCfi;
+    const count = search.searchResultCount;
+    if (original && count > 0) {
+      Alert.alert(t("reader.searchComplete"), t("reader.returnToOriginal"), [
+        { text: t("common.cancel"), style: "cancel" },
+        { text: t("common.confirm"), onPress: () => goToCFISafely(original) },
+      ]);
+    }
+    closeAuxiliaryPanel();
+    setShowControls(true);
+    Animated.timing(toolbarAnim, {
+      toValue: 0,
+      duration: 180,
+      useNativeDriver: true,
+    }).start();
+  }, [search.searchStartCfi, search.searchResultCount, t, goToCFISafely, closeAuxiliaryPanel, toolbarAnim]);
 
   useEffect(() => {
     progressRef.current = progress;
@@ -828,12 +858,8 @@ export function ReaderScreen({ route, navigation }: Props) {
         useNativeDriver: true,
       }).start();
     },
-    onSearchResult: (index: number, count: number) => {
-      search.onSearchResult(index, count);
-    },
-    onSearchComplete: (count: number) => {
-      search.onSearchComplete(count);
-    },
+    onSearchResult: search.onSearchResult,
+    onSearchComplete: search.onSearchComplete,
     onError: (message: string) => {
       console.error("[Reader] WebView error:", message);
       if (loading) {
@@ -883,6 +909,15 @@ export function ReaderScreen({ route, navigation }: Props) {
     noteTooltipVisibleRef.current = !!noteTooltip;
   }, [noteTooltip]);
 
+  useEffect(() => {
+    if (!auxiliaryOpen) return;
+    const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
+      closeAuxiliaryPanel();
+      return true;
+    });
+    return () => subscription.remove();
+  }, [auxiliaryOpen, closeAuxiliaryPanel]);
+
   // ── Volume button paging ─────────────────────────────────────────────────
   const isPureReadingContext = useMemo(
     () =>
@@ -908,10 +943,25 @@ export function ReaderScreen({ route, navigation }: Props) {
       appActive,
     // 维护约定：任何新增遮盖正文/输入态/导航跳转，必须在此追加判定。
     [
-      readSettings.volumeButtonsPageTurn, webViewReady, loading, error, isReimporting,
-      showSearch, showTOC, showSettings, showNotebook, showTTS,
-      showTranslation, showChapterTranslation, chapterTranslation.state.status,
-      selection, noteViewHighlight, noteTooltip, ttsPlayState, isFocused, appActive,
+      readSettings.volumeButtonsPageTurn,
+      webViewReady,
+      loading,
+      error,
+      isReimporting,
+      showSearch,
+      showTOC,
+      showSettings,
+      showNotebook,
+      showTTS,
+      showTranslation,
+      showChapterTranslation,
+      chapterTranslation.state.status,
+      selection,
+      noteViewHighlight,
+      noteTooltip,
+      ttsPlayState,
+      isFocused,
+      appActive,
     ],
   );
 
@@ -956,9 +1006,9 @@ export function ReaderScreen({ route, navigation }: Props) {
         locationHistoryRef.current.push(lastCfiRef.current);
       }
       goToHrefSafely(href);
-      setShowTOC(false);
+      if (!dockedTools) closeAuxiliaryPanel();
     },
-    [goToHrefSafely],
+    [goToHrefSafely, dockedTools, closeAuxiliaryPanel],
   );
 
   const goBackToPreviousLocation = useCallback(() => {
@@ -1425,19 +1475,19 @@ export function ReaderScreen({ route, navigation }: Props) {
     outputRange: [1, 0.24, 0],
   });
 
-  const isPanelOpen = showTOC || showSettings || showSearch || showNotebook || showTranslation;
   const existingSelectionHighlight = selection
     ? (highlights.find(
         (highlight) => highlight.bookId === bookId && highlight.cfi === selection.cfi,
       ) ?? null)
     : null;
-  const readerTopMargin = !showSearch
-    ? showTopTitleProgress
-      ? layoutTopInset + 30
-      : layoutTopInset
-    : 0;
-  const readerBottomInset =
-    !showSearch && showBottomTimeBattery ? Math.max(insets.bottom, 8) + 14 : 0;
+  const searchPanelHeight = Math.min(windowHeight * 0.48, 320);
+  const readerTopMargin =
+    showSearch && !dockedTools
+      ? searchPanelHeight
+      : showTopTitleProgress
+        ? layoutTopInset + 30
+        : layoutTopInset;
+  const readerBottomInset = !showSearch && showBottomTimeBattery ? 22 : 0;
   const batteryLabel = batteryLevel == null ? "--%" : `${Math.round(batteryLevel * 100)}%`;
   const selectionPopoverSelection = selection
     ? {
@@ -1463,543 +1513,530 @@ export function ReaderScreen({ route, navigation }: Props) {
     : null;
 
   return (
-    <View style={[s.container, { paddingBottom: insets.bottom }]}>
-      <Animated.View
-        style={[s.readerStage, { transform: [{ translateY: readerPullAnim }] }]}
-        pointerEvents="box-none"
+    <View
+      style={[
+        s.container,
+        {
+          flexDirection: "row",
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+          paddingBottom: insets.bottom,
+        },
+      ]}
+    >
+      <View
+        style={{ flex: 1, minWidth: 0 }}
+        onLayout={(event) => {
+          const { width, height } = event.nativeEvent.layout;
+          setReaderSize((previous) =>
+            previous.width === width && previous.height === height ? previous : { width, height },
+          );
+          setNoteTooltip(null);
+        }}
       >
-        {/* WebView with foliate-js */}
-        <View style={{ flex: 1 }}>
-          <WebView
-            ref={bridge.webViewRef}
-            source={{ uri: readerHtmlUri }}
-            style={[
-              s.webview,
-              {
-                marginTop: readerTopMargin,
-                marginBottom: readerBottomInset,
-              },
-            ]}
-            pointerEvents={isPanelOpen ? "none" : "auto"}
-            onMessage={bridge.handleMessage}
-            onError={(e) => {
-              console.error("[ReaderScreen] WebView error:", e.nativeEvent);
-            }}
-            onHttpError={(e) => {
-              console.error("[ReaderScreen] WebView HTTP error:", e.nativeEvent);
-            }}
-            onContentProcessDidTerminate={() => {
-              console.warn("[ReaderScreen] WebView content process terminated");
-            }}
-            javaScriptEnabled
-            domStorageEnabled
-            cacheEnabled={false}
-            allowFileAccess
-            allowFileAccessFromFileURLs
-            allowUniversalAccessFromFileURLs
-            allowsInlineMediaPlayback
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
-            originWhitelist={["*"]}
-            mixedContentMode="always"
-          />
-        </View>
-
-        {/* Loading overlay */}
-        {loading && (
-          <View style={s.loadingOverlay}>
-            <ActivityIndicator size="large" color={colors.primary} />
-          </View>
-        )}
-
-        {/* ─── Top Info Bar (always visible) ─── */}
-        {!showSearch && !showControls && showTopTitleProgress && (
-          <View style={[s.topInfoBar, { top: layoutTopInset }]}>
-            <View style={s.topInfoRow}>
-              <Text style={s.topInfoText} numberOfLines={1}>
-                {currentChapter || bookTitle}
-              </Text>
-              <Text style={s.topInfoPageText}>
-                {currentPage > 0 && totalPages > 0 ? `${currentPage}/${totalPages}` : `${percent}%`}
-              </Text>
-            </View>
-          </View>
-        )}
-      </Animated.View>
-
-      {/* ─── Bookmark Ribbon (top-right) ─── */}
-      <BookmarkRibbon visible={isBookmarked} topOffset={0} />
-
-      {!showSearch && (
         <Animated.View
-          pointerEvents={showControls ? "auto" : "none"}
-          style={[
-            s.topToolbar,
-            {
-              top: 0,
-              left: 0,
-              right: 0,
-              opacity: topControlsOpacity,
-              transform: [{ translateY: topControlsTranslate }],
-            },
-          ]}
+          style={[s.readerStage, { transform: [{ translateY: readerPullAnim }] }]}
+          pointerEvents="box-none"
         >
-          <View
-            style={[
-              s.topToolbarBar,
-              {
-                paddingTop: layoutTopInset,
-                minHeight: layoutTopInset + topToolbarRowHeight,
-              },
-            ]}
-          >
-            <View
+          {/* WebView with foliate-js */}
+          <View style={{ flex: 1 }}>
+            <WebView
+              ref={bridge.webViewRef}
+              source={{ uri: readerHtmlUri }}
               style={[
-                s.topToolbarRow,
+                s.webview,
                 {
-                  minHeight: topToolbarRowHeight,
-                  paddingLeft: insets.left + 12,
-                  paddingRight: insets.right + 16,
+                  marginTop: readerTopMargin,
+                  marginBottom: readerBottomInset,
                 },
               ]}
-            >
-              <View style={s.topToolbarSideSlot}>
-                <TouchableOpacity
-                  style={s.topToolbarBackBtn}
-                  onPress={() => navigation.reset({ routes: [{ name: "Tabs" }] })}
-                >
-                  <ChevronLeftIcon size={topToolbarIconSize} color={colors.foreground} />
-                </TouchableOpacity>
-              </View>
-              <View style={s.topToolbarTitleWrap}>
-                <Text style={s.topToolbarTitleText} numberOfLines={1}>
+              pointerEvents={
+                showSettings || showTranslation || (!dockedTools && (showTOC || showNotebook))
+                  ? "none"
+                  : "auto"
+              }
+              onMessage={bridge.handleMessage}
+              onError={(e) => {
+                console.error("[ReaderScreen] WebView error:", e.nativeEvent);
+              }}
+              onHttpError={(e) => {
+                console.error("[ReaderScreen] WebView HTTP error:", e.nativeEvent);
+              }}
+              onContentProcessDidTerminate={() => {
+                console.warn("[ReaderScreen] WebView content process terminated");
+              }}
+              javaScriptEnabled
+              domStorageEnabled
+              cacheEnabled={false}
+              allowFileAccess
+              allowFileAccessFromFileURLs
+              allowUniversalAccessFromFileURLs
+              allowsInlineMediaPlayback
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+              originWhitelist={["*"]}
+              mixedContentMode="always"
+            />
+          </View>
+
+          {/* Loading overlay */}
+          {loading && (
+            <View style={s.loadingOverlay}>
+              <ActivityIndicator size="large" color={colors.primary} />
+            </View>
+          )}
+
+          {/* ─── Top Info Bar (always visible) ─── */}
+          {!showSearch && !showControls && showTopTitleProgress && (
+            <View style={[s.topInfoBar, { top: layoutTopInset }]}>
+              <View style={s.topInfoRow}>
+                <Text style={s.topInfoText} numberOfLines={1}>
                   {currentChapter || bookTitle}
                 </Text>
-              </View>
-              <View
-                style={[
-                  s.topToolbarSideSlot,
-                  s.topToolbarMetaWrap,
-                  { flexDirection: "row", alignItems: "center", gap: 6 },
-                ]}
-              >
-                <SyncButton size={16} color={colors.foreground} />
-                <Text style={s.topToolbarMetaText}>
+                <Text style={s.topInfoPageText}>
                   {currentPage > 0 && totalPages > 0
                     ? `${currentPage}/${totalPages}`
                     : `${percent}%`}
                 </Text>
               </View>
             </View>
-            <View style={s.topToolbarProgressTrack}>
-              <View style={[s.topToolbarProgressFill, { width: `${percent}%` }]} />
-            </View>
-          </View>
+          )}
         </Animated.View>
-      )}
 
-      {/* Selection Popover */}
-      {selectionPopoverSelection && (
-        <SelectionPopover
-          selection={selectionPopoverSelection}
-          onHighlight={handleHighlight}
-          onDismiss={handleDismissSelection}
-          onCopy={() => {
-            setSelection(null);
-          }}
-          onSpeak={(text, cfi) => {
-            tts.startSelectionTTS(text, cfi);
-            setSelection(null);
-          }}
-          onAIChat={() => {
-            const selectedText = selectionPopoverSelection.text;
-            const chapter = currentChapter;
-            setSelection(null);
-            navigation.navigate("BookChat", {
-              bookId,
-              selectedText,
-              chapterTitle: chapter,
-            });
-          }}
-          onNote={(text, cfi) => {
-            const mutation = createSelectionNoteMutation({
-              bookId,
-              cfi,
-              text: selectionPopoverSelection.text,
-              note: text,
-              chapterTitle: currentChapter,
-              existingHighlight: existingSelectionHighlight,
-              defaultColor: readSettings.defaultHighlightColor ?? "yellow",
-            });
+        {/* ─── Bookmark Ribbon (top-right) ─── */}
+        <BookmarkRibbon visible={isBookmarked} topOffset={0} />
 
-            if (mutation.kind === "create") {
-              addHighlight(mutation.highlight);
+        {!showSearch && (
+          <Animated.View
+            pointerEvents={showControls ? "auto" : "none"}
+            style={[
+              s.topToolbar,
+              {
+                top: 0,
+                left: 0,
+                right: 0,
+                opacity: topControlsOpacity,
+                transform: [{ translateY: topControlsTranslate }],
+              },
+            ]}
+          >
+            <View
+              style={[
+                s.topToolbarBar,
+                {
+                  paddingTop: layoutTopInset,
+                  minHeight: layoutTopInset + topToolbarRowHeight,
+                },
+              ]}
+            >
+              <View
+                style={[
+                  s.topToolbarRow,
+                  {
+                    minHeight: topToolbarRowHeight,
+                    paddingLeft: 12,
+                    paddingRight: 16,
+                  },
+                ]}
+              >
+                <View style={s.topToolbarSideSlot}>
+                  <TouchableOpacity
+                    style={s.topToolbarBackBtn}
+                    onPress={() => navigation.reset({ routes: [{ name: "Tabs" }] })}
+                  >
+                    <ChevronLeftIcon size={topToolbarIconSize} color={colors.foreground} />
+                  </TouchableOpacity>
+                </View>
+                <View style={s.topToolbarTitleWrap}>
+                  <Text style={s.topToolbarTitleText} numberOfLines={1}>
+                    {currentChapter || bookTitle}
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    s.topToolbarSideSlot,
+                    s.topToolbarMetaWrap,
+                    { flexDirection: "row", alignItems: "center", gap: 6 },
+                  ]}
+                >
+                  <SyncButton size={16} color={colors.foreground} />
+                  <Text style={s.topToolbarMetaText}>
+                    {currentPage > 0 && totalPages > 0
+                      ? `${currentPage}/${totalPages}`
+                      : `${percent}%`}
+                  </Text>
+                </View>
+              </View>
+              <View style={s.topToolbarProgressTrack}>
+                <View style={[s.topToolbarProgressFill, { width: `${percent}%` }]} />
+              </View>
+            </View>
+          </Animated.View>
+        )}
+
+        {/* Selection Popover */}
+        {selectionPopoverSelection && (
+          <SelectionPopover
+            selection={selectionPopoverSelection}
+            viewport={readerSize}
+            onHighlight={handleHighlight}
+            onDismiss={handleDismissSelection}
+            onCopy={() => {
+              setSelection(null);
+            }}
+            onSpeak={(text, cfi) => {
+              tts.startSelectionTTS(text, cfi);
+              setSelection(null);
+            }}
+            onAIChat={() => {
+              const selectedText = selectionPopoverSelection.text;
+              const chapter = currentChapter;
+              setSelection(null);
+              navigation.navigate("BookChat", {
+                bookId,
+                selectedText,
+                chapterTitle: chapter,
+              });
+            }}
+            onNote={(text, cfi) => {
+              const mutation = createSelectionNoteMutation({
+                bookId,
+                cfi,
+                text: selectionPopoverSelection.text,
+                note: text,
+                chapterTitle: currentChapter,
+                existingHighlight: existingSelectionHighlight,
+                defaultColor: readSettings.defaultHighlightColor ?? "yellow",
+              });
+
+              if (mutation.kind === "create") {
+                addHighlight(mutation.highlight);
+                bridge.addAnnotation({
+                  value: cfi,
+                  type: "highlight",
+                  color: mutation.highlight.color,
+                  note: mutation.highlight.note,
+                });
+                return;
+              }
+
+              updateHighlight(mutation.id, mutation.updates);
               bridge.addAnnotation({
                 value: cfi,
                 type: "highlight",
-                color: mutation.highlight.color,
-                note: mutation.highlight.note,
+                color: existingSelectionHighlight?.color || "yellow",
+                note: mutation.updates.note,
               });
-              return;
+            }}
+            onTranslate={(text) => {
+              setShowTranslation(true);
+              setTranslationText(text);
+            }}
+            existingHighlight={
+              existingSelectionHighlight
+                ? {
+                    id: existingSelectionHighlight.id,
+                    color: existingSelectionHighlight.color,
+                    note: existingSelectionHighlight.note,
+                  }
+                : null
             }
-
-            updateHighlight(mutation.id, mutation.updates);
-            bridge.addAnnotation({
-              value: cfi,
-              type: "highlight",
-              color: existingSelectionHighlight?.color || "yellow",
-              note: mutation.updates.note,
-            });
-          }}
-          onTranslate={(text) => {
-            setShowTranslation(true);
-            setTranslationText(text);
-          }}
-          existingHighlight={
-            existingSelectionHighlight
-              ? {
-                  id: existingSelectionHighlight.id,
-                  color: existingSelectionHighlight.color,
-                  note: existingSelectionHighlight.note,
-                }
-              : null
-          }
-          defaultColor={readSettings.defaultHighlightColor ?? "yellow"}
-          onRemoveHighlight={() => {
-            const existing = highlights.find(
-              (h) => h.bookId === bookId && h.cfi === selectionPopoverSelection.cfi,
-            );
-            if (existing) {
-              removeHighlight(existing.id);
-              bridge.removeAnnotation({ value: existing.cfi });
-            }
-          }}
-        />
-      )}
-
-      {/* Note Tooltip (long-press on wavy underline) */}
-      {adjustedNoteTooltip && (
-        <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
-          <Pressable
-            style={StyleSheet.absoluteFill}
-            onPress={() => {
-              suppressReaderTapUntilRef.current = Date.now() + 350;
-              if (noteTooltipTimer.current) {
-                clearTimeout(noteTooltipTimer.current);
-                noteTooltipTimer.current = null;
+            defaultColor={readSettings.defaultHighlightColor ?? "yellow"}
+            onRemoveHighlight={() => {
+              const existing = highlights.find(
+                (h) => h.bookId === bookId && h.cfi === selectionPopoverSelection.cfi,
+              );
+              if (existing) {
+                removeHighlight(existing.id);
+                bridge.removeAnnotation({ value: existing.cfi });
               }
-              setNoteTooltip(null);
             }}
           />
-          <Pressable
-            style={[
-              s.noteTooltip,
-              {
-                left: Math.max(
-                  NOTE_TOOLTIP_SIDE_PADDING,
-                  Math.min(
-                    adjustedNoteTooltip.position.x - NOTE_TOOLTIP_WIDTH / 2,
-                    SCREEN_WIDTH - NOTE_TOOLTIP_WIDTH - NOTE_TOOLTIP_SIDE_PADDING,
-                  ),
-                ),
-                ...(adjustedNoteTooltip.position.selectionTop > NOTE_TOOLTIP_TOP_THRESHOLD
-                  ? {
-                      bottom:
-                        SCREEN_HEIGHT -
-                        adjustedNoteTooltip.position.selectionTop +
-                        NOTE_TOOLTIP_ABOVE_OFFSET,
-                    }
-                  : {
-                      top: adjustedNoteTooltip.position.selectionBottom + NOTE_TOOLTIP_BELOW_OFFSET,
-                    }),
-              },
-            ]}
-            onPress={(event) => {
-              event.stopPropagation();
-              suppressReaderTapUntilRef.current = Date.now() + 550;
-            }}
-            onPressIn={(event) => {
-              event.stopPropagation();
-              suppressReaderTapUntilRef.current = Date.now() + 550;
-            }}
-            onStartShouldSetResponder={() => true}
-            onMoveShouldSetResponder={() => true}
-            onResponderTerminationRequest={() => false}
-          >
-            <View style={s.noteTooltipContent}>
-              <MarkdownRenderer
-                content={adjustedNoteTooltip.note || ""}
-                styleOverrides={noteTooltipMdStyles}
-              />
-            </View>
-          </Pressable>
-        </View>
-      )}
+        )}
 
-      {!showSearch && (
-        <Animated.View
-          pointerEvents={showControls ? "auto" : "none"}
-          style={[
-            s.floatingTools,
-            {
-              right: insets.right + 16,
-              bottom: insets.bottom + 110,
-              opacity: auxToolsOpacity,
-              transform: [{ translateY: auxToolsTranslate }],
-            },
-          ]}
-        >
-          <TouchableOpacity
-            style={[
-              s.floatingToolBtn,
-              (showChapterTranslation || chapterTranslation.state.status !== "idle") &&
-                s.floatingToolBtnActive,
-            ]}
-            onPress={() => setShowChapterTranslation(true)}
-          >
-            <LanguagesIcon size={18} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              s.floatingToolBtn,
-              (showTTS || ttsPlayState !== "stopped") && s.floatingToolBtnActive,
-            ]}
-            onPress={tts.handleToggleTTS}
-          >
-            <HeadphonesIcon size={20} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={s.floatingToolBtn}
-            onPress={() => navigation.navigate("BookChat", { bookId })}
-          >
-            <BotIcon size={20} color="#fff" />
-          </TouchableOpacity>
-        </Animated.View>
-      )}
-
-      {!showSearch && !showControls && showBottomTimeBattery && (
-        <View
-          pointerEvents="none"
-          style={[
-            s.bottomInfoBar,
-            {
-              left: insets.left + 18,
-              right: insets.right + 18,
-              bottom: Math.max(insets.bottom, 8) + 4,
-            },
-          ]}
-        >
-          <Text style={s.bottomInfoText}>{readerClock}</Text>
-          <View style={s.bottomInfoSide}>
-            <BatteryIcon
-              width={22}
-              height={11}
-              color={colors.mutedForeground}
-              level={batteryLevel}
-              charging={isBatteryCharging}
-            />
-            <Text style={s.bottomInfoText}>{batteryLabel}</Text>
-          </View>
-        </View>
-      )}
-
-      {/* ─── Bottom Toolbar ─── */}
-      {!showSearch && (
-        <Animated.View
-          pointerEvents={showControls ? "auto" : "none"}
-          style={[
-            s.bottomToolbar,
-            {
-              left: 0,
-              right: 0,
-              opacity: bottomControlsOpacity,
-              transform: [{ translateY: bottomControlsTranslate }],
-            },
-          ]}
-        >
-          <View
-            style={[
-              s.bottomToolbarGlass,
-              {
-                paddingBottom: Math.max(insets.bottom, 8) + 6,
-                paddingLeft: insets.left + 18,
-                paddingRight: insets.right + 18,
-              },
-            ]}
-          >
-            <ReadingProgressSlider
-              progress={progress}
-              onDragStart={() => suppressProgressTracking(99999)}
-              onDragEnd={() => suppressProgressTracking(2000)}
-              onSeek={(fraction) => {
-                bridgeRef.current?.goToFraction(fraction);
-              }}
-              accentColor={colors.primary}
-              trackColor={withOpacity(colors.foreground, 0.12)}
-              textColor={withOpacity(colors.foreground, 0.6)}
-            />
-            <View style={s.bottomDockRow}>
-              <TouchableOpacity
-                style={s.bottomDockBtn}
-                onPress={() => {
-                  setTocActiveTab("toc");
-                  setShowTOC(true);
-                }}
-              >
-                <ListIcon size={bottomDockIconSize} color={colors.foreground} />
-                <Text style={s.bottomDockLabel}>{t("reader.toc", "目录")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[s.bottomDockBtn, isBookmarked && s.bottomDockBtnActive]}
-                onPress={handleToggleBookmark}
-              >
-                {isBookmarked ? (
-                  <BookmarkFilledIcon size={bottomDockIconSize} color={colors.primary} />
-                ) : (
-                  <BookmarkIcon size={bottomDockIconSize} color={colors.foreground} />
-                )}
-                <Text style={[s.bottomDockLabel, isBookmarked && s.bottomDockLabelActive]}>
-                  {t("reader.bookmarks", "书签")}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={s.bottomDockBtn}
-                onPress={() => navigation.navigate("FullScreenNotes", { bookId })}
-              >
-                <NotebookPenIcon size={bottomDockIconSize} color={colors.foreground} />
-                <Text style={s.bottomDockLabel}>{t("notes.title", "笔记")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={s.bottomDockBtn}
-                onPress={() => {
-                  setShowSearch(true);
-                  setShowControls(false);
-                  Animated.timing(toolbarAnim, {
-                    toValue: TOOLBAR_HIDE_OFFSET,
-                    duration: 180,
-                    easing: Easing.out(Easing.cubic),
-                    useNativeDriver: true,
-                  }).start();
-                }}
-              >
-                <SearchIcon size={bottomDockIconSize} color={colors.foreground} />
-                <Text style={s.bottomDockLabel}>{t("reader.search", "搜索")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={s.bottomDockBtn} onPress={() => setShowSettings(true)}>
-                <SettingsIcon size={bottomDockIconSize} color={colors.foreground} />
-                <Text style={s.bottomDockLabel}>{t("common.settings", "设置")}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Animated.View>
-      )}
-
-      {/* ─── Search Bar ─── */}
-      {showSearch && (
-        <View style={[s.searchBarWrap, { paddingTop: layoutTopInset }]}>
-          <View style={s.searchBarRow}>
-            <View style={s.searchInputWrap}>
-              <SearchIcon size={16} color={colors.mutedForeground} />
-              <TextInput
-                style={s.searchInput}
-                placeholder={t("reader.searchInBook", "在书中搜索")}
-                placeholderTextColor={colors.mutedForeground}
-                value={search.searchQuery}
-                onChangeText={search.handleSearchInput}
-                autoFocus
-                returnKeyType="search"
-              />
-            </View>
-            <View style={s.searchMetaRow}>
-              {search.isSearching ? (
-                <ActivityIndicator size="small" color={colors.mutedForeground} />
-              ) : search.searchQuery && search.searchResultCount > 0 ? (
-                <Text style={s.searchCount}>
-                  {search.searchIndex + 1} / {search.searchResultCount}
-                </Text>
-              ) : search.searchQuery && !search.isSearching ? (
-                <Text style={s.searchCount}>0</Text>
-              ) : null}
-            </View>
-            <TouchableOpacity
-              style={s.searchNavBtn}
-              onPress={() => search.navigateSearch("prev")}
-              disabled={search.searchResultCount === 0}
-            >
-              <ChevronLeftIcon
-                size={16}
-                color={search.searchResultCount > 0 ? colors.foreground : colors.mutedForeground}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={s.searchNavBtn}
-              onPress={() => search.navigateSearch("next")}
-              disabled={search.searchResultCount === 0}
-            >
-              <ChevronRightIcon
-                size={16}
-                color={search.searchResultCount > 0 ? colors.foreground : colors.mutedForeground}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={s.searchNavBtn}
+        {/* Note Tooltip (long-press on wavy underline) */}
+        {adjustedNoteTooltip && (
+          <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
+            <Pressable
+              style={StyleSheet.absoluteFill}
               onPress={() => {
-                if (search.searchStartCfi && search.searchResultCount > 0) {
-                  Alert.alert(
-                    t("reader.searchComplete", "搜索完成"),
-                    t("reader.returnToOriginal", "是否返回搜索前的位置？"),
-                    [
-                      {
-                        text: t("common.cancel", "取消"),
-                        style: "cancel",
-                        onPress: () => {
-                          search.setSearchStartCfi(null);
-                        },
-                      },
-                      {
-                        text: t("common.confirm", "确定"),
-                        onPress: () => {
-                          goToCFISafely(search.searchStartCfi!);
-                          search.setSearchStartCfi(null);
-                        },
-                      },
-                    ],
-                  );
-                } else {
-                  search.setSearchStartCfi(null);
+                suppressReaderTapUntilRef.current = Date.now() + 350;
+                if (noteTooltipTimer.current) {
+                  clearTimeout(noteTooltipTimer.current);
+                  noteTooltipTimer.current = null;
                 }
-                setShowSearch(false);
-                search.clearSearch();
-                setShowControls(true);
-                Animated.timing(toolbarAnim, {
-                  toValue: 0,
-                  duration: 180,
-                  easing: Easing.out(Easing.cubic),
-                  useNativeDriver: true,
-                }).start();
+                setNoteTooltip(null);
+              }}
+            />
+            <Pressable
+              style={[
+                s.noteTooltip,
+                {
+                  maxWidth: Math.max(0, readerSize.width - 24),
+                  left: Math.max(
+                    NOTE_TOOLTIP_SIDE_PADDING,
+                    Math.min(
+                      adjustedNoteTooltip.position.x - NOTE_TOOLTIP_WIDTH / 2,
+                      readerSize.width -
+                        Math.min(NOTE_TOOLTIP_WIDTH, readerSize.width - 24) -
+                        NOTE_TOOLTIP_SIDE_PADDING,
+                    ),
+                  ),
+                  ...(adjustedNoteTooltip.position.selectionTop > NOTE_TOOLTIP_TOP_THRESHOLD
+                    ? {
+                        bottom:
+                          readerSize.height -
+                          adjustedNoteTooltip.position.selectionTop +
+                          NOTE_TOOLTIP_ABOVE_OFFSET,
+                      }
+                    : {
+                        top:
+                          adjustedNoteTooltip.position.selectionBottom + NOTE_TOOLTIP_BELOW_OFFSET,
+                      }),
+                },
+              ]}
+              onPress={(event) => {
+                event.stopPropagation();
+                suppressReaderTapUntilRef.current = Date.now() + 550;
+              }}
+              onPressIn={(event) => {
+                event.stopPropagation();
+                suppressReaderTapUntilRef.current = Date.now() + 550;
+              }}
+              onStartShouldSetResponder={() => true}
+              onMoveShouldSetResponder={() => true}
+              onResponderTerminationRequest={() => false}
+            >
+              <View style={s.noteTooltipContent}>
+                <MarkdownRenderer
+                  content={adjustedNoteTooltip.note || ""}
+                  styleOverrides={noteTooltipMdStyles}
+                />
+              </View>
+            </Pressable>
+          </View>
+        )}
+
+        {!showSearch && (
+          <Animated.View
+            pointerEvents={showControls ? "auto" : "none"}
+            style={[
+              s.floatingTools,
+              {
+                right: 16,
+                bottom: 110,
+                opacity: auxToolsOpacity,
+                transform: [{ translateY: auxToolsTranslate }],
+              },
+            ]}
+          >
+            <TouchableOpacity
+              style={[
+                s.floatingToolBtn,
+                (showChapterTranslation || chapterTranslation.state.status !== "idle") &&
+                  s.floatingToolBtnActive,
+              ]}
+              onPress={() => setShowChapterTranslation(true)}
+            >
+              <LanguagesIcon size={18} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                s.floatingToolBtn,
+                (showTTS || ttsPlayState !== "stopped") && s.floatingToolBtnActive,
+              ]}
+              onPress={tts.handleToggleTTS}
+            >
+              <HeadphonesIcon size={20} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={s.floatingToolBtn}
+              onPress={() => navigation.navigate("BookChat", { bookId })}
+            >
+              <BotIcon size={20} color="#fff" />
+            </TouchableOpacity>
+          </Animated.View>
+        )}
+
+        {!showSearch && !showControls && showBottomTimeBattery && (
+          <View
+            pointerEvents="none"
+            style={[
+              s.bottomInfoBar,
+              {
+                left: 18,
+                right: 18,
+                bottom: 12,
+              },
+            ]}
+          >
+            <Text style={s.bottomInfoText}>{readerClock}</Text>
+            <View style={s.bottomInfoSide}>
+              <BatteryIcon
+                width={22}
+                height={11}
+                color={colors.mutedForeground}
+                level={batteryLevel}
+                charging={isBatteryCharging}
+              />
+              <Text style={s.bottomInfoText}>{batteryLabel}</Text>
+            </View>
+          </View>
+        )}
+
+        {/* ─── Bottom Toolbar ─── */}
+        {!showSearch && (
+          <Animated.View
+            pointerEvents={showControls ? "auto" : "none"}
+            style={[
+              s.bottomToolbar,
+              {
+                left: 0,
+                right: 0,
+                opacity: bottomControlsOpacity,
+                transform: [{ translateY: bottomControlsTranslate }],
+              },
+            ]}
+          >
+            <View
+              style={[
+                s.bottomToolbarGlass,
+                {
+                  paddingBottom: 14,
+                  paddingLeft: 18,
+                  paddingRight: 18,
+                },
+              ]}
+            >
+              <ReadingProgressSlider
+                progress={progress}
+                onDragStart={() => suppressProgressTracking(99999)}
+                onDragEnd={() => suppressProgressTracking(2000)}
+                onSeek={(fraction) => {
+                  bridgeRef.current?.goToFraction(fraction);
+                }}
+                accentColor={colors.primary}
+                trackColor={withOpacity(colors.foreground, 0.12)}
+                textColor={withOpacity(colors.foreground, 0.6)}
+              />
+              <View style={s.bottomDockRow}>
+                <TouchableOpacity
+                  style={s.bottomDockBtn}
+                  onPress={() => {
+                    setTocActiveTab("toc");
+                    setAuxiliaryPanel("toc");
+                  }}
+                >
+                  <ListIcon size={bottomDockIconSize} color={colors.foreground} />
+                  <Text style={s.bottomDockLabel}>{t("reader.toc", "目录")}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[s.bottomDockBtn, isBookmarked && s.bottomDockBtnActive]}
+                  onPress={handleToggleBookmark}
+                >
+                  {isBookmarked ? (
+                    <BookmarkFilledIcon size={bottomDockIconSize} color={colors.primary} />
+                  ) : (
+                    <BookmarkIcon size={bottomDockIconSize} color={colors.foreground} />
+                  )}
+                  <Text style={[s.bottomDockLabel, isBookmarked && s.bottomDockLabelActive]}>
+                    {t("reader.bookmarks", "书签")}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={s.bottomDockBtn}
+                  onPress={() => setAuxiliaryPanel("notebook")}
+                >
+                  <NotebookPenIcon size={bottomDockIconSize} color={colors.foreground} />
+                  <Text style={s.bottomDockLabel}>{t("notes.title", "笔记")}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={s.bottomDockBtn}
+                  onPress={() => {
+                    setAuxiliaryPanel("search");
+                    setShowControls(false);
+                    Animated.timing(toolbarAnim, {
+                      toValue: TOOLBAR_HIDE_OFFSET,
+                      duration: 180,
+                      easing: Easing.out(Easing.cubic),
+                      useNativeDriver: true,
+                    }).start();
+                  }}
+                >
+                  <SearchIcon size={bottomDockIconSize} color={colors.foreground} />
+                  <Text style={s.bottomDockLabel}>{t("reader.search", "搜索")}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={s.bottomDockBtn} onPress={() => setShowSettings(true)}>
+                  <SettingsIcon size={bottomDockIconSize} color={colors.foreground} />
+                  <Text style={s.bottomDockLabel}>{t("common.settings", "设置")}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Animated.View>
+        )}
+      </View>
+
+      <ReaderAuxiliaryPane
+        panel={auxiliaryPanel}
+        docked={dockedTools}
+        width={auxiliaryWidth}
+        windowHeight={windowHeight}
+        searchPanelHeight={searchPanelHeight}
+        topInset={layoutTopInset}
+        insets={insets}
+        onClose={closeAuxiliaryPanel}
+        searchContent={<ReaderSearchPanel search={search} onClose={closeSearchWithPrompt} />}
+        tocContent={
+          <ReaderTOCPanel
+            embedded
+            visible={showTOC}
+            activeTab={tocActiveTab}
+            toc={toc}
+            bookmarks={bookBookmarks}
+            currentChapter={currentChapter}
+            onClose={closeAuxiliaryPanel}
+            onTabChange={setTocActiveTab}
+            onSelectTocItem={goToTocItem}
+            onGoToBookmark={(cfi) => {
+              goToCFISafely(cfi);
+              if (!dockedTools) closeAuxiliaryPanel();
+            }}
+            onDeleteBookmark={(id) => removeBookmark(id)}
+          />
+        }
+        notebookContent={
+          <>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                paddingHorizontal: 16,
               }}
             >
-              <XIcon size={16} color={colors.mutedForeground} />
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
-
-      {/* ─── TOC & Bookmarks Panel ─── */}
-      <ReaderTOCPanel
-        visible={showTOC}
-        activeTab={tocActiveTab}
-        toc={toc}
-        bookmarks={bookBookmarks}
-        currentChapter={currentChapter}
-        onClose={() => setShowTOC(false)}
-        onTabChange={setTocActiveTab}
-        onSelectTocItem={goToTocItem}
-        onGoToBookmark={(cfi) => {
-          goToCFISafely(cfi);
-          setShowTOC(false);
-        }}
-        onDeleteBookmark={(id) => removeBookmark(id)}
+              <Text style={s.sheetTitle}>{t("reader.notebook")}</Text>
+              <TouchableOpacity
+                onPress={closeAuxiliaryPanel}
+                style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}
+                accessibilityRole="button"
+                accessibilityLabel={t("common.close")}
+              >
+                <XIcon size={20} color={colors.mutedForeground} />
+              </TouchableOpacity>
+            </View>
+            {showNotebook && (
+              <NotesView
+                initialBookId={bookId}
+                hideDetailHeader
+                edges={[]}
+                onNavigate={(_, cfi) => {
+                  if (cfi) goToCFISafely(cfi);
+                  if (!dockedTools) closeAuxiliaryPanel();
+                }}
+              />
+            )}
+          </>
+        }
       />
 
       {/* ─── Settings Panel ─── */}
@@ -2028,69 +2065,6 @@ export function ReaderScreen({ route, navigation }: Props) {
           }
         }}
       />
-
-      {/* ─── Notebook Panel ─── */}
-      <Modal
-        visible={showNotebook}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setShowNotebook(false)}
-      >
-        <Pressable style={s.modalBackdrop} onPress={() => setShowNotebook(false)} />
-        <View
-          style={[
-            s.bottomSheet,
-            { maxHeight: SCREEN_HEIGHT * 0.7, paddingBottom: insets.bottom || 16 },
-          ]}
-        >
-          <View style={s.sheetHeader}>
-            <Text style={s.sheetTitle}>{t("reader.notebook", "笔记本")}</Text>
-            <TouchableOpacity onPress={() => setShowNotebook(false)}>
-              <XIcon size={18} color={colors.mutedForeground} />
-            </TouchableOpacity>
-          </View>
-          {highlights.length > 0 ? (
-            <ScrollView showsVerticalScrollIndicator={false} style={s.sheetScroll}>
-              {highlights.map((h) => (
-                <View key={h.id} style={s.highlightItem}>
-                  <View
-                    style={[
-                      s.highlightColorDot,
-                      {
-                        backgroundColor:
-                          h.color === "yellow"
-                            ? "#facc15"
-                            : h.color === "green"
-                              ? "#4ade80"
-                              : h.color === "blue"
-                                ? "#60a5fa"
-                                : h.color === "pink"
-                                  ? "#ec4899"
-                                  : h.color === "red"
-                                    ? "#f87171"
-                                    : "#a78bfa",
-                      },
-                    ]}
-                  />
-                  <View style={s.highlightContent}>
-                    <Text style={s.highlightText} numberOfLines={3}>
-                      {h.text}
-                    </Text>
-                    {h.note && <Text style={s.highlightNote}>{h.note}</Text>}
-                  </View>
-                </View>
-              ))}
-            </ScrollView>
-          ) : (
-            <View style={s.notebookPlaceholder}>
-              <NotebookPenIcon size={40} color={colors.mutedForeground} />
-              <Text style={s.notebookPlaceholderText}>
-                {t("reader.notebookHint", "在阅读时选中文字来创建笔记和高亮")}
-              </Text>
-            </View>
-          )}
-        </View>
-      </Modal>
 
       {/* ─── Note View Modal ─── */}
       <ReaderNoteViewModal

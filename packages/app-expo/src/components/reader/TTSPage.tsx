@@ -12,6 +12,7 @@ import {
   SquareIcon,
 } from "@/components/ui/Icon";
 import { useColors, radius } from "@/styles/theme";
+import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
 import {
   buildNarrationPreview,
   type TTSConfig,
@@ -29,10 +30,11 @@ import {
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BookCoverImage } from "./tts/BookCoverImage";
-import { makeStyles, SH } from "./tts/tts-page-styles";
+import { makeStyles } from "./tts/tts-page-styles";
 import { VoicePickerModal } from "./tts/VoicePickerModal";
 import { TTSSleepTimerSheet } from "@/components/tts/TTSSleepTimerSheet";
 import { useTTSStore } from "@/stores";
@@ -125,11 +127,18 @@ export function TTSPage({
   onLoadMoreAbove,
   onLoadMoreBelow,
   onUpdateConfig,
-  onPrevChapter,
-  onNextChapter,
 }: TTSPageProps) {
   const colors = useColors();
   const insets = useSafeAreaInsets();
+  // 当前窗口尺寸：折叠/旋转/分屏后歌词区按当前窗口高度布局。
+  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
+  // 低窗口（分屏/折叠外屏上半）：固定 UI 超过窗口时改为整屏可滚，歌词区给有限高度。
+  const split = useResponsiveLayout().supportsSplitView;
+  const isLowWindow = !split && windowHeight < 640;
+  const lowWindowLyricStyle = useMemo(
+    () => ({ flex: 0 as const, height: Math.max(120, Math.round(windowHeight * 0.4)) }),
+    [windowHeight],
+  );
   const { t } = useTranslation();
   const [voicePickerVisible, setVoicePickerVisible] = useState(false);
   const [timerSheetVisible, setTimerSheetVisible] = useState(false);
@@ -150,7 +159,7 @@ export function TTSPage({
 
   // Measured height of the lyricArea — used to compute paddingBottom so the
   // last sentence can always scroll to the vertical center of the list.
-  const [lyricAreaHeight, setLyricAreaHeight] = useState(SH * 0.4);
+  const [lyricAreaHeight, setLyricAreaHeight] = useState(windowHeight * 0.4);
   const onLyricAreaLayout = useCallback((e: { nativeEvent: { layout: { height: number } } }) => {
     const nextHeight = e.nativeEvent.layout.height;
     // Ignore transient tiny heights during modal open/close animation.
@@ -194,7 +203,7 @@ export function TTSPage({
     return currentText ? [{ id: "fallback:current-text", text: currentText, cfi: null }] : [];
   }, [currentText, narrationSegments, prevNarrationSegments]);
   const lyricSegmentIdsKey = useMemo(
-    () => lyricSegments.map((segment) => segment.id).join("|"),
+    () => JSON.stringify(lyricSegments.map((segment) => segment.id)),
     [lyricSegments],
   );
 
@@ -390,7 +399,7 @@ export function TTSPage({
 
   useEffect(() => {
     // Keep layout entries that still exist in the current segment list; evict stale ones.
-    const currentIds = new Set(lyricSegments.map((s) => s.id));
+    const currentIds = new Set<string>(JSON.parse(lyricSegmentIdsKey));
     for (const key of lyricLayoutRef.current.keys()) {
       if (!currentIds.has(key)) {
         lyricLayoutRef.current.delete(key);
@@ -424,9 +433,8 @@ export function TTSPage({
         centerLyricIndex(targetIndex, true);
       }, 80);
       return () => clearTimeout(timer);
-    } else {
-      pendingCenterRef.current = targetIndex;
     }
+    pendingCenterRef.current = targetIndex;
   }, [
     centerLyricIndex,
     currentChunkIndex,
@@ -541,7 +549,7 @@ export function TTSPage({
 
   // ── PanResponder listener removed — replaced by native ScrollView paging ──
 
-  const s = makeStyles(colors);
+  const s = makeStyles(colors, windowHeight, windowWidth);
 
   // ── Shared UI blocks ───────────────────────────────────────────────────────
 
@@ -724,6 +732,8 @@ export function TTSPage({
 
         <TouchableOpacity
           style={[s.timerQuickCluster, sleepTimerLabel ? s.timerQuickClusterActive : null]}
+          accessibilityRole="button"
+          accessibilityLabel={t("tts.sleepTimer")}
           onPress={() => setTimerSheetVisible(true)}
           activeOpacity={0.8}
         >
@@ -807,6 +817,20 @@ export function TTSPage({
     </View>
   );
 
+  const bookHeaderJSX = (
+    <View style={s.lyricHeaderRow}>
+      <View style={s.thumbShadowWrap}>
+        <BookCoverImage coverUri={coverUri} bookTitle={bookTitle} chapterTitle={chapterTitle}
+          width={THUMB_W} height={THUMB_H} borderRadius={radius.sm ?? 6}
+          pct={pct} colors={colors} t={t} />
+      </View>
+      <View style={s.lyricHeaderMeta}>
+        <Text style={s.lyricBookName} numberOfLines={2}>{bookTitle || t("reader.untitled")}</Text>
+        <Text style={s.lyricChapterName} numberOfLines={1}>{chapterTitle || t("tts.fromCurrentPage")}</Text>
+      </View>
+    </View>
+  );
+
   // ── Top bar ────────────────────────────────────────────────────────────────
 
   const topBarJSX = (
@@ -819,7 +843,8 @@ export function TTSPage({
         },
       ]}
     >
-      <TouchableOpacity style={s.iconBtn} onPress={onClose} activeOpacity={0.7}>
+      <TouchableOpacity style={s.iconBtn} onPress={onClose} activeOpacity={0.7}
+        accessibilityRole="button" accessibilityLabel={t("common.close")}>
         <ChevronDownIcon size={22} color={colors.mutedForeground} />
       </TouchableOpacity>
       <View style={s.statusPill}>
@@ -828,6 +853,8 @@ export function TTSPage({
       </View>
       <TouchableOpacity
         style={s.iconBtn}
+        accessibilityRole="button"
+        accessibilityLabel={t("tts.sleepTimer")}
         onPress={() => setTimerSheetVisible(true)}
         activeOpacity={0.7}
       >
@@ -839,40 +866,40 @@ export function TTSPage({
   return (
     <Modal
       visible={visible}
+      onRequestClose={onClose}
       animationType="slide"
       presentationStyle="fullScreen"
       statusBarTranslucent={Platform.OS === "android"}
       navigationBarTranslucent={Platform.OS === "android"}
       hardwareAccelerated={Platform.OS === "android"}
     >
-      <View style={s.screen}>
+      <View style={[s.screen, { paddingLeft: insets.left, paddingRight: insets.right }]}>
         {topBarJSX}
-        <View style={s.content}>
-          <View style={s.lyricHeaderRow}>
-            <View style={s.thumbShadowWrap}>
-              <BookCoverImage
-                coverUri={coverUri}
-                bookTitle={bookTitle}
-                chapterTitle={chapterTitle}
-                width={THUMB_W}
-                height={THUMB_H}
-                borderRadius={radius.sm ?? 6}
-                pct={pct}
-                colors={colors}
-                t={t}
-              />
-            </View>
-            <View style={s.lyricHeaderMeta}>
-              <Text style={s.lyricBookName} numberOfLines={2}>
-                {bookTitle || t("reader.untitled")}
-              </Text>
-              <Text style={s.lyricChapterName} numberOfLines={1}>
-                {chapterTitle || t("tts.fromCurrentPage")}
-              </Text>
-            </View>
-          </View>
-
-          <View style={s.lyricArea} onLayout={onLyricAreaLayout}>
+        {/* 外层可滚动：低窗口时固定头部+控制+底部可能超过窗口，可滚到控制；
+            正常高窗内容高度锁定视口，布局与原 View 一致。 */}
+        <ScrollView
+          style={s.content}
+          contentContainerStyle={isLowWindow ? undefined : s.contentFill}
+          scrollEnabled={isLowWindow}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={{ display: split ? "none" : "flex" }}>{bookHeaderJSX}</View>
+          <View style={[s.playerBody, { flexDirection: split ? "row" : "column-reverse" }, isLowWindow && { flex: 0 }]}>
+            <ScrollView
+              style={[s.playerControls, split ? s.playerControlsSplit : { flexGrow: 0, flexShrink: 0 }]}
+              contentContainerStyle={split ? s.playerControlsContent : undefined}
+              scrollEnabled={split} nestedScrollEnabled showsVerticalScrollIndicator={false}>
+              <View style={{ display: split ? "flex" : "none" }}>{bookHeaderJSX}</View>
+              {progressBarJSX}
+              {controlsJSX}
+              {settingsJSX}
+              <View style={[s.bottom, { paddingBottom: chromeBottomInset + 10 }]}>{bottomStripJSX}</View>
+            </ScrollView>
+          <View
+            style={[s.lyricArea, isLowWindow && lowWindowLyricStyle,
+              split && { borderLeftWidth: 1, borderLeftColor: colors.border, paddingBottom: chromeBottomInset + 16 }]}
+            onLayout={onLyricAreaLayout}
+          >
             {lyricSegments.length > 0 ? (
               <ScrollView
                 ref={lyricScrollRef}
@@ -984,14 +1011,8 @@ export function TTSPage({
             )}
           </View>
 
-          {progressBarJSX}
-          {controlsJSX}
-          {settingsJSX}
-
-          <View style={[s.bottom, { paddingBottom: chromeBottomInset + 10 }]}>
-            {bottomStripJSX}
           </View>
-        </View>
+        </ScrollView>
       </View>
 
       {onUpdateConfig && (

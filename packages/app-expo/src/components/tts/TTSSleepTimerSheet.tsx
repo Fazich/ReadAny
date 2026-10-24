@@ -1,5 +1,4 @@
-import { ClockIcon } from "@/components/ui/Icon";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
+import { ClockIcon, XIcon } from "@/components/ui/Icon";
 import { useTTSStore } from "@/stores";
 import { fontSize, fontWeight, radius, useColors, withOpacity } from "@/styles/theme";
 import { useEffect, useMemo, useState } from "react";
@@ -43,7 +42,6 @@ export function TTSSleepTimerSheet({ visible, onClose }: TTSSleepTimerSheetProps
   const { t } = useTranslation();
   const colors = useColors();
   const insets = useSafeAreaInsets();
-  const layout = useResponsiveLayout();
   const sleepTimerEndsAt = useTTSStore((s) => s.sleepTimerEndsAt);
   const sleepTimerDurationMinutes = useTTSStore((s) => s.sleepTimerDurationMinutes);
   const setSleepTimer = useTTSStore((s) => s.setSleepTimer);
@@ -72,9 +70,15 @@ export function TTSSleepTimerSheet({ visible, onClose }: TTSSleepTimerSheetProps
           flex: 1,
           backgroundColor: "rgba(0,0,0,0.36)",
           justifyContent: "flex-end",
+          alignItems: "center",
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+          paddingTop: insets.top,
         },
         keyboardRoot: { flex: 1 },
         sheet: {
+          width: "100%",
+          maxWidth: 560,
           backgroundColor: colors.background,
           borderTopLeftRadius: 24,
           borderTopRightRadius: 24,
@@ -194,7 +198,7 @@ export function TTSSleepTimerSheet({ visible, onClose }: TTSSleepTimerSheetProps
           color: colors.foreground,
         },
       }),
-    [colors, insets.bottom],
+    [colors, insets.bottom, insets.left, insets.right, insets.top],
   );
 
   const remainingLabel = useMemo(() => {
@@ -217,12 +221,7 @@ export function TTSSleepTimerSheet({ visible, onClose }: TTSSleepTimerSheetProps
       >
         <Pressable style={s.overlay} onPress={onClose}>
           <Pressable
-            style={[
-              s.sheet,
-              layout.isTablet && {
-                width: "100%",
-              },
-            ]}
+            style={s.sheet}
             onPress={(event) => event.stopPropagation()}
           >
             <ScrollView
@@ -234,12 +233,16 @@ export function TTSSleepTimerSheet({ visible, onClose }: TTSSleepTimerSheetProps
               <View style={s.handle} />
               <View style={s.header}>
                 <ClockIcon size={18} color={colors.primary} />
-                <View>
+                <View style={{ flex: 1 }}>
                   <Text style={s.title}>{t("tts.sleepTimer", "定时停止")}</Text>
                   <Text style={s.subtitle}>
                     {t("tts.sleepTimerSubtitle", "让朗读在你设定的时间后自动停止")}
                   </Text>
                 </View>
+                <TouchableOpacity style={{ width: 44, height: 44, alignItems: "center", justifyContent: "center" }}
+                  onPress={onClose} accessibilityRole="button" accessibilityLabel={t("common.close")}>
+                  <XIcon size={18} color={colors.mutedForeground} />
+                </TouchableOpacity>
               </View>
 
               {sleepTimerEndsAt ? (

@@ -1,5 +1,4 @@
 import { KeyboardAwareScrollView } from "@/components/ui/KeyboardAwareScrollView";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
 import { useSettingsStore } from "@/stores";
 import {
   TRANSLATOR_LANGS,
@@ -33,7 +32,6 @@ export default function TranslationSettingsScreen() {
   const colors = useColors();
   const styles = makeStyles(colors);
   const { t } = useTranslation();
-  const layout = useResponsiveLayout();
   const { translationConfig, updateTranslationConfig, aiConfig } = useSettingsStore();
   const [showModelPicker, setShowModelPicker] = useState(false);
 
@@ -81,7 +79,7 @@ export default function TranslationSettingsScreen() {
         style={styles.scroll}
         contentContainerStyle={[styles.scrollContent, { alignItems: "center" }]}
       >
-          <View style={[styles.contentColumn, { width: "100%", maxWidth: layout.centeredContentWidth }]}>
+          <View style={[styles.contentColumn, { width: "100%", maxWidth: 720 }]}>
             {/* Provider */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>{t("translation.engine", "翻译引擎")}</Text>

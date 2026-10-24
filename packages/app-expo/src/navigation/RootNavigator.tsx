@@ -14,6 +14,7 @@ import AppearanceSettingsScreen from "@/screens/settings/AppearanceSettingsScree
 import FeedbackDetailScreen from "@/screens/settings/FeedbackDetailScreen";
 import FeedbackScreen from "@/screens/settings/FeedbackScreen";
 import FontSettingsScreen from "@/screens/settings/FontSettingsScreen";
+import { SettingsLayout } from "@/screens/settings/SettingsLayout";
 import SyncSettingsScreen from "@/screens/settings/SyncSettingsScreen";
 import TTSSettingsScreen from "@/screens/settings/TTSSettingsScreen";
 import TranslationSettingsScreen from "@/screens/settings/TranslationSettingsScreen";
@@ -50,6 +51,9 @@ export type RootStackParamList = {
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const settingsScreenLayout = ({ children }: { children: React.ReactNode }) => (
+  <SettingsLayout>{children}</SettingsLayout>
+);
 
 export function RootNavigator() {
   const { hasCompletedOnboarding, _hasHydrated } = useSettingsStore();
@@ -96,28 +100,30 @@ export function RootNavigator() {
               component={SkillsScreen}
               options={{ animation: "slide_from_right" }}
             />
-            <Stack.Screen
-              name="VectorModelSettings"
-              component={VectorModelSettingsScreen}
-              options={{ animation: "slide_from_right" }}
-            />
-            <Stack.Screen name="AppearanceSettings" component={AppearanceSettingsScreen} />
-            <Stack.Screen name="AISettings" component={AISettingsScreen} />
-            <Stack.Screen name="TTSSettings" component={TTSSettingsScreen} />
-            <Stack.Screen name="TranslationSettings" component={TranslationSettingsScreen} />
-            <Stack.Screen name="SyncSettings" component={SyncSettingsScreen} />
-            <Stack.Screen name="About" component={AboutScreen} />
-            <Stack.Screen name="Feedback" component={FeedbackScreen} />
-            <Stack.Screen
-              name="FeedbackDetail"
-              component={FeedbackDetailScreen}
-              options={{ animation: "slide_from_right" }}
-            />
-            <Stack.Screen
-              name="FontSettings"
-              component={FontSettingsScreen}
-              options={{ animation: "slide_from_right" }}
-            />
+            <Stack.Group screenLayout={settingsScreenLayout}>
+              <Stack.Screen
+                name="VectorModelSettings"
+                component={VectorModelSettingsScreen}
+                options={{ animation: "slide_from_right" }}
+              />
+              <Stack.Screen name="AppearanceSettings" component={AppearanceSettingsScreen} />
+              <Stack.Screen name="AISettings" component={AISettingsScreen} />
+              <Stack.Screen name="TTSSettings" component={TTSSettingsScreen} />
+              <Stack.Screen name="TranslationSettings" component={TranslationSettingsScreen} />
+              <Stack.Screen name="SyncSettings" component={SyncSettingsScreen} />
+              <Stack.Screen name="About" component={AboutScreen} />
+              <Stack.Screen name="Feedback" component={FeedbackScreen} />
+              <Stack.Screen
+                name="FeedbackDetail"
+                component={FeedbackDetailScreen}
+                options={{ animation: "slide_from_right" }}
+              />
+              <Stack.Screen
+                name="FontSettings"
+                component={FontSettingsScreen}
+                options={{ animation: "slide_from_right" }}
+              />
+            </Stack.Group>
             <Stack.Screen
               name="WebDavImportBrowser"
               component={WebDavImportBrowserScreen}

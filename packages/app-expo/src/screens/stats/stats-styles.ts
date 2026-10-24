@@ -30,8 +30,8 @@ export const makeStyles = (colors: ThemeColors) =>
       paddingVertical: 10,
     },
     backBtn: {
-      width: 36,
-      height: 36,
+      width: 44,
+      height: 44,
       borderRadius: radius.full,
       alignItems: "center",
       justifyContent: "center",

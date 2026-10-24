@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/Icon";
 import { KeyboardAwareScrollView } from "@/components/ui/KeyboardAwareScrollView";
 import { SyncButton } from "@/components/ui/SyncButton";
+import { useContentLayout } from "@/hooks/use-responsive-layout";
 import { openMobileBook } from "@/lib/library/open-mobile-book";
 import type { RootStackParamList } from "@/navigation/RootNavigator";
 import { useAnnotationStore, useLibraryStore } from "@/stores";
@@ -33,7 +34,6 @@ import {
   Image,
   Modal,
   Pressable,
-  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -58,17 +58,22 @@ export function NotesView({
   showBackButton,
   edges = ["top"],
   hideDetailHeader,
+  onNavigate,
 }: {
   initialBookId?: string | null;
   showBackButton?: boolean;
   edges?: ("top" | "bottom" | "left" | "right")[];
   hideDetailHeader?: boolean;
+  onNavigate?: (bookId: string, cfi?: string) => void;
 }) {
   const colors = useColors();
   const { isDark } = useTheme();
   const s = makeStyles(colors);
   const { t } = useTranslation();
   const nav = useNavigation<Nav>();
+  const layout = useContentLayout();
+  const currentBookOnly = Boolean(initialBookId) && !showBackButton;
+  const split = layout.supportsSplitView && !currentBookOnly;
   const {
     highlightsWithBooks,
     loadAllHighlightsWithBooks,
@@ -81,6 +86,7 @@ export function NotesView({
 
   const [selectedBookId, setSelectedBookId] = useState<string | null>(initialBookId || null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [notebookQuery, setNotebookQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [detailTab, setDetailTab] = useState<DetailTab>("notes");
@@ -94,12 +100,6 @@ export function NotesView({
       Promise.all([loadAllHighlightsWithBooks(500), loadStats()]).finally(() =>
         setIsLoading(false),
       );
-
-      return () => {
-        setSelectedBookId(null);
-        setEditingId(null);
-        setSearchQuery("");
-      };
     }, [loadAllHighlightsWithBooks, loadStats]),
   );
 
@@ -209,9 +209,10 @@ export function NotesView({
 
   const handleOpenBook = useCallback(
     (bookId: string, cfi?: string) => {
-      void openMobileBook({ bookId, navigation: nav, t, cfi });
+      if (onNavigate) onNavigate(bookId, cfi);
+      else void openMobileBook({ bookId, navigation: nav, t, cfi });
     },
-    [nav, t],
+    [nav, t, onNavigate],
   );
 
   const handleDeleteNote = useCallback(
@@ -301,7 +302,7 @@ export function NotesView({
   const totalBooks = stats?.totalBooks ?? 0;
 
   // Loading
-  if (isLoading) {
+  if (isLoading && bookNotebooks.length === 0) {
     return (
       <SafeAreaView style={[s.container, { backgroundColor: colors.background }]} edges={["top"]}>
         <View style={s.loadingWrap}>
@@ -333,185 +334,186 @@ export function NotesView({
     );
   }
 
-  // Detail view
-  if (selectedBookId && selectedBook) {
-    return (
-      <SafeAreaView style={[s.container, { backgroundColor: colors.background }]} edges={edges}>
-        {/* Detail header - hide entirely when from reader and empty */}
-        {!(hideDetailHeader && selectedBook.highlights.length === 0) && (
-          <View style={s.detailHeader}>
-            {!hideDetailHeader && (
-              <View style={s.detailHeaderTop}>
-                {/* Back button - return to list when in tab navigation */}
-                {showBackButton && (
-                  <TouchableOpacity style={s.backBtn} onPress={() => setSelectedBookId(null)}>
-                    <ChevronLeftIcon size={20} color={colors.foreground} />
-                  </TouchableOpacity>
-                )}
-
-                {/* Book cover */}
-                {resolvedCovers.get(selectedBook.bookId) || selectedBook.coverUrl ? (
-                  <Image
-                    source={{
-                      uri: resolvedCovers.get(selectedBook.bookId) || selectedBook.coverUrl || "",
-                    }}
-                    style={s.detailCover}
-                    resizeMode="cover"
-                  />
-                ) : (
-                  <View style={s.detailCoverFallback}>
-                    <BookOpenIcon size={16} color={colors.mutedForeground} />
-                  </View>
-                )}
-
-                <View style={s.detailHeaderInfo}>
-                  <Text style={s.detailTitle} numberOfLines={1}>
-                    {selectedBook.title}
-                  </Text>
-                  <Text style={s.detailAuthor}>{selectedBook.author}</Text>
-                </View>
-
-                {/* Export button */}
-                <TouchableOpacity
-                  style={s.exportBtn}
-                  onPress={() => setShowExportMenu(!showExportMenu)}
-                >
-                  <ShareIcon size={16} color={colors.foreground} />
+  const detailContent = selectedBook ? (
+    <View style={s.container}>
+      {/* Detail header - hide entirely when from reader and empty */}
+      {!(hideDetailHeader && selectedBook.highlights.length === 0) && (
+        <View style={s.detailHeader}>
+          {!hideDetailHeader && (
+            <View style={s.detailHeaderTop}>
+              {/* Back button - return to list when in tab navigation */}
+              {showBackButton && !split && (
+                <TouchableOpacity style={s.backBtn} onPress={() => setSelectedBookId(null)}>
+                  <ChevronLeftIcon size={20} color={colors.foreground} />
                 </TouchableOpacity>
-              </View>
-            )}
+              )}
 
-            {/* Tabs + search */}
-            <View style={s.detailTabRow}>
-              <View style={s.tabSwitcher}>
-                <TouchableOpacity
-                  style={[s.tabBtn, detailTab === "notes" && s.tabBtnActive]}
-                  onPress={() => setDetailTab("notes")}
-                >
-                  <NotebookPenIcon
-                    size={12}
-                    color={
-                      detailTab === "notes" ? colors.primaryForeground : colors.mutedForeground
-                    }
-                  />
-                  <Text style={[s.tabBtnText, detailTab === "notes" && s.tabBtnTextActive]}>
-                    {t("notebook.notesSection", "笔记")} ({selectedBook.notesCount || 0})
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[s.tabBtn, detailTab === "highlights" && s.tabBtnActive]}
-                  onPress={() => setDetailTab("highlights")}
-                >
-                  <HighlighterIcon
-                    size={12}
-                    color={
-                      detailTab === "highlights" ? colors.primaryForeground : colors.mutedForeground
-                    }
-                  />
-                  <Text style={[s.tabBtnText, detailTab === "highlights" && s.tabBtnTextActive]}>
-                    {t("notebook.highlightsSection", "高亮")} (
-                    {selectedBook.highlightsOnlyCount || 0})
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              <View style={s.detailSearch}>
-                <SearchIcon size={14} color={colors.mutedForeground} />
-                <TextInput
-                  style={s.detailSearchInput}
-                  placeholder={t("notes.searchPlaceholder", "搜索...")}
-                  placeholderTextColor={colors.mutedForeground}
-                  value={searchQuery}
-                  onChangeText={setSearchQuery}
+              {/* Book cover */}
+              {resolvedCovers.get(selectedBook.bookId) || selectedBook.coverUrl ? (
+                <Image
+                  source={{
+                    uri: resolvedCovers.get(selectedBook.bookId) || selectedBook.coverUrl || "",
+                  }}
+                  style={s.detailCover}
+                  resizeMode="cover"
                 />
-              </View>
-            </View>
-          </View>
-        )}
-
-        {/* Detail content */}
-        {currentList.length === 0 ? (
-          <View style={s.detailEmpty}>
-            <Text style={s.detailEmptyText}>
-              {searchQuery
-                ? t("notes.noSearchResults", "没有匹配结果")
-                : detailTab === "notes"
-                  ? t("notes.noNotes", "暂无笔记")
-                  : t("highlights.noHighlights", "暂无高亮")}
-            </Text>
-          </View>
-        ) : (
-          <KeyboardAwareScrollView style={s.detailList} showsVerticalScrollIndicator={false}>
-            {itemsByChapter.map(({ chapter, items }) => (
-              <View key={chapter} style={s.chapterGroup}>
-                {/* Chapter divider */}
-                <View style={s.chapterDivider}>
-                  <View style={s.chapterLine} />
-                  <Text style={s.chapterName}>{chapter}</Text>
-                  <View style={s.chapterLine} />
+              ) : (
+                <View style={s.detailCoverFallback}>
+                  <BookOpenIcon size={16} color={colors.mutedForeground} />
                 </View>
+              )}
 
-                {items.map((item) =>
-                  detailTab === "notes" ? (
-                    <NoteCard
-                      key={item.id}
-                      highlight={item}
-                      isEditing={editingId === item.id}
-                      editNote={editNote}
-                      setEditNote={setEditNote}
-                      onStartEdit={() => startEditNote(item)}
-                      onSaveNote={() => saveNote(item.id)}
-                      onCancelEdit={cancelEdit}
-                      onDeleteNote={() => handleDeleteNote(item)}
-                      onNavigate={() => handleOpenBook(selectedBook.bookId, item.cfi)}
-                      t={t}
-                    />
-                  ) : (
-                    <HighlightCard
-                      key={item.id}
-                      highlight={item}
-                      onDelete={() => handleDeleteHighlight(item)}
-                      onNavigate={() => handleOpenBook(selectedBook.bookId, item.cfi)}
-                    />
-                  ),
-                )}
+              <View style={s.detailHeaderInfo}>
+                <Text style={s.detailTitle} numberOfLines={1}>
+                  {selectedBook.title}
+                </Text>
+                <Text style={s.detailAuthor}>{selectedBook.author}</Text>
               </View>
-            ))}
-            <View style={{ height: 24 }} />
-          </KeyboardAwareScrollView>
-        )}
 
-        {/* Export menu */}
-        <Modal
-          visible={showExportMenu}
-          transparent
-          animationType="fade"
-          onRequestClose={() => setShowExportMenu(false)}
-        >
-          <Pressable style={s.exportOverlay} onPress={() => setShowExportMenu(false)} />
-          <View style={s.exportDropdown}>
-            {(["markdown", "json", "obsidian", "notion"] as const).map((fmt) => (
-              <TouchableOpacity key={fmt} style={s.exportItem} onPress={() => handleExport(fmt)}>
-                <Text style={s.exportItemText}>
-                  {fmt === "markdown"
-                    ? "Markdown"
-                    : fmt === "json"
-                      ? "JSON"
-                      : fmt === "obsidian"
-                        ? "Obsidian"
-                        : "Notion"}
+              {/* Export button */}
+              <TouchableOpacity
+                style={s.exportBtn}
+                onPress={() => setShowExportMenu(!showExportMenu)}
+              >
+                <ShareIcon size={16} color={colors.foreground} />
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* Tabs + search */}
+          <View style={s.detailTabRow}>
+            <View style={s.tabSwitcher}>
+              <TouchableOpacity
+                style={[s.tabBtn, detailTab === "notes" && s.tabBtnActive]}
+                onPress={() => setDetailTab("notes")}
+              >
+                <NotebookPenIcon
+                  size={12}
+                  color={detailTab === "notes" ? colors.primaryForeground : colors.mutedForeground}
+                />
+                <Text style={[s.tabBtnText, detailTab === "notes" && s.tabBtnTextActive]}>
+                  {t("notebook.notesSection", "笔记")} ({selectedBook.notesCount || 0})
                 </Text>
               </TouchableOpacity>
-            ))}
-          </View>
-        </Modal>
-      </SafeAreaView>
-    );
-  }
+              <TouchableOpacity
+                style={[s.tabBtn, detailTab === "highlights" && s.tabBtnActive]}
+                onPress={() => setDetailTab("highlights")}
+              >
+                <HighlighterIcon
+                  size={12}
+                  color={
+                    detailTab === "highlights" ? colors.primaryForeground : colors.mutedForeground
+                  }
+                />
+                <Text style={[s.tabBtnText, detailTab === "highlights" && s.tabBtnTextActive]}>
+                  {t("notebook.highlightsSection", "高亮")} ({selectedBook.highlightsOnlyCount || 0}
+                  )
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-  // Main list view
-  return (
-    <SafeAreaView style={[s.container, { backgroundColor: colors.background }]} edges={edges}>
+            <View style={s.detailSearch}>
+              <SearchIcon size={14} color={colors.mutedForeground} />
+              <TextInput
+                style={s.detailSearchInput}
+                placeholder={t("notes.searchPlaceholder", "搜索...")}
+                placeholderTextColor={colors.mutedForeground}
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+              />
+            </View>
+          </View>
+        </View>
+      )}
+
+      {/* Detail content */}
+      {currentList.length === 0 ? (
+        <View style={s.detailEmpty}>
+          <Text style={s.detailEmptyText}>
+            {searchQuery
+              ? t("notes.noSearchResults", "没有匹配结果")
+              : detailTab === "notes"
+                ? t("notes.noNotes", "暂无笔记")
+                : t("highlights.noHighlights", "暂无高亮")}
+          </Text>
+        </View>
+      ) : (
+        <KeyboardAwareScrollView style={s.detailList} showsVerticalScrollIndicator={false}>
+          {itemsByChapter.map(({ chapter, items }) => (
+            <View key={chapter} style={s.chapterGroup}>
+              {/* Chapter divider */}
+              <View style={s.chapterDivider}>
+                <View style={s.chapterLine} />
+                <Text style={s.chapterName}>{chapter}</Text>
+                <View style={s.chapterLine} />
+              </View>
+
+              {items.map((item) =>
+                detailTab === "notes" ? (
+                  <NoteCard
+                    key={item.id}
+                    highlight={item}
+                    isEditing={editingId === item.id}
+                    editNote={editNote}
+                    setEditNote={setEditNote}
+                    onStartEdit={() => startEditNote(item)}
+                    onSaveNote={() => saveNote(item.id)}
+                    onCancelEdit={cancelEdit}
+                    onDeleteNote={() => handleDeleteNote(item)}
+                    onNavigate={() => handleOpenBook(selectedBook.bookId, item.cfi)}
+                    t={t}
+                  />
+                ) : (
+                  <HighlightCard
+                    key={item.id}
+                    highlight={item}
+                    onDelete={() => handleDeleteHighlight(item)}
+                    onNavigate={() => handleOpenBook(selectedBook.bookId, item.cfi)}
+                  />
+                ),
+              )}
+            </View>
+          ))}
+          <View style={{ height: 24 }} />
+        </KeyboardAwareScrollView>
+      )}
+
+      {/* Export menu */}
+      <Modal
+        visible={showExportMenu}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowExportMenu(false)}
+      >
+        <Pressable style={s.exportOverlay} onPress={() => setShowExportMenu(false)} />
+        <View style={s.exportDropdown}>
+          {(["markdown", "json", "obsidian", "notion"] as const).map((fmt) => (
+            <TouchableOpacity key={fmt} style={s.exportItem} onPress={() => handleExport(fmt)}>
+              <Text style={s.exportItemText}>
+                {fmt === "markdown"
+                  ? "Markdown"
+                  : fmt === "json"
+                    ? "JSON"
+                    : fmt === "obsidian"
+                      ? "Obsidian"
+                      : "Notion"}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </Modal>
+    </View>
+  ) : (
+    <View style={s.detailEmpty}>
+      <NotebookPenIcon size={32} color={colors.mutedForeground} />
+      <Text style={s.detailEmptyText}>
+        {t("notes.selectNotebook", "选择一本书，查看笔记与高亮")}
+      </Text>
+    </View>
+  );
+
+  const notebookContent = (
+    <View style={s.container}>
       <View style={s.header}>
         <View style={s.headerRow}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
@@ -523,7 +525,7 @@ export function NotesView({
               style={s.searchToggle}
               onPress={() => {
                 setShowSearch(!showSearch);
-                if (showSearch) setSearchQuery("");
+                if (showSearch) setNotebookQuery("");
               }}
             >
               {showSearch ? (
@@ -561,12 +563,12 @@ export function NotesView({
               style={s.searchInput}
               placeholder={t("notes.searchPlaceholder", "搜索笔记...")}
               placeholderTextColor={colors.mutedForeground}
-              value={searchQuery}
-              onChangeText={setSearchQuery}
+              value={notebookQuery}
+              onChangeText={setNotebookQuery}
               autoFocus
             />
-            {searchQuery.length > 0 && (
-              <TouchableOpacity onPress={() => setSearchQuery("")}>
+            {notebookQuery.length > 0 && (
+              <TouchableOpacity onPress={() => setNotebookQuery("")}>
                 <XIcon size={14} color={colors.mutedForeground} />
               </TouchableOpacity>
             )}
@@ -576,7 +578,9 @@ export function NotesView({
 
       {/* Notebook list */}
       <FlatList
-        data={bookNotebooks}
+        data={bookNotebooks.filter((book) =>
+          `${book.title} ${book.author}`.toLowerCase().includes(notebookQuery.toLowerCase()),
+        )}
         keyExtractor={(item) => item.bookId}
         contentContainerStyle={s.listContent}
         showsVerticalScrollIndicator={false}
@@ -593,6 +597,41 @@ export function NotesView({
           />
         )}
       />
+    </View>
+  );
+
+  return (
+    <SafeAreaView style={s.container} edges={edges}>
+      <View
+        onLayout={layout.onContentLayout}
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          marginHorizontal: currentBookOnly ? 0 : layout.horizontalPadding,
+        }}
+      >
+        <View
+          key="notebooks"
+          style={{
+            display: currentBookOnly || (!split && selectedBook) ? "none" : "flex",
+            width: split ? layout.sidebarWidth : "100%",
+            borderRightWidth: split ? 0.5 : 0,
+            borderRightColor: colors.border,
+          }}
+        >
+          {notebookContent}
+        </View>
+        <View
+          key="notes"
+          style={{
+            flex: 1,
+            minWidth: 0,
+            display: split || selectedBook || currentBookOnly ? "flex" : "none",
+          }}
+        >
+          {detailContent}
+        </View>
+      </View>
     </SafeAreaView>
   );
 }

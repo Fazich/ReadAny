@@ -1,5 +1,4 @@
 import { GlobeIcon, LinkIcon, PlusIcon, Trash2Icon, TypeIcon } from "@/components/ui/Icon";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
 import { fontSize, fontWeight, radius, spacing, useColors } from "@/styles/theme";
 /**
  * FontSettingsScreen — custom font management for mobile
@@ -35,7 +34,6 @@ import { SettingsHeader } from "./SettingsHeader";
 export default function FontSettingsScreen() {
   const { t, i18n } = useTranslation();
   const colors = useColors();
-  const layout = useResponsiveLayout();
 
   const fonts = useFontStore((s) => s.fonts);
   const fontsHydrated = useFontStore((s) => s._hasHydrated);
@@ -273,7 +271,7 @@ export default function FontSettingsScreen() {
         style={s.scroll}
         contentContainerStyle={[s.scrollContent, { alignItems: "center" }]}
       >
-        <View style={{ width: "100%", maxWidth: layout.centeredContentWidth }}>
+        <View style={{ width: "100%", maxWidth: 720 }}>
           <View style={s.section}>
             <Text style={[s.hint, { color: colors.mutedForeground }]}>
               {t("fonts.desc", "导入自定义字体，在阅读器中使用。支持 TTF、OTF、WOFF、WOFF2 格式。")}

@@ -39,7 +39,7 @@ export const noteTooltipMdStyles = {
   softbreak: { color: TOOLTIP_FG },
 };
 
-export const makeNoteStyles = (colors: ThemeColors) =>
+export const makeNoteStyles = (colors: ThemeColors, windowHeight = SCREEN_HEIGHT) =>
   StyleSheet.create({
     // ── Note view modal ───────────────────────────────────────────────────────
     noteViewOverlay: {
@@ -51,7 +51,7 @@ export const makeNoteStyles = (colors: ThemeColors) =>
       borderTopLeftRadius: radius.xxl,
       borderTopRightRadius: radius.xxl,
       padding: 16,
-      maxHeight: SCREEN_HEIGHT * 0.75,
+      maxHeight: windowHeight * 0.75,
     },
     noteViewHeader: {
       flexDirection: "row", alignItems: "center",
@@ -67,15 +67,19 @@ export const makeNoteStyles = (colors: ThemeColors) =>
       fontSize: fontSize.sm, color: colors.mutedForeground,
       marginBottom: 12, fontStyle: "italic", lineHeight: 20,
       paddingHorizontal: 8, borderLeftWidth: 2, borderLeftColor: colors.primary,
+      flexShrink: 1,
     },
     noteViewBody: {
-      maxHeight: SCREEN_HEIGHT * 0.35,
+      maxHeight: windowHeight * 0.35,
+      flexShrink: 1,
       backgroundColor: colors.muted,
       borderRadius: radius.lg,
       paddingHorizontal: 12, paddingVertical: 8,
     },
+    // 编辑区随可用高度收缩，低窗口下保存/取消仍可达；正常窗口保持 200 高，
+    // 不换 key、RichTextEditor 实例与草稿不重置。
     noteViewEditorContainer: {
-      height: 200, borderRadius: radius.lg,
+      height: 200, flexShrink: 1, borderRadius: radius.lg,
       borderWidth: 1, borderColor: colors.border, overflow: "hidden",
     },
     noteViewActions: { flexDirection: "row", justifyContent: "flex-end", gap: 8, marginTop: 12 },

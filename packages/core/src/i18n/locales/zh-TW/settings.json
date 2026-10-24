@@ -1,6 +1,9 @@
 {
   "settings": {
     "title": "設定",
+    "unsavedTitle": "有尚未儲存的修改",
+    "unsavedMessage": "離開前如何處理目前的修改？",
+    "discardChanges": "放棄修改",
     "realtimeHint": "所有改動即時生效，無需手動儲存",
     "general": "一般",
     "reading": "閱讀",

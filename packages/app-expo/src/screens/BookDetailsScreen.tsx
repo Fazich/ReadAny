@@ -7,7 +7,7 @@ import {
   Trash2Icon,
 } from "@/components/ui/Icon";
 import { KeyboardAwareScrollView } from "@/components/ui/KeyboardAwareScrollView";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
+import { useContentLayout } from "@/hooks/use-responsive-layout";
 import { extractLocalBookMetadata } from "@/lib/book/auto-metadata";
 import type { RootStackParamList } from "@/navigation/RootNavigator";
 import { SettingsHeader } from "@/screens/settings/SettingsHeader";
@@ -276,7 +276,7 @@ async function pickCoverFromPhotoLibrary(): Promise<PickedCoverSource | null> {
 export function BookDetailsScreen({ route }: Props) {
   const { bookId } = route.params;
   const colors = useColors();
-  const layout = useResponsiveLayout();
+  const layout = useContentLayout();
   const { t, i18n } = useTranslation();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const books = useLibraryStore((state) => state.books);
@@ -507,277 +507,300 @@ export function BookDetailsScreen({ route }: Props) {
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
-      edges={["top"]}
+      edges={["top", "left", "right", "bottom"]}
     >
       <SettingsHeader title={t("library.detailsTitle", "书籍详情")} />
-      <View style={styles.flex}>
+      <View
+        onLayout={layout.onContentLayout}
+        style={[styles.flex, { marginHorizontal: layout.horizontalPadding }]}
+      >
         <KeyboardAwareScrollView
           style={styles.flex}
           contentContainerStyle={[
             styles.scrollContent,
-            { maxWidth: layout.centeredContentWidth, alignSelf: "center" },
+            {
+              maxWidth: 1200,
+              alignSelf: "center",
+              flexDirection: layout.supportsSplitView ? "row" : "column",
+              alignItems: "flex-start",
+            },
           ]}
           keyboardShouldPersistTaps="handled"
         >
-          <View style={styles.heroStage}>
-            <View style={styles.coverColumn}>
-              <View style={styles.coverStack}>
-                <View style={styles.coverShadow} />
-                <View style={styles.cover}>
-                  {coverSrc ? (
-                    <Image
-                      source={{ uri: coverSrc }}
-                      style={styles.coverImage}
-                      resizeMode="cover"
-                    />
-                  ) : (
-                    <View style={styles.coverFallback}>
-                      <Text style={styles.coverFallbackTitle} numberOfLines={4}>
-                        {book.meta.title}
-                      </Text>
-                      {book.meta.author ? (
-                        <Text style={styles.coverFallbackAuthor} numberOfLines={1}>
-                          {book.meta.author}
+          <View style={{ width: layout.supportsSplitView ? 240 : "100%", gap: 24 }}>
+            <View
+              style={[
+                styles.heroStage,
+                layout.supportsSplitView && { flexDirection: "column", alignItems: "stretch" },
+              ]}
+            >
+              <View style={styles.coverColumn}>
+                <View style={styles.coverStack}>
+                  <View style={styles.coverShadow} />
+                  <View style={styles.cover}>
+                    {coverSrc ? (
+                      <Image
+                        source={{ uri: coverSrc }}
+                        style={styles.coverImage}
+                        resizeMode="cover"
+                      />
+                    ) : (
+                      <View style={styles.coverFallback}>
+                        <Text style={styles.coverFallbackTitle} numberOfLines={4}>
+                          {book.meta.title}
                         </Text>
-                      ) : null}
-                    </View>
-                  )}
+                        {book.meta.author ? (
+                          <Text style={styles.coverFallbackAuthor} numberOfLines={1}>
+                            {book.meta.author}
+                          </Text>
+                        ) : null}
+                      </View>
+                    )}
+                  </View>
+                </View>
+                <View style={styles.coverActions}>
+                  <TouchableOpacity
+                    style={styles.coverAction}
+                    activeOpacity={0.78}
+                    onPress={() => void handleChangeCover()}
+                  >
+                    <EditIcon size={12} color={colors.mutedForeground} />
+                    <Text style={styles.coverActionText}>
+                      {t("library.detailsChangeCover", "更换")}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.coverAction, !values.coverUrl && styles.coverActionDisabled]}
+                    disabled={!values.coverUrl}
+                    activeOpacity={0.78}
+                    onPress={() => void persistCoverUrl("")}
+                  >
+                    <Trash2Icon size={12} color={colors.mutedForeground} />
+                    <Text style={styles.coverActionText}>
+                      {t("library.detailsClearCover", "清除")}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
-              <View style={styles.coverActions}>
-                <TouchableOpacity
-                  style={styles.coverAction}
-                  activeOpacity={0.78}
-                  onPress={() => void handleChangeCover()}
-                >
-                  <EditIcon size={12} color={colors.mutedForeground} />
-                  <Text style={styles.coverActionText}>
-                    {t("library.detailsChangeCover", "更换")}
+              <View style={styles.heroCopy}>
+                <InlineEditableHeroInput
+                  value={values.title}
+                  placeholder={t("library.detailsBookTitle", "书名")}
+                  textStyle={styles.heroTitleText}
+                  placeholderStyle={styles.heroTitlePlaceholder}
+                  multiline
+                  onChangeText={(text) => setField("title", text)}
+                  styles={styles}
+                />
+                <InlineEditableHeroInput
+                  value={values.author}
+                  placeholder={t("library.detailsUnknownAuthor", "未知作者")}
+                  textStyle={styles.heroAuthorText}
+                  placeholderStyle={styles.heroAuthorPlaceholder}
+                  onChangeText={(text) => setField("author", text)}
+                  styles={styles}
+                />
+                <RatingField
+                  label={t("library.detailsRating", "评分")}
+                  noRatingLabel={t("library.detailsNoRating", "未评分")}
+                  value={values.rating}
+                  onChange={setRating}
+                  styles={styles}
+                  colors={colors}
+                />
+                <View style={styles.progressBlock}>
+                  <View style={styles.progressTrack}>
+                    <View style={[styles.progressFill, { width: `${progressPct}%` }]} />
+                  </View>
+                  <Text style={styles.progressText}>
+                    {t("library.detailsProgressValue", "{{progress}}% 已读", {
+                      progress: progressPct,
+                    })}
                   </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.coverAction, !values.coverUrl && styles.coverActionDisabled]}
-                  disabled={!values.coverUrl}
-                  activeOpacity={0.78}
-                  onPress={() => void persistCoverUrl("")}
-                >
-                  <Trash2Icon size={12} color={colors.mutedForeground} />
-                  <Text style={styles.coverActionText}>
-                    {t("library.detailsClearCover", "清除")}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.heroCopy}>
-              <InlineEditableHeroInput
-                value={values.title}
-                placeholder={t("library.detailsBookTitle", "书名")}
-                textStyle={styles.heroTitleText}
-                placeholderStyle={styles.heroTitlePlaceholder}
-                multiline
-                onChangeText={(text) => setField("title", text)}
-                styles={styles}
-              />
-              <InlineEditableHeroInput
-                value={values.author}
-                placeholder={t("library.detailsUnknownAuthor", "未知作者")}
-                textStyle={styles.heroAuthorText}
-                placeholderStyle={styles.heroAuthorPlaceholder}
-                onChangeText={(text) => setField("author", text)}
-                styles={styles}
-              />
-              <RatingField
-                label={t("library.detailsRating", "评分")}
-                noRatingLabel={t("library.detailsNoRating", "未评分")}
-                value={values.rating}
-                onChange={setRating}
-                styles={styles}
-                colors={colors}
-              />
-              <View style={styles.progressBlock}>
-                <View style={styles.progressTrack}>
-                  <View style={[styles.progressFill, { width: `${progressPct}%` }]} />
                 </View>
-                <Text style={styles.progressText}>
-                  {t("library.detailsProgressValue", "{{progress}}% 已读", {
-                    progress: progressPct,
-                  })}
-                </Text>
               </View>
             </View>
-          </View>
 
-          <View style={styles.metaStrip}>
-            <MetaItem
-              label={t("library.detailsSync", "同步")}
-              value={syncStatusLabel(book.syncStatus, t)}
-              styles={styles}
-            />
-            <MetaItem label={t("library.group", "分组")} value={groupName} styles={styles} />
-            <MetaItem
-              label={t("library.detailsVector", "向量")}
-              value={
-                book.isVectorized
-                  ? t("home.vec_indexed", "已索引")
-                  : t("home.notVectorized", "未索引")
-              }
-              styles={styles}
-            />
-            <MetaItem
-              label={t("library.detailsFormat", "格式")}
-              value={book.format.toUpperCase()}
-              styles={styles}
-              last
-            />
-          </View>
-
-          <View style={styles.tabBar}>
-            <DetailsTabButton
-              active={activeTab === "basic"}
-              label={t("library.detailsTabBasic", "基本信息")}
-              onPress={() => setActiveTab("basic")}
-              styles={styles}
-            />
-            <DetailsTabButton
-              active={activeTab === "reviews"}
-              label={t("library.detailsTabReviews", "书评")}
-              count={reviewCount}
-              onPress={() => setActiveTab("reviews")}
-              styles={styles}
-            />
-          </View>
-
-          {activeTab === "basic" ? (
-            <View style={styles.tabContent}>
-              <View style={styles.editorPanel}>
-                <EditableInfoRow
-                  label={t("library.detailsPublisher", "出版社")}
-                  value={values.publisher}
-                  placeholder="—"
-                  onCommit={(text) => setField("publisher", text)}
-                  styles={styles}
-                />
-                <PickerInfoRow
-                  label={t("library.detailsLanguage", "语言")}
-                  value={values.language}
-                  placeholder="—"
-                  options={LANGUAGE_PRESETS}
-                  onPress={() =>
-                    setOptionPickerTarget({
-                      field: "language",
-                      label: t("library.detailsLanguage", "语言"),
-                      value: values.language,
-                      options: LANGUAGE_PRESETS,
-                    })
-                  }
-                  styles={styles}
-                />
-                <DateInfoRow
-                  label={t("library.detailsPublishDate", "出版日期")}
-                  value={values.publishDate}
-                  locale={i18n.language}
-                  onPress={() => setDatePickerOpen(true)}
-                  styles={styles}
-                />
-                <EditableInfoRow
-                  label={t("library.detailsIsbn", "ISBN")}
-                  value={values.isbn}
-                  placeholder="—"
-                  inputStyle={styles.monospaceValue}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  keyboardType="numbers-and-punctuation"
-                  onCommit={(text) => setField("isbn", text)}
-                  styles={styles}
-                />
-                <PickerInfoRow
-                  label={t("library.group", "分组")}
-                  value={values.groupId}
-                  placeholder={t("sidebar.uncategorized", "未分类")}
-                  options={[
-                    { value: "", label: t("sidebar.uncategorized", "未分类") },
-                    ...groups.map((group) => ({ value: group.id, label: group.name })),
-                  ]}
-                  onPress={() =>
-                    setOptionPickerTarget({
-                      field: "groupId",
-                      label: t("library.group", "分组"),
-                      value: values.groupId,
-                      options: [
-                        { value: "", label: t("sidebar.uncategorized", "未分类") },
-                        ...groups.map((group) => ({ value: group.id, label: group.name })),
-                      ],
-                    })
-                  }
-                  styles={styles}
-                  last
-                />
-              </View>
-              <TagField
-                label={t("library.detailsTags", "标签")}
-                value={values.tagsText}
-                allTags={allTags}
-                newTag={newTag}
-                emptyLabel={t("sidebar.noTags", "还没有标签")}
-                placeholder={t("sidebar.tagPlaceholder", "标签名称")}
-                onChange={(text) => setField("tagsText", text)}
-                onNewTagChange={setNewTag}
-                onAddTag={(tag) => {
-                  addTag(tag);
-                  setField("tagsText", joinTags([...splitEditableList(values.tagsText), tag]));
-                  setNewTag("");
-                }}
+            <View style={[styles.metaStrip, layout.supportsSplitView && { flexWrap: "wrap" }]}>
+              <MetaItem
+                label={t("library.detailsSync", "同步")}
+                value={syncStatusLabel(book.syncStatus, t)}
                 styles={styles}
               />
-              <EditableLongTextField
-                label={t("library.detailsDescription", "简介")}
-                value={values.description}
-                placeholder={t("library.detailsDescriptionPlaceholder", "补充这本书的简介")}
-                editLabel={t("library.detailsEditDescription", "编辑简介")}
-                onEdit={() =>
-                  setTextEditorTarget({
-                    kind: "field",
-                    field: "description",
-                    label: t("library.detailsDescription", "简介"),
-                    value: values.description,
-                    placeholder: t("library.detailsDescriptionPlaceholder", "补充这本书的简介"),
-                    multiline: true,
-                  })
+              <MetaItem label={t("library.group", "分组")} value={groupName} styles={styles} />
+              <MetaItem
+                label={t("library.detailsVector", "向量")}
+                value={
+                  book.isVectorized
+                    ? t("home.vec_indexed", "已索引")
+                    : t("home.notVectorized", "未索引")
                 }
                 styles={styles}
               />
+              <MetaItem
+                label={t("library.detailsFormat", "格式")}
+                value={book.format.toUpperCase()}
+                styles={styles}
+                last
+              />
             </View>
-          ) : (
-            <ReviewsField
-              label={t("library.detailsReviews", "书评")}
-              addLabel={t("library.detailsAddReview", "添加书评")}
-              placeholder={t("library.detailsReviewPlaceholder", "写下你对这本书的想法")}
-              editLabel={t("common.edit", "编辑")}
-              removeLabel={t("library.detailsRemoveReview", "删除书评")}
-              reviews={values.reviews}
-              locale={i18n.language}
-              onAdd={() =>
-                setTextEditorTarget({
-                  kind: "newReview",
-                  label: t("library.detailsAddReview", "添加书评"),
-                  value: "",
-                  placeholder: t("library.detailsReviewPlaceholder", "写下你对这本书的想法"),
-                })
-              }
-              onEdit={(review) =>
-                setTextEditorTarget({
-                  kind: "review",
-                  reviewId: review.id,
-                  label: t("library.detailsReviews", "书评"),
-                  value: review.content,
-                  placeholder: t("library.detailsReviewPlaceholder", "写下你对这本书的想法"),
-                })
-              }
-              onRemove={removeReview}
-              styles={styles}
-              colors={colors}
-            />
-          )}
+          </View>
+          <View
+            style={{
+              flex: layout.supportsSplitView ? 1 : undefined,
+              width: layout.supportsSplitView ? undefined : "100%",
+              minWidth: 0,
+              gap: 26,
+            }}
+          >
+            <View style={styles.tabBar}>
+              <DetailsTabButton
+                active={activeTab === "basic"}
+                label={t("library.detailsTabBasic", "基本信息")}
+                onPress={() => setActiveTab("basic")}
+                styles={styles}
+              />
+              <DetailsTabButton
+                active={activeTab === "reviews"}
+                label={t("library.detailsTabReviews", "书评")}
+                count={reviewCount}
+                onPress={() => setActiveTab("reviews")}
+                styles={styles}
+              />
+            </View>
+
+            {activeTab === "basic" ? (
+              <View style={styles.tabContent}>
+                <View style={styles.editorPanel}>
+                  <EditableInfoRow
+                    label={t("library.detailsPublisher", "出版社")}
+                    value={values.publisher}
+                    placeholder="—"
+                    onCommit={(text) => setField("publisher", text)}
+                    styles={styles}
+                  />
+                  <PickerInfoRow
+                    label={t("library.detailsLanguage", "语言")}
+                    value={values.language}
+                    placeholder="—"
+                    options={LANGUAGE_PRESETS}
+                    onPress={() =>
+                      setOptionPickerTarget({
+                        field: "language",
+                        label: t("library.detailsLanguage", "语言"),
+                        value: values.language,
+                        options: LANGUAGE_PRESETS,
+                      })
+                    }
+                    styles={styles}
+                  />
+                  <DateInfoRow
+                    label={t("library.detailsPublishDate", "出版日期")}
+                    value={values.publishDate}
+                    locale={i18n.language}
+                    onPress={() => setDatePickerOpen(true)}
+                    styles={styles}
+                  />
+                  <EditableInfoRow
+                    label={t("library.detailsIsbn", "ISBN")}
+                    value={values.isbn}
+                    placeholder="—"
+                    inputStyle={styles.monospaceValue}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="numbers-and-punctuation"
+                    onCommit={(text) => setField("isbn", text)}
+                    styles={styles}
+                  />
+                  <PickerInfoRow
+                    label={t("library.group", "分组")}
+                    value={values.groupId}
+                    placeholder={t("sidebar.uncategorized", "未分类")}
+                    options={[
+                      { value: "", label: t("sidebar.uncategorized", "未分类") },
+                      ...groups.map((group) => ({ value: group.id, label: group.name })),
+                    ]}
+                    onPress={() =>
+                      setOptionPickerTarget({
+                        field: "groupId",
+                        label: t("library.group", "分组"),
+                        value: values.groupId,
+                        options: [
+                          { value: "", label: t("sidebar.uncategorized", "未分类") },
+                          ...groups.map((group) => ({ value: group.id, label: group.name })),
+                        ],
+                      })
+                    }
+                    styles={styles}
+                    last
+                  />
+                </View>
+                <TagField
+                  label={t("library.detailsTags", "标签")}
+                  value={values.tagsText}
+                  allTags={allTags}
+                  newTag={newTag}
+                  emptyLabel={t("sidebar.noTags", "还没有标签")}
+                  placeholder={t("sidebar.tagPlaceholder", "标签名称")}
+                  onChange={(text) => setField("tagsText", text)}
+                  onNewTagChange={setNewTag}
+                  onAddTag={(tag) => {
+                    addTag(tag);
+                    setField("tagsText", joinTags([...splitEditableList(values.tagsText), tag]));
+                    setNewTag("");
+                  }}
+                  styles={styles}
+                />
+                <EditableLongTextField
+                  label={t("library.detailsDescription", "简介")}
+                  value={values.description}
+                  placeholder={t("library.detailsDescriptionPlaceholder", "补充这本书的简介")}
+                  editLabel={t("library.detailsEditDescription", "编辑简介")}
+                  onEdit={() =>
+                    setTextEditorTarget({
+                      kind: "field",
+                      field: "description",
+                      label: t("library.detailsDescription", "简介"),
+                      value: values.description,
+                      placeholder: t("library.detailsDescriptionPlaceholder", "补充这本书的简介"),
+                      multiline: true,
+                    })
+                  }
+                  styles={styles}
+                />
+              </View>
+            ) : (
+              <ReviewsField
+                label={t("library.detailsReviews", "书评")}
+                addLabel={t("library.detailsAddReview", "添加书评")}
+                placeholder={t("library.detailsReviewPlaceholder", "写下你对这本书的想法")}
+                editLabel={t("common.edit", "编辑")}
+                removeLabel={t("library.detailsRemoveReview", "删除书评")}
+                reviews={values.reviews}
+                locale={i18n.language}
+                onAdd={() =>
+                  setTextEditorTarget({
+                    kind: "newReview",
+                    label: t("library.detailsAddReview", "添加书评"),
+                    value: "",
+                    placeholder: t("library.detailsReviewPlaceholder", "写下你对这本书的想法"),
+                  })
+                }
+                onEdit={(review) =>
+                  setTextEditorTarget({
+                    kind: "review",
+                    reviewId: review.id,
+                    label: t("library.detailsReviews", "书评"),
+                    value: review.content,
+                    placeholder: t("library.detailsReviewPlaceholder", "写下你对这本书的想法"),
+                  })
+                }
+                onRemove={removeReview}
+                styles={styles}
+                colors={colors}
+              />
+            )}
+          </View>
         </KeyboardAwareScrollView>
       </View>
       <TextEditSheet
@@ -1705,7 +1728,6 @@ const makeStyles = (colors: ThemeColors) =>
     flex: { flex: 1 },
     scrollContent: {
       width: "100%",
-      paddingHorizontal: spacing.lg,
       paddingTop: spacing.lg,
       paddingBottom: 64,
       gap: 26,
@@ -1722,6 +1744,7 @@ const makeStyles = (colors: ThemeColors) =>
     },
     coverColumn: {
       width: 108,
+      alignSelf: "center",
       alignItems: "center",
       gap: spacing.sm,
     },
@@ -1905,7 +1928,7 @@ const makeStyles = (colors: ThemeColors) =>
     },
     metaItem: {
       flex: 1,
-      minWidth: 0,
+      minWidth: 58,
       paddingHorizontal: spacing.sm,
       paddingVertical: spacing.sm,
       borderRightWidth: StyleSheet.hairlineWidth,

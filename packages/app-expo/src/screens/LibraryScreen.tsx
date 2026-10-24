@@ -20,7 +20,7 @@ import {
   XIcon,
 } from "@/components/ui/Icon";
 import { SyncButton } from "@/components/ui/SyncButton";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
+import { useContentLayout } from "@/hooks/use-responsive-layout";
 import { openMobileBook } from "@/lib/library/open-mobile-book";
 import { setCallback, setExtractorRef } from "@/lib/rag/auto-vectorize-service";
 import type { RootStackParamList } from "@/navigation/RootNavigator";
@@ -55,13 +55,19 @@ import { File as ExpoFile } from "expo-file-system";
  * Features: header search/sort/import, tag filter, vectorization progress banner,
  * tag management sheet, book grid (3 cols), empty/loading states.
  */
-import { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
   Animated,
-  FlatList,
   Image,
   Keyboard,
   Modal,
@@ -76,6 +82,8 @@ import {
 } from "react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LibraryGrid } from "./library/LibraryGrid";
+import type { LibraryGridItem } from "./library/library-grid-anchor";
 import { TagManagementSheet } from "./library/TagManagementSheet";
 import { useBookDownload } from "./library/useBookDownload";
 import { useVectorizationQueue } from "./library/useVectorizationQueue";
@@ -138,30 +146,39 @@ const SORT_OPTIONS: { field: SortField; labelKey: string }[] = [
   { field: "progress", labelKey: "library.sortProgress" },
 ];
 
-type LibraryGridItem =
-  | { type: "group"; group: BookGroup; books: Book[] }
-  | { type: "book"; book: Book };
-
 export function LibraryScreen() {
   const colors = useColors();
   const { isDark } = useTheme();
   const { t } = useTranslation();
   const nav = useNavigation<Nav>();
-  const layout = useResponsiveLayout();
-  const gridGap = layout.isTablet ? 16 : GRID_GAP;
-  const columnCount = layout.isTabletLandscape ? 5 : layout.isTablet ? 4 : NUM_COLUMNS;
+  const layout = useContentLayout();
+  const gridGap = layout.contentWidth >= 560 ? 16 : GRID_GAP;
+  const columnCount =
+    layout.contentWidth >= 560
+      ? Math.min(
+          8,
+          Math.max(NUM_COLUMNS, Math.floor((layout.contentWidth + gridGap) / (128 + gridGap))),
+        )
+      : NUM_COLUMNS;
   const contentWidth = layout.centeredContentWidth;
   const gridItemWidth = Math.floor((contentWidth - gridGap * (columnCount - 1)) / columnCount);
   const s = useMemo(
     () =>
       makeStyles(colors, {
         horizontalPadding: layout.horizontalPadding,
-        contentWidth,
+        contentWidth: layout.contentMaxWidth,
         gridGap,
         gridItemWidth,
-        isWideScreen: layout.isTablet,
+        isWideScreen: layout.contentWidth >= 680,
       }),
-    [colors, contentWidth, gridGap, gridItemWidth, layout.horizontalPadding, layout.isTablet],
+    [
+      colors,
+      gridGap,
+      gridItemWidth,
+      layout.contentMaxWidth,
+      layout.horizontalPadding,
+      layout.contentWidth,
+    ],
   );
   const [showSearch, setShowSearch] = useState(false);
   const [showSort, setShowSort] = useState(false);
@@ -912,7 +929,7 @@ export function LibraryScreen() {
                 <Animated.View
                   style={[
                     s.searchInputContainer,
-                    layout.isTablet ? s.searchInputContainerWide : null,
+                    layout.contentWidth >= 680 ? s.searchInputContainerWide : null,
                     {
                       opacity: searchAnim,
                       transform: [
@@ -957,7 +974,7 @@ export function LibraryScreen() {
                 <ScrollView
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  style={[s.tagScroll, layout.isTablet ? s.tagScrollWide : null]}
+                  style={[s.tagScroll, layout.contentWidth >= 680 ? s.tagScrollWide : null]}
                   contentContainerStyle={s.tagScrollContent}
                 >
                   <TouchableOpacity
@@ -1035,7 +1052,7 @@ export function LibraryScreen() {
 
       {/* Content */}
       <View style={s.content}>
-        <View style={s.contentInner}>
+        <View style={s.contentInner} onLayout={layout.onContentLayout}>
           {!isLoaded && (
             <View style={s.loadingWrap}>
               <ActivityIndicator size="large" color={colors.mutedForeground} />
@@ -1079,20 +1096,13 @@ export function LibraryScreen() {
             </Text>
           )}
           {isLoaded && !isEmpty && (
-            <FlatList
+            <LibraryGrid
               data={gridItems}
               renderItem={renderGridItem}
               extraData={{ vectorProgress, vectorizingBookId }}
-              keyExtractor={(item) =>
-                item.type === "group" ? `group-${item.group.id}` : item.book.id
-              }
-              key={`library-grid-${columnCount}`}
               numColumns={columnCount}
               columnWrapperStyle={s.gridRow}
               contentContainerStyle={s.gridContent}
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled"
-              keyboardDismissMode="on-drag"
             />
           )}
         </View>
@@ -1215,15 +1225,15 @@ const makeStyles = (
     },
     headerActions: { flexDirection: "row", alignItems: "center", gap: 4 },
     headerBtn: {
-      width: 36,
-      height: 36,
+      width: 44,
+      height: 44,
       borderRadius: radius.full,
       alignItems: "center",
       justifyContent: "center",
     },
     importBtn: {
-      width: 36,
-      height: 36,
+      width: 44,
+      height: 44,
       borderRadius: radius.full,
       backgroundColor: colors.primary,
       alignItems: "center",

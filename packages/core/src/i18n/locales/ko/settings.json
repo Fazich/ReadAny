@@ -1,6 +1,9 @@
 {
   "settings": {
     "title": "설정",
+    "unsavedTitle": "저장하지 않은 변경 사항",
+    "unsavedMessage": "이동하기 전에 변경 사항을 어떻게 할까요?",
+    "discardChanges": "변경 사항 버리기",
     "realtimeHint": "모든 변경 사항이 실시간으로 적용돼요",
     "general": "일반",
     "reading": "읽기",

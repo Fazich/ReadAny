@@ -1,7 +1,7 @@
 import { CommonActions, type NavigationProp, useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ChevronLeftIcon } from "../../components/ui/Icon";
-import { useResponsiveLayout } from "../../hooks/use-responsive-layout";
 import type { RootStackParamList } from "../../navigation/RootNavigator";
 import { fontSize, fontWeight, spacing, useColors } from "../../styles/theme";
 
@@ -14,7 +14,7 @@ interface Props {
 export function SettingsHeader({ title, subtitle, right }: Props) {
   const nav = useNavigation<NavigationProp<RootStackParamList>>();
   const colors = useColors();
-  const layout = useResponsiveLayout();
+  const { t } = useTranslation();
 
   const handleBack = () => {
     if (nav.canGoBack()) {
@@ -31,9 +31,11 @@ export function SettingsHeader({ title, subtitle, right }: Props) {
         { borderBottomColor: colors.border, backgroundColor: colors.background },
       ]}
     >
-      <View style={[styles.headerInner, { maxWidth: layout.centeredContentWidth }]}>
+      <View style={[styles.headerInner, { maxWidth: 760 }]}>
         <TouchableOpacity
           onPress={handleBack}
+          accessibilityRole="button"
+          accessibilityLabel={t("common.back")}
           style={styles.backBtn}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
@@ -70,7 +72,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
   },
   backBtn: {
-    padding: 4,
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center",
     marginLeft: -4,
   },
   title: {

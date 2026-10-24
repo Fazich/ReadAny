@@ -1,6 +1,9 @@
 {
   "settings": {
     "title": "Configuración",
+    "unsavedTitle": "Cambios sin guardar",
+    "unsavedMessage": "¿Qué quieres hacer con los cambios antes de salir?",
+    "discardChanges": "Descartar cambios",
     "realtimeHint": "Todos los cambios se aplican en tiempo real",
     "general": "General",
     "reading": "Lectura",

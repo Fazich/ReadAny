@@ -26,7 +26,7 @@ import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useStreamingChat } from "@/hooks";
-import { useResponsiveLayout } from "@/hooks/use-responsive-layout";
+import { useContentLayout } from "@/hooks/use-responsive-layout";
 import { resolveActiveAIConfig } from "@/lib/ai/resolve-active-ai-config";
 import { useChatStore } from "@/stores/chat-store";
 import { useSettingsStore } from "@/stores/settings-store";
@@ -82,11 +82,11 @@ export function ChatScreen() {
   const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const layout = useResponsiveLayout();
-  const isTabletLandscape = layout.isTabletLandscape;
+  const layout = useContentLayout();
+  const isTabletLandscape = layout.supportsSplitView;
   const sidebarWidth = isTabletLandscape
-    ? Math.min(360, layout.width * 0.28)
-    : Math.min(layout.width * 0.75, 300);
+    ? layout.sidebarWidth
+    : Math.min(layout.contentWidth * 0.85, 300);
   const s = useMemo(
     () =>
       makeStyles(colors, {
@@ -391,14 +391,13 @@ export function ChatScreen() {
 
   return (
     <SafeAreaView style={s.container} edges={["top"]}>
-      <View style={s.shell}>
-        {isTabletLandscape && (
-          <View style={[s.sidebarDocked, { paddingTop: insets.top }]}>
-            {renderSidebarContent(false)}
-          </View>
-        )}
+      <View
+        style={[s.shell, { marginHorizontal: layout.horizontalPadding }]}
+        onLayout={layout.onContentLayout}
+      >
+        {isTabletLandscape && <View style={s.sidebarDocked}>{renderSidebarContent(false)}</View>}
 
-        <View style={s.mainColumn}>
+        <View key="conversation" style={s.mainColumn}>
           {/* Header — compact, matching mobile */}
           <View style={s.header}>
             <View style={s.headerLeft}>
@@ -467,7 +466,7 @@ export function ChatScreen() {
 
           {/* Content */}
           <KeyboardAvoidingView
-            style={s.content}
+            style={[s.content, { width: "100%", maxWidth: 760, alignSelf: "center" }]}
             behavior="height"
             enabled={Platform.OS === "android"}
             keyboardVerticalOffset={insets.top}
@@ -495,7 +494,7 @@ export function ChatScreen() {
               onSend={handleSend}
               onStop={stopStream}
               isStreaming={isStreaming}
-              keyboardBottomOffset={tabBarHeight}
+              keyboardBottomOffset={layout.useNavigationRail ? insets.bottom : tabBarHeight}
             />
           </KeyboardAvoidingView>
         </View>
@@ -615,7 +614,7 @@ const makeStyles = (
       paddingHorizontal: 12,
       paddingBottom: 12,
     },
-    mainColumn: { flex: 1 },
+    mainColumn: { flex: 1, minWidth: 0 },
     header: {
       flexDirection: "row",
       alignItems: "center",
@@ -638,8 +637,8 @@ const makeStyles = (
       gap: 4,
     },
     iconBtn: {
-      width: 32,
-      height: 32,
+      width: 44,
+      height: 44,
       borderRadius: radius.full,
       alignItems: "center",
       justifyContent: "center",
