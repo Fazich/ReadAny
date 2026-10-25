@@ -1,4 +1,5 @@
 import { CheckIcon, ChevronDownIcon, XIcon } from "@/components/ui/Icon";
+import { SheetShell } from "@/components/ui/SheetShell";
 import { useSettingsStore } from "@/stores";
 import { type ThemeColors, fontSize, fontWeight, radius, useColors } from "@/styles/theme";
 import {
@@ -13,19 +14,17 @@ import {
   type TranslatorName,
 } from "@readany/core/types/translation";
 import { providerRequiresApiKey } from "@readany/core/utils";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
-  Modal,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface TranslationPanelProps {
   text: string;
@@ -35,7 +34,7 @@ interface TranslationPanelProps {
 export function TranslationPanel({ text, onClose }: TranslationPanelProps) {
   const { t } = useTranslation();
   const colors = useColors();
-  const insets = useSafeAreaInsets();
+  const { height: windowHeight } = useWindowDimensions();
   const s = makeStyles(colors);
 
   const translationConfig = useSettingsStore((s) => s.translationConfig);
@@ -46,9 +45,15 @@ export function TranslationPanel({ text, onClose }: TranslationPanelProps) {
   const [translation, setTranslation] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showLangPicker, setShowLangPicker] = useState(false);
-  const [showProviderPicker, setShowProviderPicker] = useState(false);
+  const [activePicker, setActivePicker] = useState<"language" | "provider" | null>(null);
+  const bodyRef = useRef<ScrollView>(null);
   const [providerRevision, setProviderRevision] = useState(0);
+
+  useLayoutEffect(() => {
+    // Every picker transition resets the single body, including closing it.
+    void activePicker;
+    bodyRef.current?.scrollTo({ y: 0, animated: false });
+  }, [activePicker]);
 
   const translate = useCallback(async () => {
     void providerRevision;
@@ -123,7 +128,7 @@ export function TranslationPanel({ text, onClose }: TranslationPanelProps) {
     (lang: TranslationTargetLang) => {
       setTargetLang(lang);
       updateTranslationConfig({ targetLang: lang });
-      setShowLangPicker(false);
+      setActivePicker(null);
     },
     [updateTranslationConfig],
   );
@@ -138,7 +143,7 @@ export function TranslationPanel({ text, onClose }: TranslationPanelProps) {
         },
       });
       setProviderRevision((revision) => revision + 1);
-      setShowProviderPicker(false);
+      setActivePicker(null);
     },
     [translationConfig.provider, updateTranslationConfig],
   );
@@ -154,18 +159,21 @@ export function TranslationPanel({ text, onClose }: TranslationPanelProps) {
         );
 
   return (
-    <Modal visible transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable style={s.backdrop} onPress={onClose} />
-      <View style={[s.container, { paddingBottom: insets.bottom || 16 }]}>
-        <View style={s.handle} />
-
-        <View style={s.header}>
+    <SheetShell
+      visible
+      onClose={onClose}
+      placement="bottom"
+      maxHeight={Math.round(windowHeight * 0.7)}
+      surfaceStyle={s.container}
+      header={
+        <>
+          <View style={s.handle} />
+          <View style={s.header}>
           <View style={s.headerLeft}>
             <TouchableOpacity
               style={s.langBtn}
               onPress={() => {
-                setShowProviderPicker(false);
-                setShowLangPicker(!showLangPicker);
+                setActivePicker((current) => current === "language" ? null : "language");
               }}
             >
               <Text style={s.langBtnText}>{TRANSLATOR_LANGS[targetLang]}</Text>
@@ -174,8 +182,7 @@ export function TranslationPanel({ text, onClose }: TranslationPanelProps) {
             <TouchableOpacity
               style={s.providerBtn}
               onPress={() => {
-                setShowLangPicker(false);
-                setShowProviderPicker(!showProviderPicker);
+                setActivePicker((current) => current === "provider" ? null : "provider");
               }}
             >
               <Text style={s.providerBtnText} numberOfLines={1}>
@@ -187,101 +194,95 @@ export function TranslationPanel({ text, onClose }: TranslationPanelProps) {
           <TouchableOpacity style={s.closeBtn} onPress={onClose}>
             <XIcon size={18} color={colors.mutedForeground} />
           </TouchableOpacity>
-        </View>
-
-        {showLangPicker && (
-          <ScrollView style={s.langPicker} nestedScrollEnabled>
-            {(Object.entries(TRANSLATOR_LANGS) as [TranslationTargetLang, string][]).map(
-              ([lang, label]) => (
-                <TouchableOpacity
-                  key={lang}
-                  style={[s.langOption, targetLang === lang && s.langOptionActive]}
-                  onPress={() => handleLangChange(lang)}
-                >
-                  <Text style={[s.langOptionText, targetLang === lang && s.langOptionTextActive]}>
-                    {label}
-                  </Text>
-                  {targetLang === lang && <CheckIcon size={14} color={colors.primary} />}
-                </TouchableOpacity>
-              ),
-            )}
-          </ScrollView>
-        )}
-
-        {showProviderPicker && (
-          <View style={s.providerPicker}>
-            {TRANSLATOR_PROVIDERS.map((p) => {
-              const label = t(p.labelKey);
-              return (
-                <TouchableOpacity
-                  key={p.id}
-                  style={[
-                    s.providerOption,
-                    translationConfig.provider.id === p.id && s.providerOptionActive,
-                  ]}
-                  onPress={() => handleProviderChange(p.id, label)}
-                >
-                  <Text
-                    style={[
-                      s.providerOptionText,
-                      translationConfig.provider.id === p.id && s.providerOptionTextActive,
-                    ]}
-                  >
-                    {label}
-                  </Text>
-                  {translationConfig.provider.id === p.id && (
-                    <CheckIcon size={14} color={colors.primary} />
-                  )}
-                </TouchableOpacity>
-              );
-            })}
           </View>
-        )}
-
-        <ScrollView style={s.content} nestedScrollEnabled>
-          <Text style={s.originalLabel}>{t("translation.original", "原文")}</Text>
-          <Text style={s.originalText}>{text}</Text>
-
-          <View style={s.divider} />
-
-          <Text style={s.translationLabel}>{t("translation.translation", "译文")}</Text>
-          {loading ? (
-            <View style={s.loadingWrap}>
-              <ActivityIndicator size="small" color={colors.primary} />
-              <Text style={s.loadingText}>{t("translation.translating", "翻译中...")}</Text>
+        </>
+      }
+    >
+        <ScrollView ref={bodyRef} style={s.body} nestedScrollEnabled>
+          {activePicker === "language" && (
+            <View style={s.langPicker}>
+              {(Object.entries(TRANSLATOR_LANGS) as [TranslationTargetLang, string][]).map(
+                ([lang, label]) => (
+                  <TouchableOpacity
+                    key={lang}
+                    style={[s.langOption, targetLang === lang && s.langOptionActive]}
+                    onPress={() => handleLangChange(lang)}
+                  >
+                    <Text style={[s.langOptionText, targetLang === lang && s.langOptionTextActive]}>
+                      {label}
+                    </Text>
+                    {targetLang === lang && <CheckIcon size={14} color={colors.primary} />}
+                  </TouchableOpacity>
+                ),
+              )}
             </View>
-          ) : error ? (
-            <View style={s.errorWrap}>
-              <Text style={s.errorText}>{error}</Text>
-              <TouchableOpacity style={s.retryBtn} onPress={translate}>
-                <Text style={s.retryBtnText}>{t("common.retry", "重试")}</Text>
-              </TouchableOpacity>
+          )}
+
+          {activePicker === "provider" && (
+            <View style={s.providerPicker}>
+              {TRANSLATOR_PROVIDERS.map((p) => {
+                const label = t(p.labelKey);
+                return (
+                  <TouchableOpacity
+                    key={p.id}
+                    style={[
+                      s.providerOption,
+                      translationConfig.provider.id === p.id && s.providerOptionActive,
+                    ]}
+                    onPress={() => handleProviderChange(p.id, label)}
+                  >
+                    <Text
+                      style={[
+                        s.providerOptionText,
+                        translationConfig.provider.id === p.id && s.providerOptionTextActive,
+                      ]}
+                    >
+                      {label}
+                    </Text>
+                    {translationConfig.provider.id === p.id && (
+                      <CheckIcon size={14} color={colors.primary} />
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
             </View>
-          ) : translation ? (
-            <Text style={s.translationText}>{translation}</Text>
-          ) : null}
+          )}
+
+          <View style={s.content}>
+            <Text style={s.originalLabel}>{t("translation.original", "原文")}</Text>
+            <Text style={s.originalText}>{text}</Text>
+
+            <View style={s.divider} />
+
+            <Text style={s.translationLabel}>{t("translation.translation", "译文")}</Text>
+            {loading ? (
+              <View style={s.loadingWrap}>
+                <ActivityIndicator size="small" color={colors.primary} />
+                <Text style={s.loadingText}>{t("translation.translating", "翻译中...")}</Text>
+              </View>
+            ) : error ? (
+              <View style={s.errorWrap}>
+                <Text style={s.errorText}>{error}</Text>
+                <TouchableOpacity style={s.retryBtn} onPress={translate}>
+                  <Text style={s.retryBtnText}>{t("common.retry", "重试")}</Text>
+                </TouchableOpacity>
+              </View>
+            ) : translation ? (
+              <Text style={s.translationText}>{translation}</Text>
+            ) : null}
+          </View>
         </ScrollView>
-      </View>
-    </Modal>
+    </SheetShell>
   );
 }
 
 const makeStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    backdrop: {
-      flex: 1,
-      backgroundColor: "rgba(0,0,0,0.3)",
-    },
     container: {
-      position: "absolute",
-      bottom: 0,
-      left: 0,
-      right: 0,
-      backgroundColor: colors.background,
-      borderTopLeftRadius: radius.xl,
-      borderTopRightRadius: radius.xl,
-      maxHeight: "60%",
+      paddingHorizontal: 0,
+      paddingTop: 0,
     },
+    body: { flexGrow: 0, flexShrink: 1, minHeight: 0 },
     handle: {
       width: 40,
       height: 4,
@@ -301,21 +302,25 @@ const makeStyles = (colors: ThemeColors) =>
     },
     headerLeft: {
       flexDirection: "row",
+      flexWrap: "wrap",
       alignItems: "center",
       gap: 8,
       flex: 1,
+      minWidth: 0,
       paddingRight: 8,
     },
     langBtn: {
       flexDirection: "row",
       alignItems: "center",
       gap: 4,
+      maxWidth: "100%",
       paddingHorizontal: 8,
       paddingVertical: 4,
       borderRadius: radius.lg,
       backgroundColor: colors.muted,
     },
     langBtnText: {
+      flexShrink: 1,
       fontSize: fontSize.sm,
       color: colors.foreground,
     },
@@ -323,6 +328,7 @@ const makeStyles = (colors: ThemeColors) =>
       flexDirection: "row",
       alignItems: "center",
       gap: 4,
+      flexShrink: 1,
       minWidth: 0,
       maxWidth: 150,
       paddingHorizontal: 8,
@@ -340,12 +346,12 @@ const makeStyles = (colors: ThemeColors) =>
     closeBtn: {
       width: 32,
       height: 32,
+      flexShrink: 0,
       borderRadius: radius.full,
       alignItems: "center",
       justifyContent: "center",
     },
     langPicker: {
-      maxHeight: 200,
       backgroundColor: colors.card,
       borderBottomWidth: 1,
       borderBottomColor: colors.border,

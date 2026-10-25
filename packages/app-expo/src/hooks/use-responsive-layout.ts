@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { type LayoutChangeEvent, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { calculateResponsiveLayout } from "./responsive-layout";
@@ -10,11 +10,12 @@ export function useResponsiveLayout(containerWidth?: number) {
 }
 
 export function useContentLayout() {
-  const [contentWidth, setContentWidth] = useState<number>();
-  const layout = useResponsiveLayout(contentWidth);
-  const onContentLayout = (event: LayoutChangeEvent) => {
+  const [contentWidth, setContentWidth] = useState<number | null>(null);
+  const layout = useResponsiveLayout(contentWidth ?? 0);
+  const onContentLayout = useCallback((event: LayoutChangeEvent) => {
     const width = event.nativeEvent.layout.width;
+    if (!Number.isFinite(width) || width <= 0) return;
     setContentWidth((previous) => (previous === width ? previous : width));
-  };
-  return { ...layout, onContentLayout };
+  }, []);
+  return { ...layout, onContentLayout, isContentMeasured: contentWidth !== null };
 }

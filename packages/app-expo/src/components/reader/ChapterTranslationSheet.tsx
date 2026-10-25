@@ -8,15 +8,24 @@
  *   error → message + retry + clear
  */
 
-import { CheckIcon, EyeIcon, EyeOffIcon, LanguagesIcon, Trash2Icon, XIcon } from "@/components/ui/Icon";
+import { SheetShell } from "@/components/ui/SheetShell";
+import { CheckIcon, EyeIcon, EyeOffIcon, LanguagesIcon, Trash2Icon } from "@/components/ui/Icon";
 import type { ChapterTranslationState } from "@readany/core/hooks";
 import { useSettingsStore } from "@/stores";
 import type { TranslationTargetLang } from "@readany/core/types/translation";
 import { TRANSLATOR_LANGS } from "@readany/core/types/translation";
 import { type ThemeColors, fontSize, useColors } from "@/styles/theme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ActivityIndicator, FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 interface ChapterTranslationSheetProps {
   visible: boolean;
@@ -46,6 +55,11 @@ export function ChapterTranslationSheet({
   const setTranslationLang = useSettingsStore((ss) => ss.setTranslationLang);
   const [selectedLang, setSelectedLang] = useState<TranslationTargetLang>(defaultLang);
   const [showLangPicker, setShowLangPicker] = useState(false);
+  const pickerAvailable = state.status === "idle" || state.status === "complete";
+
+  useEffect(() => {
+    if (!visible || !pickerAvailable) setShowLangPicker(false);
+  }, [visible, pickerAvailable]);
 
   const renderContent = () => {
     // ── idle: language picker + translate ──
@@ -75,46 +89,6 @@ export function ChapterTranslationSheet({
             <Text style={s.primaryButtonText}>{t("translation.translateChapter")}</Text>
           </Pressable>
 
-          {/* Language picker modal */}
-          <Modal
-            visible={showLangPicker}
-            transparent
-            animationType="fade"
-            onRequestClose={() => setShowLangPicker(false)}
-          >
-            <Pressable style={s.langModalOverlay} onPress={() => setShowLangPicker(false)}>
-              <View style={s.langModalContent}>
-                <Text style={s.langModalTitle}>
-                  {t("translation.selectLanguage", { defaultValue: "Select Language" })}
-                </Text>
-                <FlatList
-                  data={Object.entries(TRANSLATOR_LANGS) as [TranslationTargetLang, string][]}
-                  keyExtractor={([code]) => code}
-                  renderItem={({ item: [code, name] }) => (
-                    <Pressable
-                      style={[
-                        s.langOption,
-                        code === selectedLang && { backgroundColor: colors.muted },
-                      ]}
-                      onPress={() => {
-                        setSelectedLang(code as TranslationTargetLang);
-                        setShowLangPicker(false);
-                      }}
-                    >
-                      <Text
-                        style={[
-                          s.langOptionText,
-                          code === selectedLang && { color: colors.primary },
-                        ]}
-                      >
-                        {name}
-                      </Text>
-                    </Pressable>
-                  )}
-                />
-              </View>
-            </Pressable>
-          </Modal>
         </>
       );
     }
@@ -227,46 +201,6 @@ export function ChapterTranslationSheet({
             </View>
           </Pressable>
 
-          {/* Language picker modal */}
-          <Modal
-            visible={showLangPicker}
-            transparent
-            animationType="fade"
-            onRequestClose={() => setShowLangPicker(false)}
-          >
-            <Pressable style={s.langModalOverlay} onPress={() => setShowLangPicker(false)}>
-              <View style={s.langModalContent}>
-                <Text style={s.langModalTitle}>
-                  {t("translation.selectLanguage", { defaultValue: "Select Language" })}
-                </Text>
-                <FlatList
-                  data={Object.entries(TRANSLATOR_LANGS) as [TranslationTargetLang, string][]}
-                  keyExtractor={([code]) => code}
-                  renderItem={({ item: [code, name] }) => (
-                    <Pressable
-                      style={[
-                        s.langOption,
-                        code === selectedLang && { backgroundColor: colors.muted },
-                      ]}
-                      onPress={() => {
-                        setSelectedLang(code as TranslationTargetLang);
-                        setShowLangPicker(false);
-                      }}
-                    >
-                      <Text
-                        style={[
-                          s.langOptionText,
-                          code === selectedLang && { color: colors.primary },
-                        ]}
-                      >
-                        {name}
-                      </Text>
-                    </Pressable>
-                  )}
-                />
-              </View>
-            </Pressable>
-          </Modal>
         </>
       );
     }
@@ -304,47 +238,61 @@ export function ChapterTranslationSheet({
   };
 
   return (
-    <Modal
+    <SheetShell
       visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={onClose}
+      onClose={onClose}
+      placement="bottom"
+      footer={
+        pickerAvailable ? (
+          <Pressable style={s.closeRow} onPress={onClose}>
+            <Text style={s.closeText}>{t("common.close")}</Text>
+          </Pressable>
+        ) : undefined
+      }
     >
-      <Pressable style={s.overlay} onPress={onClose}>
-        <Pressable style={s.sheet} onPress={(e) => e.stopPropagation()}>
-          {/* Drag handle */}
-          <View style={s.handleBar} />
-
-          {renderContent()}
-
-          {/* Close row — only for idle/complete, others have explicit actions */}
-          {(state.status === "idle" || state.status === "complete") && (
-            <Pressable style={s.closeRow} onPress={onClose}>
-              <Text style={s.closeText}>{t("common.close")}</Text>
+      <ScrollView style={s.body} contentContainerStyle={s.bodyContent}>
+        <View style={s.handleBar} />
+        {renderContent()}
+      </ScrollView>
+      <SheetShell
+        visible={visible && showLangPicker && pickerAvailable}
+        onClose={() => setShowLangPicker(false)}
+        placement="center"
+        maxWidth={260}
+        surfaceStyle={s.langModalContent}
+        header={
+          <Text style={s.langModalTitle}>
+            {t("translation.selectLanguage", { defaultValue: "Select Language" })}
+          </Text>
+        }
+      >
+        <FlatList
+          style={s.langList}
+          data={Object.entries(TRANSLATOR_LANGS) as [TranslationTargetLang, string][]}
+          keyExtractor={([code]) => code}
+          renderItem={({ item: [code, name] }) => (
+            <Pressable
+              style={[s.langOption, code === selectedLang && { backgroundColor: colors.muted }]}
+              onPress={() => {
+                setSelectedLang(code);
+                setShowLangPicker(false);
+              }}
+            >
+              <Text style={[s.langOptionText, code === selectedLang && { color: colors.primary }]}>
+                {name}
+              </Text>
             </Pressable>
           )}
-        </Pressable>
-      </Pressable>
-    </Modal>
+        />
+      </SheetShell>
+    </SheetShell>
   );
 }
 
 function makeStyles(colors: ThemeColors) {
   return StyleSheet.create({
-    overlay: {
-      flex: 1,
-      backgroundColor: "rgba(0,0,0,0.35)",
-      justifyContent: "flex-end",
-    },
-    sheet: {
-      backgroundColor: colors.background,
-      borderTopLeftRadius: 16,
-      borderTopRightRadius: 16,
-      paddingHorizontal: 20,
-      paddingBottom: 34, // safe area
-      paddingTop: 8,
-      gap: 12,
-    },
+    body: { flexGrow: 0, flexShrink: 1, minHeight: 0 },
+    bodyContent: { gap: 12 },
     handleBar: {
       width: 36,
       height: 4,
@@ -488,27 +436,18 @@ function makeStyles(colors: ThemeColors) {
       color: colors.mutedForeground,
     },
 
-    // Language picker modal (nested)
-    langModalOverlay: {
-      flex: 1,
-      backgroundColor: "rgba(0,0,0,0.4)",
-      justifyContent: "center",
-      alignItems: "center",
-    },
     langModalContent: {
-      width: 260,
-      maxHeight: 400,
-      backgroundColor: colors.background,
-      borderRadius: 12,
       paddingVertical: 12,
       paddingHorizontal: 4,
     },
+    langList: { flexGrow: 0, flexShrink: 1, minHeight: 0 },
     langModalTitle: {
       fontSize: fontSize.sm,
       fontWeight: "600",
       color: colors.foreground,
       textAlign: "center",
       marginBottom: 8,
+      paddingHorizontal: 16,
     },
     langOption: {
       paddingHorizontal: 16,

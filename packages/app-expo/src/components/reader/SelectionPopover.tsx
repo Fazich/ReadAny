@@ -26,12 +26,14 @@ import {
   KeyboardAvoidingView,
   Modal,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   useWindowDimensions,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const POPOVER_MARGIN = 8;
 const POPOVER_PADDING = 4;
@@ -78,6 +80,7 @@ export function SelectionPopover({
 }: Props) {
   const { t } = useTranslation();
   const colors = useColors();
+  const insets = useSafeAreaInsets();
   const window = useWindowDimensions();
   const { width: screenWidth, height: screenHeight } = viewport ?? window;
   const s = useMemo(() => makeStyles(colors), [colors]);
@@ -282,35 +285,39 @@ export function SelectionPopover({
           style={s.modalOverlay}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-          <TouchableOpacity
-            style={StyleSheet.absoluteFill}
-            onPress={() => setShowNoteModal(false)}
-          />
-          <View style={s.noteModal}>
-            <View style={s.noteModalHeader}>
-              <Text style={s.noteModalTitle}>{t("reader.addNote", "添加笔记")}</Text>
-              <TouchableOpacity style={s.noteCloseBtn} onPress={() => setShowNoteModal(false)}>
-                <XIcon size={20} color={colors.mutedForeground} />
-              </TouchableOpacity>
-            </View>
-            <Text style={s.noteModalPreview} numberOfLines={2}>
-              {selection.text}
-            </Text>
-            <View style={s.editorContainer}>
-              <RichTextEditor
-                initialContent={noteContent}
-                onChange={setNoteContent}
-                placeholder={t("reader.notePlaceholder", "写下你的想法...")}
-                autoFocus
-              />
-            </View>
-            <View style={s.noteModalActions}>
-              <TouchableOpacity style={s.noteCancelBtn} onPress={() => setShowNoteModal(false)}>
-                <Text style={s.noteCancelText}>{t("common.cancel", "取消")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={s.noteSaveBtn} onPress={handleSaveNote}>
-                <Text style={s.noteSaveText}>{t("common.save", "保存")}</Text>
-              </TouchableOpacity>
+          <View style={[s.modalArea, { paddingTop: insets.top }]}>
+            <TouchableOpacity
+              style={StyleSheet.absoluteFill}
+              onPress={() => setShowNoteModal(false)}
+            />
+            <View style={[s.noteModal, { paddingBottom: Math.max(16, insets.bottom) }]}>
+              <View style={s.noteModalHeader}>
+                <Text style={s.noteModalTitle}>{t("reader.addNote", "添加笔记")}</Text>
+                <TouchableOpacity style={s.noteCloseBtn} onPress={() => setShowNoteModal(false)}>
+                  <XIcon size={20} color={colors.mutedForeground} />
+                </TouchableOpacity>
+              </View>
+              <ScrollView style={s.noteBody} keyboardShouldPersistTaps="handled">
+                <Text style={s.noteModalPreview} numberOfLines={2}>
+                  {selection.text}
+                </Text>
+                <View style={s.editorContainer}>
+                  <RichTextEditor
+                    initialContent={noteContent}
+                    onChange={setNoteContent}
+                    placeholder={t("reader.notePlaceholder", "写下你的想法...")}
+                    autoFocus
+                  />
+                </View>
+              </ScrollView>
+              <View style={s.noteModalActions}>
+                <TouchableOpacity style={s.noteCancelBtn} onPress={() => setShowNoteModal(false)}>
+                  <Text style={s.noteCancelText}>{t("common.cancel", "取消")}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={s.noteSaveBtn} onPress={handleSaveNote}>
+                  <Text style={s.noteSaveText}>{t("common.save", "保存")}</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -393,12 +400,21 @@ const makeStyles = (colors: ThemeColors) =>
       justifyContent: "flex-end",
       backgroundColor: "rgba(0,0,0,0.5)",
     },
+    modalArea: {
+      flex: 1,
+      justifyContent: "flex-end",
+    },
     noteModal: {
+      flexShrink: 1,
+      maxHeight: "85%",
       backgroundColor: colors.card,
       borderTopLeftRadius: radius.xxl,
       borderTopRightRadius: radius.xxl,
       padding: spacing.lg,
-      maxHeight: "85%",
+    },
+    noteBody: {
+      flexShrink: 1,
+      minHeight: 0,
     },
     noteModalHeader: {
       flexDirection: "row",

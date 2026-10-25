@@ -1,6 +1,63 @@
 # 阔折叠大屏设计：实现与验收记录
 
-全应用布局改动已写入工作区；此前的大屏布局已完成本机自动检查、阅读器浏览器验收和 Android APK 构建。本次严格质量审查的四项实现、60 项自动回归、TypeScript 检查和最终 Android JavaScript 导出已完成，详见实施增量。**原生设备交互及截图仍未完成。** 当前在线 Android 折叠设备的 development 安装被 `INSTALL_FAILED_USER_RESTRICTED` 拒绝；此前「无在线设备」是历史记录。
+此前大屏布局已完成本机自动检查、阅读器浏览器验收和 Android APK 构建；严格质量审查的四项实现、60 项自动回归、TypeScript 检查和 Android JavaScript 导出见历史实施增量。**这些历史结果不代表本次外屏改动已完成原生验收。** 本次（2026-10-25）的在线状态、检查和补充浏览器证据单列如下。
+
+## 阔折叠外屏布局：增量验收（2026-10-25）
+
+### 实施范围
+
+- 新增 `AdaptiveEmptyState`：只测空态自身剩余视口，零高度或 `<440dp` 使用紧凑插画；短内容居中、超长内容始终可滚。首页 AI、书籍 AI、空书库／无结果和空笔记复用；输入、消息、网格和 Reader 实例未新增尺寸 key。
+- 首页 AI 保留四项 2×2，插画 140／96dp；书籍 AI 120／96dp；书库／笔记 160／96dp。错误条改为输入前正常流，窄宽动作行换行。真实 320dp 浏览器验收发现原 `48%×2+10dp` 超出可用宽度，已将首页建议卡片基础宽度改为 `47%` 配合 `flexGrow:1`，恢复两列，不隐藏功能。
+- 多选标题与 44dp 操作分行；书籍菜单按窗口和安全区 clamp，内部滚动区扣除 12dp 外层 padding。导入锚点挂在实际按钮 ref；原二次删除确认和数据保留选项不变。
+- 分组、WebDAV、语言和模型弹层使用有界父容器与可收缩滚动区；详情窄宽 hero 上下排、五星保持一组，简介编辑区取消 430／300dp 固定最小高度；统计周期与我的数值可换行。
+- 真实书籍 AI 点击验收还复现既有引用删除缺陷：`quotes.length` 作为初始化 effect 依赖导致最后一条删除后被重新加入。改为只随选文／章节变化执行 functional 初始化；同一移除操作后 chip 数=0，960×720→320×350→320×568 后仍为0且输入草稿保留。发送、引用跳转与保存回调不变。
+- Reader 新增笔记保持草稿与保存回调，正文滚动且标题／操作留在外；章节翻译和划词翻译约束安全区，选择项和译文完整可达。TTS 所有单列允许整页滚动，歌词外框为 `max(200,round(实际视口高度×0.4))`，双栏仍独立滚动。
+- 删除只断言源码字符串的 `chat-keyboard-layout.test.ts` 和 `oled-theme-contract.test.ts`；没有新增源码正则断言、产品依赖或修改主题／导航／网格恢复机制。
+
+### 自动检查
+
+- 计划指定的四个定向文件：4 个文件、27 项测试通过。
+- 最终 `pnpm --filter @readany/app-expo exec vitest run`：10 个文件、55 项测试通过；`pnpm --filter @readany/app-expo exec tsc --noEmit`：退出码 0。
+- 受影响的七个 Screen 经 TypeScript LSP 检查无诊断。
+- development Android JavaScript 导出成功：Metro 5,279 模块、bundle 29.6MB。此项证明模块集成，不证明原生 UI。导出目录为临时目录，不替换此前 release APK。
+- `git diff --check` 通过；本次改动的 TypeScript 文件 `biome lint` 无新增错误，5 个格式未对齐的改动文件已用 `biome format --write` 仅调整空白。
+
+### Reader 真实组件浏览器补充证明
+
+使用实际修改的 `SelectionPopover`、`ChapterTranslationSheet`、`TranslationPanel` 和 `TTSPage`；只适配 RN DOM 宿主、store／网络／编辑器／音频边界。实际浏览器视口以 CSS px 模拟 dp；安全区固定 top=24、bottom=16、left/right=0。未复制页面 JSX。
+
+| 场景 | 观测结果 |
+| --- | --- |
+| 新增笔记 320×568→390×600 | 草稿保留，保存回调一次且携带原 CFI；320×300 时正文缩至 114.59px，保存／取消仍在视口内（bottom=284） |
+| 章节翻译五种状态 | idle／extracting／translating／complete／error 的原分支均运行；两处语言选择可滚到真实末项 `ئۇيغۇرچە`；start=2、cancel=1、两种显示切换各=1、reset=1、close=2 |
+| 划词翻译 | 语言、服务与长译文共用外层滚动；长错误可到 retry。初次请求=1，resize 后仍=1；切换语言／服务、错误与重试按实际按钮计数 |
+| TTS 639／640／700dp | 同输入基线在 640／700 时禁止整页滚动；当前三组均允许，实测视口559／560／620px、歌词224／224／248px，末控件 bottom=613／614／674 |
+| TTS 展开 960×720 | 外层不滚，380px 控制列独立滚动、歌词 flex；resize 过程播放回调保持0。CSS 150% 文本仅作大字号近似，不算 Android 系统字号证明 |
+
+基线来自 commit `04b2a6c3eec2961c4e75250f2917325d0e520c2b` 的真实 TTSPage；原样输入24条 narrationSegments、currentChunkIndex=10、playing。证据为 `artifacts/foldable-outer-screen/reader-browser-evidence.json` 及同目录27张 `reader-*.png`。
+
+### 首页、书库、详情等真实组件浏览器补充证明
+
+同一轮验收以 RN Web 0.21.1 宿主加载实际修改的 `ChatScreen`、`BookChatScreen`、`LibraryScreen`、`BookDetailsScreen`、`StatsScreen`、`ProfileScreen`、`NotesView`、`BookCardActionSheet`、`GroupPickerSheet`、`WebDavConnectSheet`、`AppearanceSettingsScreen`、`TranslationSettingsScreen` 及现有设置页；只替换 RN 宿主、导航、store、网络与编辑器边界。共 78 条观测、66 张截图索引，另有 93 张 PNG 与夹具快照。
+
+| 场景 | 观测结果 |
+| --- | --- |
+| `AdaptiveEmptyState` | 0／439dp 为紧凑，440／650dp 为正常；内容 658px 时 180／439／440dp 都能滚到最后一项，末项 bottom 落在视口内 |
+| 首页 AI 六种尺寸 | 320×568、390×600、529×773、608×860、840×390、960×720 均无裁切；修正后四项为 2×2，草稿与两个开关经 320→960→320 循环保留 |
+| 首页发送与错误 | 点快捷建议触发一次原 `handleSend` 的配置提示；发送失败错误条在输入上方参与布局，不覆盖卡片 |
+| 书籍 AI | 四行选文与引用 chip 显示；移除后 chip=0，且 960×720→320×350→320×568 后仍为 0，草稿保留 |
+| 书库与多选 | 空库导入锚点、无结果、30 本网格均挂载；英文／150% 文本 320dp 下六个 44×44 动作同排完整可点，选择保持 |
+| 书籍菜单 | 贴底锚点在 500×600 与 320×220 内 clamp；末项「删除」滚到 bottom=185（菜单 bottom=192），二次确认与数据保留勾选正常 |
+| 分组／语言／模型 | 10 分组滚到末项并回调 `g-10`，空名时「确定」禁用；语言末项选择并恢复 `es`；20 个模型滚到末项 |
+| WebDAV | 320×350 短窗口中 4 字段与长错误可滚，footer 提交按钮 bottom=320 在视口内，提交回调收到预期字段 |
+| 书籍详情／笔记／统计／我的 | 简介多行编辑草稿经 320×280→960×720→320×568 保留，取消/完成可见；笔记编辑与搜索在 960→320×300→320×568 保持；跨月周期日期换行、48→32 紧凑值；长时长值不省略尾数 |
+| 已有滚动页面 | Skills、成就、字体、AI／同步／听书／向量模型设置、反馈与 30 行 WebDAV 浏览列表均挂载并滚到末尾，返回回调触发 |
+
+证据为 `artifacts/foldable-outer-screen/component-smoke-evidence.json`、`component-smoke-fixture-snapshot.json` 及同目录 `chat-*`、`library-*`、`bookmenu-*`、`details-*`、`stats-*`、`profile-*`、`notes-*`、`webdav-*` 等截图。记录为适配器环境（安全区 top=24/bottom=16，fontScale 为宿主样式近似，FlatList 使用兼容渲染），不能替代原生列表锚点、真实流式续写、设置侧栏分类路由或 Android 键盘证明。
+
+### 原生限制
+
+本次起始 `adb devices -l` 确认 serial `08868C40499C3540` 在线，实施中再次读取配置时设备消失；重启 adb、mDNS 和 USB 探查后仍无设备，本机没有 emulator／AVD。本次未重新安装／卸载 production 包，未清库或更改系统安全设置。**未采集原生截图、实际 `useWindowDimensions`／insets、真实键盘与物理折叠、WebView 手势、音频／定时器连续性。** 浏览器补充结果不替代这些证据。
 
 ## 可安装 APK
 
@@ -134,3 +191,28 @@
 | 附属页 | 统计/成就/Skills/书籍详情/WebDAV 长内容、行内编辑、分享和导入操作可用 | 对应展开态 |
 
 上述流程还需检查明暗主题、中英文、系统字号 1.0/1.5、TalkBack、手势/三键导航及实际键盘避让。完成后将截图加入本目录，并更新计划第 10 步；当前不将这些项目记为通过。
+
+## 2026-10-26 质量审查修复与统一验收
+
+本轮先完成全部实现，再统一执行检查；未在各修改步骤之间运行测试。
+
+- TTS 单列改为 flex 填充及自然溢出，歌词最小 200dp；内层歌词 ScrollView 提供唯一实测高度，首次有效测量前不发居中命令，半视口对称 padding 支持首尾句居中。空态首次有效测量前不显示插图，过渡零尺寸保留最近有效值。
+- 划词翻译用互斥选择器状态和一个正文滚动体，打开、切换、关闭选择器均回顶部。新增 SheetShell 集中处理 Modal、背景、安全区、可用高度与键盘避让；迁移分组、章节翻译及语言、划词翻译、外观语言、模型、WebDAV、详情编辑/选项/日期和删除确认。
+- 三个详情 Sheet 与专属样式迁入 `screens/book-details/BookDetailsSheets.tsx`，日期工具迁入同目录 `book-details-date.ts`；不再传整个页面样式，保留草稿和延迟聚焦。书籍菜单改为自然内容实测，只重挂测量表面，原生 Modal 与背景保持稳定。
+- 内容布局首次宽度未知，书库等待实测后挂网格；统计、成就及 WebDAV 浏览页避免首帧零宽约束。FlatList 回调冻结和 handled 空白点击丢失两项审查结论经依赖实现复核撤销，未修改正确的书库锚点链或恢复重复触控包装。
+
+统一检查结果：
+
+| 检查 | 本轮结果 |
+| --- | --- |
+| `pnpm --filter @readany/app-expo exec vitest run` | 11 文件、81 测试通过 |
+| `pnpm --filter @readany/app-expo exec tsc --noEmit` | 通过 |
+| 新增菜单几何测试（最终 fixture 修订后单独运行） | 26 测试通过 |
+| 新增 5 个模块的 Biome 检查 | 通过 |
+| 迁移调用方 lint（不检查原有格式与导入排序） | TranslationPanel 的 picker effect 触发依赖已修正并通过；BadgesScreen 另有行 index key、badge.id effect 依赖及未使用变量诊断，位于本轮未改代码，未顺带处理 |
+| 直接执行真实菜单 helper 的尺寸切换场景 | 320×600→320×220：height 302→156、top 208→36；改锚点和内容高后 height 62/top 68；始终 left 92 |
+| 直接执行迁移后的日期工具 | 2024 年 2 月 29 天、2023 年 2 月 28 天，日期序列化保持 2024-02-29 |
+
+首轮定向测试暴露了计划示例中的横坐标算术错误：锚点 x240/width40、菜单 width188 的右对齐位置应为 92，而非 120；修正测试期望，未改变正确的右对齐规则。无锚点时仍靠右，left120。
+
+本轮**没有真实组件画面或原生交互通过证据**：`adb devices -l` 无目标；`xcrun simctl list devices available` 返回找不到 simctl（exit72）。保存的浏览器宿主源仍在，但 `/tmp/foldable-smoke` 已不存在，磁盘未找到 react-native-web；按约束未安装依赖，也未用复制布局或旧截图替代。键盘避让/空白收键盘、Android 嵌套滚动、播放连续性、歌词实际中心、短窗 Sheet 可达性、详情草稿 resize 和原生 FlatList 锚点仍未验收。恢复设备或已有 Web 宿主依赖后，按本记录的设备流程和批准计划的九组行为场景继续；浏览器适配不能证明原生键盘、音频或 FlatList 行为。

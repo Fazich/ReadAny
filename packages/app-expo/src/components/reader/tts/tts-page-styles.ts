@@ -11,9 +11,11 @@ export const makeStyles = (colors: ThemeColors, windowHeight = SH, windowWidth =
   StyleSheet.create({
     screen: { flex: 1, backgroundColor: colors.background },
     content: { flex: 1, backgroundColor: colors.background },
-    // 正常高窗：内容高度锁定为视口，不随歌词增长，保持原 View 布局。
+    // 双栏内容锁定视口，控制与歌词各自滚动。
     contentFill: { height: "100%" },
+    singleColumnContent: { flexGrow: 1 },
     playerBody: { flex: 1, minHeight: 0, width: "100%", maxWidth: 1200, alignSelf: "center" },
+    playerBodySingle: { flex: 0, flexDirection: "column-reverse", flexGrow: 1, flexShrink: 0, flexBasis: "auto" },
     playerControls: { minWidth: 0 },
     playerControlsSplit: { width: "46%", maxWidth: 380, minWidth: 320, flexGrow: 0, flexShrink: 0 },
     playerControlsContent: { flexGrow: 1, justifyContent: "center", paddingVertical: 16 },
@@ -114,8 +116,9 @@ export const makeStyles = (colors: ThemeColors, windowHeight = SH, windowWidth =
     lyricBookName: { fontSize: 15, fontWeight: fontWeight.semibold, color: colors.foreground, lineHeight: 22 },
     lyricChapterName: { fontSize: 12, color: colors.mutedForeground, lineHeight: 18, marginTop: 3 },
     lyricArea: { flex: 1, minWidth: 0, paddingHorizontal: 24, paddingTop: 8, paddingBottom: 16, alignSelf: "stretch" },
+    lyricAreaSingle: { minHeight: 200 },
     lyricList: { flex: 1, alignSelf: "stretch" },
-    lyricListContent: { justifyContent: "center" },
+    lyricListContent: { justifyContent: "flex-start" },
     lyricInner: { gap: 8, width: "100%", maxWidth: 720, alignSelf: "center" },
     lyricLinePressable: { paddingHorizontal: 14, paddingVertical: 10, borderRadius: 18 },
     lyricLinePressableActive: { backgroundColor: withOpacity(colors.foreground, 0.05) },

@@ -1,11 +1,10 @@
 import { FolderPlusIcon } from "@/components/ui/Icon";
+import { SheetShell } from "@/components/ui/SheetShell";
 import { type ThemeColors, fontSize, fontWeight, radius, spacing, useColors } from "@/styles/theme";
 import type { BookGroup } from "@readany/core/types";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Modal,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,8 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { KeyboardAvoidingView } from "react-native-keyboard-controller";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface GroupPickerSheetProps {
   visible: boolean;
@@ -34,11 +31,17 @@ export function GroupPickerSheet({
   onClose,
 }: GroupPickerSheetProps) {
   const colors = useColors();
-  const insets = useSafeAreaInsets();
-  const styles = useMemo(() => makeStyles(colors, insets.bottom), [colors, insets.bottom]);
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { t } = useTranslation();
   const [isCreating, setIsCreating] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
+  const bodyRef = useRef<ScrollView>(null);
+  const createRowY = useRef<number | null>(null);
+  const scrollToCreateRow = () => {
+    if (isCreating && createRowY.current !== null) {
+      bodyRef.current?.scrollTo({ y: createRowY.current, animated: false });
+    }
+  };
 
   const handleCreate = () => {
     const name = newGroupName.trim();
@@ -55,19 +58,27 @@ export function GroupPickerSheet({
   };
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <KeyboardAvoidingView style={styles.keyboardRoot} behavior="height">
-        <Pressable style={styles.overlay} onPress={onClose}>
-          <Pressable style={styles.sheet} onPress={(event) => event.stopPropagation()}>
-            <View style={styles.handle} />
-            <Text style={styles.title}>{t("library.moveToGroup", "移入分组")}</Text>
-
+    <SheetShell
+      visible={visible}
+      onClose={onClose}
+      placement="bottom"
+      keyboardAware
+      surfaceStyle={styles.sheet}
+      header={
+        <>
+          <View style={styles.handle} />
+          <Text style={styles.title}>{t("library.moveToGroup", "移入分组")}</Text>
+        </>
+      }
+    >
+      <ScrollView
+        ref={bodyRef}
+        style={styles.body}
+        keyboardShouldPersistTaps="handled"
+        onLayout={scrollToCreateRow}
+      >
             {groups.length > 0 && (
-              <ScrollView
-                style={styles.groupList}
-                keyboardShouldPersistTaps="handled"
-                nestedScrollEnabled
-              >
+              <View style={styles.groupList}>
                 {groups.map((group) => (
                   <TouchableOpacity
                     key={group.id}
@@ -78,11 +89,17 @@ export function GroupPickerSheet({
                     <Text style={styles.groupName}>{group.name}</Text>
                   </TouchableOpacity>
                 ))}
-              </ScrollView>
+              </View>
             )}
 
             {isCreating ? (
-              <View style={styles.createRow}>
+              <View
+                style={styles.createRow}
+                onLayout={(event) => {
+                  createRowY.current = event.nativeEvent.layout.y;
+                  scrollToCreateRow();
+                }}
+              >
                 <TextInput
                   style={styles.createInput}
                   placeholder={t("library.groupNamePlaceholder", "分组名称")}
@@ -90,6 +107,7 @@ export function GroupPickerSheet({
                   value={newGroupName}
                   onChangeText={setNewGroupName}
                   autoFocus
+                  onFocus={scrollToCreateRow}
                   onSubmitEditing={handleCreate}
                   returnKeyType="done"
                 />
@@ -121,29 +139,19 @@ export function GroupPickerSheet({
                 <Text style={styles.ungroupedText}>{t("library.removeFromGroup", "移出分组")}</Text>
               </TouchableOpacity>
             )}
-          </Pressable>
-        </Pressable>
-      </KeyboardAvoidingView>
-    </Modal>
+      </ScrollView>
+    </SheetShell>
   );
 }
 
-const makeStyles = (colors: ThemeColors, bottomInset: number) =>
+const makeStyles = (colors: ThemeColors) =>
   StyleSheet.create({
-    overlay: {
-      flex: 1,
-      justifyContent: "flex-end",
-      backgroundColor: "rgba(0,0,0,0.3)",
-    },
     sheet: {
       backgroundColor: colors.card,
-      borderTopLeftRadius: radius.xxl,
-      borderTopRightRadius: radius.xxl,
       paddingTop: 10,
-      paddingBottom: Math.max(34, bottomInset + 18),
-      paddingHorizontal: spacing.lg,
+      paddingHorizontal: 16,
     },
-    keyboardRoot: { flex: 1 },
+    body: { flexGrow: 0, flexShrink: 1, minHeight: 0 },
     handle: {
       width: 36,
       height: 4,
@@ -160,7 +168,6 @@ const makeStyles = (colors: ThemeColors, bottomInset: number) =>
       paddingHorizontal: 4,
     },
     groupList: {
-      maxHeight: 280,
       borderRadius: radius.lg,
       borderWidth: 1,
       borderColor: colors.border,

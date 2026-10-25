@@ -1,13 +1,12 @@
 import { BookOpenIcon, CheckIcon, ChevronDownIcon, MoonIcon, SunIcon } from "@/components/ui/Icon";
+import { SheetShell } from "@/components/ui/SheetShell";
 import { useTheme } from "@/styles/ThemeContext";
 import type { ThemeMode } from "@/styles/ThemeContext";
-import { fontSize, fontWeight, radius, spacing } from "@/styles/theme";
+import { type ThemeColors, fontSize, fontWeight, radius, spacing } from "@/styles/theme";
 import { changeAndPersistLanguage } from "@readany/core/i18n";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Modal,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -127,25 +126,28 @@ export default function AppearanceSettingsScreen() {
         </View>
       </ScrollView>
 
-      {/* Custom bottom sheet language picker */}
-      <Modal
+      <SheetShell
         visible={showLangPicker}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setShowLangPicker(false)}
-      >
-        <Pressable style={s.modalOverlay} onPress={() => setShowLangPicker(false)}>
-          <Pressable style={[s.modalSheet, { backgroundColor: colors.card }]} onPress={() => {}}>
-            {/* Handle bar */}
+        onClose={() => setShowLangPicker(false)}
+        placement="bottom"
+        surfaceStyle={s.modalSheet}
+        header={
+          <>
             <View style={s.handleBar}>
               <View style={[s.handle, { backgroundColor: colors.border }]} />
             </View>
-
             <Text style={[s.modalTitle, { color: colors.foreground }]}>
               {t("settings.language")}
             </Text>
-
-            <View style={s.langList}>
+          </>
+        }
+      >
+            <ScrollView
+              style={s.langList}
+              contentContainerStyle={{ backgroundColor: colors.background }}
+              bounces={false}
+              showsVerticalScrollIndicator={false}
+            >
               {LANGUAGES.map((l, idx) => {
                 const isActive = lang === l.code;
                 return (
@@ -175,15 +177,13 @@ export default function AppearanceSettingsScreen() {
                   </TouchableOpacity>
                 );
               })}
-            </View>
-          </Pressable>
-        </Pressable>
-      </Modal>
+            </ScrollView>
+      </SheetShell>
     </SafeAreaView>
   );
 }
 
-function makeStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+function makeStyles(colors: ThemeColors) {
   return StyleSheet.create({
     container: { flex: 1 },
     scroll: { flex: 1 },
@@ -221,16 +221,10 @@ function makeStyles(colors: ReturnType<typeof useTheme>["colors"]) {
       borderWidth: 1,
     },
     langRowLabel: { fontSize: fontSize.md },
-    // Bottom sheet
-    modalOverlay: {
-      flex: 1,
-      justifyContent: "flex-end",
-      backgroundColor: "rgba(0,0,0,0.35)",
-    },
     modalSheet: {
-      borderTopLeftRadius: 24,
-      borderTopRightRadius: 24,
-      paddingBottom: 40,
+      backgroundColor: colors.card,
+      paddingHorizontal: 0,
+      paddingTop: 0,
     },
     handleBar: {
       alignItems: "center",
@@ -248,6 +242,9 @@ function makeStyles(colors: ReturnType<typeof useTheme>["colors"]) {
       marginBottom: 8,
     },
     langList: {
+      flexGrow: 0,
+      minHeight: 0,
+      flexShrink: 1,
       marginHorizontal: 16,
       borderRadius: radius.xl,
       overflow: "hidden",

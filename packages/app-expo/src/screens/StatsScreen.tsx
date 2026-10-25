@@ -464,7 +464,9 @@ export default function StatsScreen() {
     <SafeAreaView style={s.container} edges={["top", "left", "right", "bottom"]}>
       {/* Header */}
       <View style={[s.header, { paddingHorizontal: layout.horizontalPadding }]}>
-        <View style={[s.headerInner, { maxWidth: statsContentWidth }]}>
+        <View
+          style={[s.headerInner, { maxWidth: layout.isContentMeasured ? statsContentWidth : undefined }]}
+        >
           <TouchableOpacity
             style={s.backBtn}
             onPress={() => {
@@ -525,7 +527,9 @@ export default function StatsScreen() {
             icon={<SearchIcon size={24} color={withOpacity(colors.mutedForeground, 0.45)} />}
           />
         ) : (
-          <View style={{ width: "100%", maxWidth: statsContentWidth }}>
+          <View
+            style={{ width: "100%", maxWidth: layout.isContentMeasured ? statsContentWidth : undefined }}
+          >
             {/* ═══ Hero Section ═══ */}
             <View style={s.heroCard}>
               {/* Period row + nav */}
@@ -540,7 +544,7 @@ export default function StatsScreen() {
                 </View>
               ) : (
                 <View style={s.heroPeriodRow}>
-                  <View>
+                  <View style={s.heroPeriodCopy}>
                     <Text style={s.heroDimLabel}>
                       {t(`stats.desktop.dimensionTitles.${dimension}`)}
                     </Text>
@@ -580,7 +584,9 @@ export default function StatsScreen() {
               )}
 
               {/* Headline metric */}
-              <Text style={s.heroValue}>{headlineValue}</Text>
+              <Text style={[s.heroValue, statsContentWidth < 360 && s.heroValueCompact]}>
+                {headlineValue}
+              </Text>
               <View style={s.heroSubRow}>
                 <ClockIcon size={14} color={withOpacity(colors.primary, 0.35)} />
                 <Text style={s.heroSubText}>{headlineLabel}</Text>

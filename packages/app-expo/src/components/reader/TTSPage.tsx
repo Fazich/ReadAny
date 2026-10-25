@@ -132,13 +132,8 @@ export function TTSPage({
   const insets = useSafeAreaInsets();
   // 当前窗口尺寸：折叠/旋转/分屏后歌词区按当前窗口高度布局。
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
-  // 低窗口（分屏/折叠外屏上半）：固定 UI 超过窗口时改为整屏可滚，歌词区给有限高度。
+  // 单列时整页可滚：窗口再矮也能滚到最后一项控制。
   const split = useResponsiveLayout().supportsSplitView;
-  const isLowWindow = !split && windowHeight < 640;
-  const lowWindowLyricStyle = useMemo(
-    () => ({ flex: 0 as const, height: Math.max(120, Math.round(windowHeight * 0.4)) }),
-    [windowHeight],
-  );
   const { t } = useTranslation();
   const [voicePickerVisible, setVoicePickerVisible] = useState(false);
   const [timerSheetVisible, setTimerSheetVisible] = useState(false);
@@ -157,14 +152,12 @@ export function TTSPage({
 
   const fallbackPreview = useMemo(() => buildNarrationPreview(currentText), [currentText]);
 
-  // Measured height of the lyricArea — used to compute paddingBottom so the
-  // last sentence can always scroll to the vertical center of the list.
-  const [lyricAreaHeight, setLyricAreaHeight] = useState(windowHeight * 0.4);
-  const onLyricAreaLayout = useCallback((e: { nativeEvent: { layout: { height: number } } }) => {
+  // Measure the scroll viewport so both end rows can reach its vertical center.
+  const [lyricViewportHeight, setLyricViewportHeight] = useState(0);
+  const onLyricViewportLayout = useCallback((e: { nativeEvent: { layout: { height: number } } }) => {
     const nextHeight = e.nativeEvent.layout.height;
-    // Ignore transient tiny heights during modal open/close animation.
-    if (nextHeight < 120) return;
-    setLyricAreaHeight((prev) => (Math.abs(prev - nextHeight) > 2 ? nextHeight : prev));
+    if (!Number.isFinite(nextHeight) || nextHeight <= 0) return;
+    setLyricViewportHeight((prev) => (Math.abs(prev - nextHeight) > 2 ? nextHeight : prev));
   }, []);
 
   // Number of prev-page sentences prepended to the list (only used in fallback mode)
@@ -260,19 +253,17 @@ export function TTSPage({
     narrationSegments,
     prevCount,
   ]);
-  const lyricCenterPadding = useMemo(
-    () => Math.max(40, Math.round(lyricAreaHeight / 2 - 32)),
-    [lyricAreaHeight],
-  );
+  const lyricCenterPadding = Math.ceil(lyricViewportHeight / 2);
   const currentExcerpt = lyricSegments[safeChunkIndex]?.text || fallbackPreview.currentExcerpt;
   const centerLyricIndex = useCallback(
     (index: number, animated = true) => {
+      if (lyricViewportHeight <= 0) return;
       const id = lyricSegments[index]?.id;
       const layout = id ? lyricLayoutRef.current.get(id) : undefined;
       if (layout) {
         const targetOffset = Math.max(
           0,
-          lyricCenterPadding + layout.y - (lyricAreaHeight - layout.height) / 2,
+          lyricCenterPadding + layout.y - (lyricViewportHeight - layout.height) / 2,
         );
         autoScrollLockUntilRef.current = Date.now() + (animated ? 800 : 250);
         if (__DEV__) {
@@ -281,7 +272,7 @@ export function TTSPage({
             animated,
             layoutY: layout.y,
             layoutHeight: layout.height,
-            lyricAreaHeight,
+            lyricViewportHeight,
             lyricCenterPadding,
             targetOffset,
           });
@@ -295,14 +286,14 @@ export function TTSPage({
       }
       const estimatedOffset = Math.max(
         0,
-        lyricCenterPadding + index * 44 - lyricAreaHeight / 2 + 22,
+        lyricCenterPadding + index * 44 - lyricViewportHeight / 2 + 22,
       );
       autoScrollLockUntilRef.current = Date.now() + (animated ? 800 : 250);
       if (__DEV__) {
         console.log("[TTSPage][lyrics] center-estimated", {
           index,
           animated,
-          lyricAreaHeight,
+          lyricViewportHeight,
           lyricCenterPadding,
           estimatedOffset,
         });
@@ -313,7 +304,7 @@ export function TTSPage({
         animated,
       });
     },
-    [lyricAreaHeight, lyricCenterPadding, lyricSegments],
+    [lyricViewportHeight, lyricCenterPadding, lyricSegments],
   );
 
   const pct = clampPct(readingProgress);
@@ -414,8 +405,9 @@ export function TTSPage({
     if (!visible || lyricSegments.length <= 1) return;
     if (!shouldAutoCenterLyrics) return;
     if (userScrollingRef.current) return;
+    if (lyricViewportHeight <= 0) return;
     const targetIndex = Math.max(0, Math.min(safeChunkIndex, lyricSegments.length - 1));
-    const centerSignature = `${targetIndex}:${currentSegmentCfi || ""}:${Math.round(lyricAreaHeight)}`;
+    const centerSignature = `${targetIndex}:${currentSegmentCfi || ""}:${Math.round(lyricViewportHeight)}`;
     if (lastCenteredSignatureRef.current === centerSignature) return;
     if (__DEV__) {
       console.log("[TTSPage][lyrics] active-changed", {
@@ -428,7 +420,7 @@ export function TTSPage({
     const targetId = lyricSegments[targetIndex]?.id;
     if (targetId && lyricLayoutRef.current.has(targetId)) {
       const timer = setTimeout(() => {
-        if (!shouldAutoCenterLyrics) return;
+        if (!shouldAutoCenterLyrics || lyricViewportHeight <= 0 || userScrollingRef.current) return;
         lastCenteredSignatureRef.current = centerSignature;
         centerLyricIndex(targetIndex, true);
       }, 80);
@@ -439,7 +431,7 @@ export function TTSPage({
     centerLyricIndex,
     currentChunkIndex,
     currentSegmentCfi,
-    lyricAreaHeight,
+    lyricViewportHeight,
     lyricSegments,
     safeChunkIndex,
     shouldAutoCenterLyrics,
@@ -875,16 +867,21 @@ export function TTSPage({
     >
       <View style={[s.screen, { paddingLeft: insets.left, paddingRight: insets.right }]}>
         {topBarJSX}
-        {/* 外层可滚动：低窗口时固定头部+控制+底部可能超过窗口，可滚到控制；
-            正常高窗内容高度锁定视口，布局与原 View 一致。 */}
+        {/* 外层可滚：单列始终可滚到最后一组控制，双栏保持原固定布局。 */}
         <ScrollView
           style={s.content}
-          contentContainerStyle={isLowWindow ? undefined : s.contentFill}
-          scrollEnabled={isLowWindow}
+          contentContainerStyle={split ? s.contentFill : s.singleColumnContent}
+          scrollEnabled={!split}
+          nestedScrollEnabled
           showsVerticalScrollIndicator={false}
         >
           <View style={{ display: split ? "none" : "flex" }}>{bookHeaderJSX}</View>
-          <View style={[s.playerBody, { flexDirection: split ? "row" : "column-reverse" }, isLowWindow && { flex: 0 }]}>
+          <View
+            style={[
+              s.playerBody,
+              split ? { flexDirection: "row" } : s.playerBodySingle,
+            ]}
+          >
             <ScrollView
               style={[s.playerControls, split ? s.playerControlsSplit : { flexGrow: 0, flexShrink: 0 }]}
               contentContainerStyle={split ? s.playerControlsContent : undefined}
@@ -896,20 +893,22 @@ export function TTSPage({
               <View style={[s.bottom, { paddingBottom: chromeBottomInset + 10 }]}>{bottomStripJSX}</View>
             </ScrollView>
           <View
-            style={[s.lyricArea, isLowWindow && lowWindowLyricStyle,
+            style={[
+              s.lyricArea,
+              !split && s.lyricAreaSingle,
               split && { borderLeftWidth: 1, borderLeftColor: colors.border, paddingBottom: chromeBottomInset + 16 }]}
-            onLayout={onLyricAreaLayout}
           >
             {lyricSegments.length > 0 ? (
               <ScrollView
                 ref={lyricScrollRef}
                 style={s.lyricList}
+                onLayout={onLyricViewportLayout}
                 contentContainerStyle={[
                   s.lyricListContent,
                   {
                     paddingTop: lyricCenterPadding,
                     paddingBottom: lyricCenterPadding,
-                    minHeight: lyricAreaHeight + lyricCenterPadding * 2,
+                    minHeight: lyricViewportHeight + lyricCenterPadding * 2,
                   },
                 ]}
                 showsVerticalScrollIndicator={false}
@@ -967,13 +966,14 @@ export function TTSPage({
                           if (
                             visible &&
                             shouldAutoCenterLyrics &&
+                            lyricViewportHeight > 0 &&
                             pendingCenterRef.current === index &&
                             !userScrollingRef.current
                           ) {
                             pendingCenterRef.current = null;
-                            lastCenteredSignatureRef.current = `${index}:${currentSegmentCfi || ""}:${Math.round(lyricAreaHeight)}`;
+                            lastCenteredSignatureRef.current = `${index}:${currentSegmentCfi || ""}:${Math.round(lyricViewportHeight)}`;
                             requestAnimationFrame(() => {
-                              if (!shouldAutoCenterLyrics) return;
+                              if (!shouldAutoCenterLyrics || lyricViewportHeight <= 0 || userScrollingRef.current) return;
                               centerLyricIndex(index, true);
                             });
                           }

@@ -21,7 +21,7 @@ import {
   useColors,
   withOpacity,
 } from "@/styles/theme";
-import { Picker } from "@react-native-picker/picker";
+import { DatePickerSheet, OptionPickerSheet, TextEditSheet, type OptionPickerTarget, type TextEditorTarget } from "./book-details/BookDetailsSheets";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { getPlatformService } from "@readany/core/services";
 import type { Book, BookReview } from "@readany/core/types";
@@ -44,9 +44,6 @@ import {
   Alert,
   Image,
   type KeyboardTypeOptions,
-  Modal,
-  Platform,
-  Pressable,
   type StyleProp,
   StyleSheet,
   Text,
@@ -55,40 +52,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type Props = NativeStackScreenProps<RootStackParamList, "BookDetails">;
 type DetailsTab = "basic" | "reviews";
-type TextMetadataField = "description";
-type OptionPickerTarget = {
-  field: "language" | "groupId";
-  label: string;
-  value: string;
-  options: { value: string; label: string }[];
-};
-type TextEditorTarget =
-  | {
-      kind: "field";
-      field: TextMetadataField;
-      label: string;
-      value: string;
-      placeholder: string;
-      multiline?: boolean;
-    }
-  | {
-      kind: "review";
-      reviewId: string;
-      label: string;
-      value: string;
-      placeholder: string;
-    }
-  | {
-      kind: "newReview";
-      label: string;
-      value: string;
-      placeholder: string;
-    };
 
 type PickedCoverSource = {
   uri: string;
@@ -109,66 +76,6 @@ const LANGUAGE_PRESETS = [
   { value: "pt", label: "Português" },
   { value: "ru", label: "Русский" },
 ];
-const DATE_PRECISIONS = ["year", "month", "day"] as const;
-type DatePrecision = (typeof DATE_PRECISIONS)[number];
-const YEAR_OPTIONS = Array.from({ length: 220 }, (_, index) =>
-  String(new Date().getFullYear() + 5 - index),
-);
-const MONTH_OPTIONS = Array.from({ length: 12 }, (_, index) => String(index + 1).padStart(2, "0"));
-
-function getDatePrecision(value: string): DatePrecision {
-  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return "day";
-  if (/^\d{4}-\d{2}$/.test(value)) return "month";
-  return "year";
-}
-
-function getTodayParts() {
-  const today = new Date();
-  return {
-    year: String(today.getFullYear()),
-    month: String(today.getMonth() + 1).padStart(2, "0"),
-    day: String(today.getDate()).padStart(2, "0"),
-  };
-}
-
-function normalizeDateParts(value: string) {
-  const match = value.match(/^(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?/);
-  const today = getTodayParts();
-  return {
-    year: match?.[1] ?? today.year,
-    month: match?.[2] ?? today.month,
-    day: match?.[3] ?? today.day,
-  };
-}
-
-function buildPublishDateValue(
-  parts: { year: string; month: string; day: string },
-  precision: DatePrecision,
-) {
-  if (precision === "day") return `${parts.year}-${parts.month}-${parts.day}`;
-  if (precision === "month") return `${parts.year}-${parts.month}`;
-  return parts.year;
-}
-
-function getDaysInMonth(year: string, month: string) {
-  return new Date(Number(year), Number(month), 0).getDate();
-}
-
-function datePrecisionLabel(precision: DatePrecision, t: TFunction) {
-  if (precision === "day") return t("library.detailsDatePrecisionDay", "年月日");
-  if (precision === "month") return t("library.detailsDatePrecisionMonth", "年月");
-  return t("library.detailsDatePrecisionYear", "仅年份");
-}
-
-function formatMonthLabel(month: string, locale: string) {
-  try {
-    return new Intl.DateTimeFormat(locale, { month: "short" }).format(
-      new Date(2024, Number(month) - 1, 1),
-    );
-  } catch {
-    return month;
-  }
-}
 
 function formatPublishDate(value: string, locale: string) {
   const trimmed = value.trim();
@@ -277,6 +184,7 @@ export function BookDetailsScreen({ route }: Props) {
   const { bookId } = route.params;
   const colors = useColors();
   const layout = useContentLayout();
+  const stackHero = layout.supportsSplitView || layout.contentWidth < 340;
   const { t, i18n } = useTranslation();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const books = useLibraryStore((state) => state.books);
@@ -531,7 +439,7 @@ export function BookDetailsScreen({ route }: Props) {
             <View
               style={[
                 styles.heroStage,
-                layout.supportsSplitView && { flexDirection: "column", alignItems: "stretch" },
+                stackHero && { flexDirection: "column", alignItems: "stretch" },
               ]}
             >
               <View style={styles.coverColumn}>
@@ -807,7 +715,6 @@ export function BookDetailsScreen({ route }: Props) {
         target={textEditorTarget}
         doneLabel={t("common.done", "完成")}
         cancelLabel={t("common.cancel", "取消")}
-        styles={styles}
         onClose={() => setTextEditorTarget(null)}
         onDone={handleTextEditorDone}
       />
@@ -815,7 +722,6 @@ export function BookDetailsScreen({ route }: Props) {
         target={optionPickerTarget}
         doneLabel={t("common.done", "完成")}
         cancelLabel={t("common.cancel", "取消")}
-        styles={styles}
         onClose={() => setOptionPickerTarget(null)}
         onDone={(target, value) => {
           setField(target.field, value);
@@ -830,7 +736,6 @@ export function BookDetailsScreen({ route }: Props) {
         doneLabel={t("common.done", "完成")}
         cancelLabel={t("common.cancel", "取消")}
         t={t}
-        styles={styles}
         onClose={() => setDatePickerOpen(false)}
         onDone={(nextValue) => {
           setField("publishDate", nextValue);
@@ -1094,26 +999,28 @@ function RatingField({
   return (
     <View style={styles.ratingBlock}>
       <View style={styles.ratingRow}>
-        {[1, 2, 3, 4, 5].map((rating) => {
-          const selected = value !== null && rating <= value;
-          return (
-            <TouchableOpacity
-              key={rating}
-              style={[styles.ratingButton, selected && styles.ratingButtonActive]}
-              activeOpacity={0.78}
-              onPress={() => onChange(rating)}
-              accessibilityRole="button"
-              accessibilityLabel={`${label} ${rating}`}
-            >
-              <Star
-                size={17}
-                color={selected ? colors.primary : colors.mutedForeground}
-                fill={selected ? colors.primary : "transparent"}
-                strokeWidth={2}
-              />
-            </TouchableOpacity>
-          );
-        })}
+        <View style={styles.ratingStars}>
+          {[1, 2, 3, 4, 5].map((rating) => {
+            const selected = value !== null && rating <= value;
+            return (
+              <TouchableOpacity
+                key={rating}
+                style={[styles.ratingButton, selected && styles.ratingButtonActive]}
+                activeOpacity={0.78}
+                onPress={() => onChange(rating)}
+                accessibilityRole="button"
+                accessibilityLabel={`${label} ${rating}`}
+              >
+                <Star
+                  size={17}
+                  color={selected ? colors.primary : colors.mutedForeground}
+                  fill={selected ? colors.primary : "transparent"}
+                  strokeWidth={2}
+                />
+              </TouchableOpacity>
+            );
+          })}
+        </View>
         <Text style={styles.ratingValue}>{value ? `${value}/5` : noRatingLabel}</Text>
       </View>
     </View>
@@ -1303,306 +1210,6 @@ function ReadOnlyTextCard({
   );
 }
 
-function TextEditSheet({
-  target,
-  doneLabel,
-  cancelLabel,
-  styles,
-  onClose,
-  onDone,
-}: {
-  target: TextEditorTarget | null;
-  doneLabel: string;
-  cancelLabel: string;
-  styles: ReturnType<typeof makeStyles>;
-  onClose: () => void;
-  onDone: (text: string) => void;
-}) {
-  const [draft, setDraft] = useState("");
-  const inputRef = useRef<TextInput>(null);
-  const multiline = Boolean(target && (target.kind !== "field" || target.multiline));
-
-  useEffect(() => {
-    setDraft(target?.value ?? "");
-  }, [target]);
-
-  useEffect(() => {
-    if (!target) return;
-    const timer = setTimeout(() => {
-      inputRef.current?.focus();
-      inputRef.current?.setNativeProps({
-        selection: { start: target.value.length, end: target.value.length },
-      });
-    }, 180);
-    return () => clearTimeout(timer);
-  }, [target]);
-
-  return (
-    <Modal visible={Boolean(target)} transparent animationType="slide" onRequestClose={onClose}>
-      <KeyboardAvoidingView behavior="padding" style={styles.sheetRoot}>
-        <Pressable style={styles.sheetOverlay} onPress={onClose} />
-        <View style={[styles.textSheet, multiline && styles.textSheetTall]}>
-          <View style={styles.sheetHandle} />
-          <View style={styles.textSheetHeader}>
-            <TouchableOpacity
-              style={styles.textSheetGhostButton}
-              activeOpacity={0.82}
-              onPress={onClose}
-            >
-              <Text style={styles.textSheetGhostButtonText}>{cancelLabel}</Text>
-            </TouchableOpacity>
-            <Text style={styles.textSheetTitle}>{target?.label ?? ""}</Text>
-            <TouchableOpacity
-              style={styles.textSheetDoneButton}
-              activeOpacity={0.82}
-              onPress={() => onDone(draft)}
-            >
-              <Text style={styles.textSheetDoneButtonText}>{doneLabel}</Text>
-            </TouchableOpacity>
-          </View>
-          <TextInput
-            ref={inputRef}
-            style={[styles.textSheetInput, multiline ? styles.textSheetMultilineInput : undefined]}
-            value={draft}
-            placeholder={target?.placeholder}
-            placeholderTextColor={styles.placeholder.color}
-            multiline={multiline}
-            textAlignVertical={multiline ? "top" : "center"}
-            returnKeyType={multiline ? "default" : "done"}
-            onChangeText={setDraft}
-            onSubmitEditing={() => {
-              if (multiline) return;
-              onDone(draft);
-            }}
-          />
-        </View>
-      </KeyboardAvoidingView>
-    </Modal>
-  );
-}
-
-function OptionPickerSheet({
-  target,
-  doneLabel,
-  cancelLabel,
-  styles,
-  onClose,
-  onDone,
-}: {
-  target: OptionPickerTarget | null;
-  doneLabel: string;
-  cancelLabel: string;
-  styles: ReturnType<typeof makeStyles>;
-  onClose: () => void;
-  onDone: (target: OptionPickerTarget, value: string) => void;
-}) {
-  const [draft, setDraft] = useState("");
-
-  useEffect(() => {
-    setDraft(target?.value ?? "");
-  }, [target]);
-
-  return (
-    <Modal visible={Boolean(target)} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={styles.sheetRoot}>
-        <Pressable style={styles.sheetOverlay} onPress={onClose} />
-        <View style={styles.pickerSheet}>
-          <View style={styles.sheetHandle} />
-          <View style={styles.textSheetHeader}>
-            <TouchableOpacity
-              style={styles.textSheetGhostButton}
-              activeOpacity={0.82}
-              onPress={onClose}
-            >
-              <Text style={styles.textSheetGhostButtonText}>{cancelLabel}</Text>
-            </TouchableOpacity>
-            <Text style={styles.textSheetTitle}>{target?.label ?? ""}</Text>
-            <TouchableOpacity
-              style={styles.textSheetDoneButton}
-              activeOpacity={0.82}
-              onPress={() => {
-                if (target) onDone(target, draft);
-              }}
-            >
-              <Text style={styles.textSheetDoneButtonText}>{doneLabel}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.pickerSheetSurface}>
-            <Picker
-              selectedValue={draft}
-              onValueChange={(nextValue) => {
-                if (typeof nextValue === "string") setDraft(nextValue);
-              }}
-              itemStyle={styles.pickerItem}
-              style={styles.nativePicker}
-            >
-              {(target?.options ?? []).map((option) => (
-                <Picker.Item
-                  key={option.value || "none"}
-                  label={option.label}
-                  value={option.value}
-                />
-              ))}
-            </Picker>
-          </View>
-        </View>
-      </View>
-    </Modal>
-  );
-}
-
-function DatePickerSheet({
-  visible,
-  value,
-  locale,
-  title,
-  doneLabel,
-  cancelLabel,
-  t,
-  styles,
-  onClose,
-  onDone,
-}: {
-  visible: boolean;
-  value: string;
-  locale: string;
-  title: string;
-  doneLabel: string;
-  cancelLabel: string;
-  t: TFunction;
-  styles: ReturnType<typeof makeStyles>;
-  onClose: () => void;
-  onDone: (value: string) => void;
-}) {
-  const [draftPrecision, setDraftPrecision] = useState<DatePrecision>(
-    value.trim() ? getDatePrecision(value) : "day",
-  );
-  const [draftParts, setDraftParts] = useState(() => normalizeDateParts(value));
-
-  useEffect(() => {
-    if (!visible) return;
-    setDraftPrecision(value.trim() ? getDatePrecision(value) : "day");
-    setDraftParts(normalizeDateParts(value));
-  }, [value, visible]);
-
-  const dayOptions = useMemo(
-    () =>
-      Array.from({ length: getDaysInMonth(draftParts.year, draftParts.month) }, (_, index) =>
-        String(index + 1).padStart(2, "0"),
-      ),
-    [draftParts.year, draftParts.month],
-  );
-
-  const setPart = (key: keyof ReturnType<typeof normalizeDateParts>, nextValue: string) => {
-    setDraftParts((current) => {
-      const nextParts = { ...current, [key]: nextValue };
-      const maxDay = getDaysInMonth(nextParts.year, nextParts.month);
-      if (Number(nextParts.day) > maxDay) nextParts.day = String(maxDay).padStart(2, "0");
-      return nextParts;
-    });
-  };
-
-  return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={styles.sheetRoot}>
-        <Pressable style={styles.sheetOverlay} onPress={onClose} />
-        <View style={styles.pickerSheet}>
-          <View style={styles.sheetHandle} />
-          <View style={styles.textSheetHeader}>
-            <TouchableOpacity
-              style={styles.textSheetGhostButton}
-              activeOpacity={0.82}
-              onPress={onClose}
-            >
-              <Text style={styles.textSheetGhostButtonText}>{cancelLabel}</Text>
-            </TouchableOpacity>
-            <Text style={styles.textSheetTitle}>{title}</Text>
-            <TouchableOpacity
-              style={styles.textSheetDoneButton}
-              activeOpacity={0.82}
-              onPress={() => onDone(buildPublishDateValue(draftParts, draftPrecision))}
-            >
-              <Text style={styles.textSheetDoneButtonText}>{doneLabel}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.segmentRow}>
-            {DATE_PRECISIONS.map((item) => {
-              const selected = draftPrecision === item;
-              return (
-                <TouchableOpacity
-                  key={item}
-                  style={[styles.segmentButton, selected && styles.segmentButtonActive]}
-                  activeOpacity={0.82}
-                  onPress={() => setDraftPrecision(item)}
-                >
-                  <Text style={[styles.segmentText, selected && styles.segmentTextActive]}>
-                    {datePrecisionLabel(item, t)}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-          <View style={styles.datePickerColumns}>
-            <PickerColumn
-              value={draftParts.year}
-              options={YEAR_OPTIONS}
-              onSelect={(nextValue) => setPart("year", nextValue)}
-              styles={styles}
-            />
-            {draftPrecision !== "year" ? (
-              <PickerColumn
-                value={draftParts.month}
-                options={MONTH_OPTIONS}
-                format={(month) => formatMonthLabel(month, locale)}
-                onSelect={(nextValue) => setPart("month", nextValue)}
-                styles={styles}
-              />
-            ) : null}
-            {draftPrecision === "day" ? (
-              <PickerColumn
-                value={draftParts.day}
-                options={dayOptions}
-                onSelect={(nextValue) => setPart("day", nextValue)}
-                styles={styles}
-              />
-            ) : null}
-          </View>
-        </View>
-      </View>
-    </Modal>
-  );
-}
-
-function PickerColumn({
-  value,
-  options,
-  format,
-  onSelect,
-  styles,
-}: {
-  value: string;
-  options: string[];
-  format?: (value: string) => string;
-  onSelect: (value: string) => void;
-  styles: ReturnType<typeof makeStyles>;
-}) {
-  return (
-    <View style={styles.pickerWheel}>
-      <Picker
-        selectedValue={value}
-        onValueChange={(nextValue) => {
-          if (typeof nextValue === "string" && nextValue !== value) onSelect(nextValue);
-        }}
-        itemStyle={styles.pickerItem}
-        style={styles.nativePicker}
-      >
-        {options.map((option) => (
-          <Picker.Item key={option} label={format ? format(option) : option} value={option} />
-        ))}
-      </Picker>
-    </View>
-  );
-}
 
 function joinTags(tags: string[]) {
   return Array.from(new Set(tags.map((tag) => tag.trim()).filter(Boolean))).join(", ");
@@ -1877,8 +1484,15 @@ const makeStyles = (colors: ThemeColors) =>
     ratingRow: {
       minHeight: 34,
       flexDirection: "row",
+      flexWrap: "wrap",
       alignItems: "center",
       gap: 5,
+    },
+    ratingStars: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 5,
+      flexShrink: 0,
     },
     ratingButton: {
       width: 30,
@@ -2215,169 +1829,8 @@ const makeStyles = (colors: ThemeColors) =>
       fontSize: fontSize.sm,
       lineHeight: 20,
     },
-    sheetRoot: {
-      flex: 1,
-      justifyContent: "flex-end",
-    },
-    sheetOverlay: {
-      ...StyleSheet.absoluteFillObject,
-      backgroundColor: "rgba(0,0,0,0.42)",
-    },
-    textSheet: {
-      borderTopLeftRadius: radius.xl,
-      borderTopRightRadius: radius.xl,
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: withOpacity(colors.border, 0.86),
-      backgroundColor: colors.card,
-      paddingHorizontal: spacing.lg,
-      paddingTop: spacing.sm,
-      paddingBottom: Platform.OS === "ios" ? 34 : spacing.lg,
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: -12 },
-      shadowOpacity: 0.2,
-      shadowRadius: 22,
-      elevation: 18,
-    },
-    textSheetTall: {
-      height: "68%",
-      minHeight: 430,
-    },
-    pickerSheet: {
-      borderTopLeftRadius: radius.xl,
-      borderTopRightRadius: radius.xl,
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: withOpacity(colors.border, 0.86),
-      backgroundColor: colors.card,
-      paddingHorizontal: spacing.lg,
-      paddingTop: spacing.sm,
-      paddingBottom: Platform.OS === "ios" ? 34 : spacing.lg,
-      shadowColor: "#000",
-      shadowOffset: { width: 0, height: -12 },
-      shadowOpacity: 0.2,
-      shadowRadius: 22,
-      elevation: 18,
-    },
-    pickerSheetSurface: {
-      overflow: "hidden",
-      borderRadius: radius.md,
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: withOpacity(colors.border, 0.82),
-      backgroundColor: withOpacity(colors.background, 0.38),
-    },
-    sheetHandle: {
-      alignSelf: "center",
-      width: 38,
-      height: 4,
-      borderRadius: radius.full,
-      backgroundColor: withOpacity(colors.mutedForeground, 0.28),
-      marginBottom: spacing.sm,
-    },
-    textSheetHeader: {
-      minHeight: 42,
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-      gap: spacing.md,
-    },
-    textSheetTitle: {
-      flex: 1,
-      color: colors.foreground,
-      fontSize: fontSize.base,
-      fontWeight: fontWeight.semibold,
-      textAlign: "center",
-    },
-    textSheetGhostButton: {
-      minWidth: 54,
-      minHeight: 34,
-      alignItems: "flex-start",
-      justifyContent: "center",
-    },
-    textSheetGhostButtonText: {
-      color: colors.mutedForeground,
-      fontSize: fontSize.sm,
-      fontWeight: fontWeight.medium,
-    },
-    textSheetDoneButton: {
-      minWidth: 54,
-      minHeight: 34,
-      alignItems: "flex-end",
-      justifyContent: "center",
-    },
-    textSheetDoneButtonText: {
-      color: colors.primary,
-      fontSize: fontSize.sm,
-      fontWeight: fontWeight.semibold,
-    },
-    textSheetInput: {
-      minHeight: 44,
-      marginTop: spacing.sm,
-      borderRadius: radius.md,
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: withOpacity(colors.border, 0.86),
-      backgroundColor: withOpacity(colors.background, 0.72),
-      color: colors.foreground,
-      fontSize: fontSize.base,
-      lineHeight: 22,
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
-    },
-    textSheetMultilineInput: {
-      flex: 1,
-      minHeight: 300,
-      textAlignVertical: "top",
-    },
     placeholder: {
       color: colors.mutedForeground,
-    },
-    segmentRow: {
-      flexDirection: "row",
-      gap: spacing.xs,
-      padding: spacing.sm,
-      borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: withOpacity(colors.border, 0.62),
-    },
-    segmentButton: {
-      flex: 1,
-      minHeight: 32,
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: radius.sm,
-      backgroundColor: "transparent",
-    },
-    segmentButtonActive: {
-      backgroundColor: withOpacity(colors.primary, 0.14),
-    },
-    segmentText: {
-      color: colors.mutedForeground,
-      fontSize: fontSize.xs,
-      fontWeight: fontWeight.medium,
-    },
-    segmentTextActive: {
-      color: colors.primary,
-      fontWeight: fontWeight.semibold,
-    },
-    datePickerColumns: {
-      height: 200,
-      flexDirection: "row",
-      gap: spacing.sm,
-      padding: spacing.sm,
-    },
-    pickerWheel: {
-      flex: 1,
-      minWidth: 0,
-      position: "relative",
-      overflow: "hidden",
-      borderRadius: radius.sm,
-      backgroundColor: withOpacity(colors.background, 0.46),
-    },
-    nativePicker: {
-      width: "100%",
-      height: 200,
-    },
-    pickerItem: {
-      color: colors.foreground,
-      fontSize: fontSize.sm,
-      fontWeight: fontWeight.medium,
     },
     tagPanel: {
       overflow: "hidden",

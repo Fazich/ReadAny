@@ -2,6 +2,7 @@ import { BookCard } from "@/components/library/BookCard";
 import { GroupCard } from "@/components/library/GroupCard";
 import { GroupPickerSheet } from "@/components/library/GroupPickerSheet";
 import { type ExtractorRef, ExtractorWebView } from "@/components/rag/ExtractorWebView";
+import { AdaptiveEmptyState } from "@/components/ui/AdaptiveEmptyState";
 import {
   ArrowDownAZIcon,
   ArrowUpAZIcon,
@@ -161,7 +162,10 @@ export function LibraryScreen() {
         )
       : NUM_COLUMNS;
   const contentWidth = layout.centeredContentWidth;
-  const gridItemWidth = Math.floor((contentWidth - gridGap * (columnCount - 1)) / columnCount);
+  const gridItemWidth = Math.max(
+    0,
+    Math.floor((contentWidth - gridGap * (columnCount - 1)) / columnCount),
+  );
   const s = useMemo(
     () =>
       makeStyles(colors, {
@@ -813,19 +817,19 @@ export function LibraryScreen() {
       <View style={[s.header, { zIndex: 20 }]}>
         <View style={s.headerInner}>
           {selectionMode ? (
-            <View style={s.headerRow}>
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <View style={s.selectionHeader}>
+              <View style={s.selectionTitleRow}>
                 <TouchableOpacity style={s.headerBtn} onPress={exitSelectionMode}>
                   <XIcon size={18} color={colors.foreground} />
                 </TouchableOpacity>
-                <Text style={s.headerTitle}>
+                <Text style={[s.headerTitle, s.selectionTitle]} numberOfLines={1}>
                   {t("library.selectedCount", {
                     count: selectedBookIds.size,
                     defaultValue: `已选 ${selectedBookIds.size} 本`,
                   })}
                 </Text>
               </View>
-              <View style={s.headerActions}>
+              <View style={s.selectionActions}>
                 <TouchableOpacity style={s.headerBtn} onPress={toggleSelectAll}>
                   <CheckCheckIcon
                     size={18}
@@ -1053,7 +1057,7 @@ export function LibraryScreen() {
       {/* Content */}
       <View style={s.content}>
         <View style={s.contentInner} onLayout={layout.onContentLayout}>
-          {!isLoaded && (
+          {(!isLoaded || !layout.isContentMeasured) && (
             <View style={s.loadingWrap}>
               <ActivityIndicator size="large" color={colors.mutedForeground} />
             </View>
@@ -1064,38 +1068,48 @@ export function LibraryScreen() {
               <Text style={s.importBannerText}>{t("library.importing", "正在导入...")}</Text>
             </View>
           )}
-          {isLoaded && books.length === 0 && (
-            <View style={s.emptyWrap}>
-              <Image
-                source={isDark ? BOOK_DARK_PNG : BOOK_PNG}
-                style={{ width: 160, height: 160 }}
-              />
-              <Text style={s.emptyTitle}>{t("library.empty", "暂无书籍")}</Text>
-              <Text style={s.emptyHint}>{t("library.emptyHint", "导入电子书开始阅读之旅")}</Text>
-              <View ref={emptyImportAnchorRef} collapsable={false}>
-                <TouchableOpacity
-                  style={s.emptyImportBtn}
-                  onPress={() => handleOpenImportSources(emptyImportAnchorRef)}
-                  disabled={isPickingImport}
-                  activeOpacity={0.8}
-                >
-                  <Text style={s.emptyImportText}>{t("library.importFirst", "导入书籍")}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+          {isLoaded && layout.isContentMeasured && books.length === 0 && (
+            <AdaptiveEmptyState>
+              {(compact) => (
+                <View style={s.emptyWrap}>
+                  <Image
+                    source={isDark ? BOOK_DARK_PNG : BOOK_PNG}
+                    style={{ width: compact ? 96 : 160, height: compact ? 96 : 160 }}
+                    resizeMode="contain"
+                  />
+                  <Text style={s.emptyTitle}>{t("library.empty", "暂无书籍")}</Text>
+                  <Text style={s.emptyHint}>{t("library.emptyHint", "导入电子书开始阅读之旅")}</Text>
+                  <TouchableOpacity
+                    ref={emptyImportAnchorRef}
+                    style={s.emptyImportBtn}
+                    onPress={() => handleOpenImportSources(emptyImportAnchorRef)}
+                    disabled={isPickingImport}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={s.emptyImportText}>{t("library.importFirst", "导入书籍")}</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </AdaptiveEmptyState>
           )}
-          {isLoaded && hasBooks && isEmpty && (
-            <View style={s.noResultsWrap}>
-              <SearchIcon size={40} color={withOpacity(colors.mutedForeground, 0.3)} />
-              <Text style={s.noResultsText}>{t("library.noResults", "没有找到匹配的书籍")}</Text>
-            </View>
+          {isLoaded && layout.isContentMeasured && hasBooks && isEmpty && (
+            <AdaptiveEmptyState>
+              {() => (
+                <View style={s.noResultsWrap}>
+                  <SearchIcon size={40} color={withOpacity(colors.mutedForeground, 0.3)} />
+                  <Text style={s.noResultsText}>
+                    {t("library.noResults", "没有找到匹配的书籍")}
+                  </Text>
+                </View>
+              )}
+            </AdaptiveEmptyState>
           )}
-          {isLoaded && hasBooks && filter.search && !isEmpty && (
+          {isLoaded && layout.isContentMeasured && hasBooks && filter.search && !isEmpty && (
             <Text style={s.resultsCount}>
               {t("library.resultsCount", { count: gridItems.length })}
             </Text>
           )}
-          {isLoaded && !isEmpty && (
+          {isLoaded && layout.isContentMeasured && !isEmpty && (
             <LibraryGrid
               data={gridItems}
               renderItem={renderGridItem}
@@ -1217,6 +1231,21 @@ const makeStyles = (
       alignItems: "center",
       justifyContent: "space-between",
       marginBottom: 8,
+    },
+    selectionHeader: { gap: 4, marginBottom: 8 },
+    selectionTitleRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+      minWidth: 0,
+    },
+    selectionTitle: { flexShrink: 1, minWidth: 0 },
+    selectionActions: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      justifyContent: "flex-end",
+      columnGap: 4,
+      rowGap: 0,
     },
     headerTitle: {
       fontSize: fontSize["2xl"],
@@ -1353,16 +1382,7 @@ const makeStyles = (
       overflow: "hidden",
     },
     vecProgressFill: { height: 4, backgroundColor: colors.primary, borderRadius: radius.full },
-    emptyWrap: { flex: 1, alignItems: "center", justifyContent: "center" },
-    emptyIconWrap: {
-      width: 80,
-      height: 80,
-      borderRadius: radius.full,
-      backgroundColor: colors.muted,
-      alignItems: "center",
-      justifyContent: "center",
-      marginBottom: 16,
-    },
+    emptyWrap: { alignItems: "center" },
     emptyTitle: {
       fontSize: fontSize.lg,
       fontWeight: fontWeight.semibold,
@@ -1387,7 +1407,7 @@ const makeStyles = (
       fontWeight: fontWeight.medium,
       color: colors.primaryForeground,
     },
-    noResultsWrap: { flex: 1, alignItems: "center", justifyContent: "center", paddingVertical: 80 },
+    noResultsWrap: { alignItems: "center" },
     noResultsText: { fontSize: fontSize.sm, color: colors.mutedForeground, marginTop: 12 },
     resultsCount: { fontSize: fontSize.xs, color: colors.mutedForeground, marginBottom: 8 },
     gridRow: { gap: layout.gridGap, justifyContent: "flex-start" },

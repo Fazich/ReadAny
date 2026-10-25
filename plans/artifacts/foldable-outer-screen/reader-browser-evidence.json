@@ -1,0 +1,2354 @@
+{
+  "adapter": "Real modified components via RN Web; safe area top=24,bottom=16,left/right=0; viewport CSS px; RNW Modal animation host frozen translated offscreen, overridden transform/animation on host only. Browser cannot prove native keyboard/audio/WebView. Custom RN DOM View/ScrollView translate Yoga flex:0 to flexGrow:0/flexShrink:0/flexBasis:auto and deliver onLayout using ResizeObserver; RNW native layout reporter absent in this host. Real JSX never copied.",
+  "note": [
+    {
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "editor": {
+        "value": "Draft retained across outer screen resize",
+        "box": {
+          "x": 17,
+          "y": 305,
+          "width": 286,
+          "height": 198,
+          "bottom": 503
+        }
+      },
+      "actions": [
+        {
+          "text": "取消",
+          "box": {
+            "x": 172,
+            "y": 516,
+            "width": 60,
+            "height": 36,
+            "bottom": 552
+          }
+        },
+        {
+          "text": "保存",
+          "box": {
+            "x": 244,
+            "y": 516,
+            "width": 60,
+            "height": 36,
+            "bottom": 552
+          }
+        }
+      ],
+      "scrolls": [
+        {
+          "box": {
+            "x": 16,
+            "y": 252,
+            "width": 288,
+            "height": 252,
+            "bottom": 504
+          },
+          "scrollHeight": 252,
+          "clientHeight": 252,
+          "scrollTop": 0,
+          "overflow": "auto"
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "editor": {
+        "value": "Draft retained across outer screen resize",
+        "box": {
+          "x": 17,
+          "y": 337,
+          "width": 356,
+          "height": 198,
+          "bottom": 535
+        }
+      },
+      "actions": [
+        {
+          "text": "取消",
+          "box": {
+            "x": 242,
+            "y": 548,
+            "width": 60,
+            "height": 36,
+            "bottom": 584
+          }
+        },
+        {
+          "text": "保存",
+          "box": {
+            "x": 314,
+            "y": 548,
+            "width": 60,
+            "height": 36,
+            "bottom": 584
+          }
+        }
+      ],
+      "scrolls": [
+        {
+          "box": {
+            "x": 16,
+            "y": 284,
+            "width": 358,
+            "height": 252,
+            "bottom": 536
+          },
+          "scrollHeight": 252,
+          "clientHeight": 252,
+          "scrollTop": 0,
+          "overflow": "auto"
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 320,
+        "height": 300
+      },
+      "editor": {
+        "value": "Draft retained across outer screen resize",
+        "box": {
+          "x": 17,
+          "y": 174.40625,
+          "width": 271,
+          "height": 198,
+          "bottom": 372.40625
+        }
+      },
+      "actions": [
+        {
+          "text": "取消",
+          "box": {
+            "x": 172,
+            "y": 248,
+            "width": 60,
+            "height": 36,
+            "bottom": 284
+          }
+        },
+        {
+          "text": "保存",
+          "box": {
+            "x": 244,
+            "y": 248,
+            "width": 60,
+            "height": 36,
+            "bottom": 284
+          }
+        }
+      ],
+      "scrolls": [
+        {
+          "box": {
+            "x": 16,
+            "y": 121.40625,
+            "width": 288,
+            "height": 114.59375,
+            "bottom": 236
+          },
+          "scrollHeight": 252,
+          "clientHeight": 115,
+          "scrollTop": 0,
+          "overflow": "auto"
+        }
+      ]
+    }
+  ],
+  "chapter": [
+    {
+      "status": "idle",
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "editor": null,
+        "actions": [
+          {
+            "text": "translation.targetLanguage▾",
+            "box": {
+              "x": 20,
+              "y": 413,
+              "width": 280,
+              "height": 41,
+              "bottom": 454
+            }
+          },
+          {
+            "text": "translation.translateChapter",
+            "box": {
+              "x": 20,
+              "y": 466,
+              "width": 280,
+              "height": 41,
+              "bottom": 507
+            }
+          },
+          {
+            "text": "common.close",
+            "box": {
+              "x": 20,
+              "y": 519,
+              "width": 280,
+              "height": 33,
+              "bottom": 552
+            }
+          }
+        ],
+        "scrolls": [
+          {
+            "box": {
+              "x": 20,
+              "y": 383,
+              "width": 280,
+              "height": 124,
+              "bottom": 507
+            },
+            "scrollHeight": 124,
+            "clientHeight": 124,
+            "scrollTop": 0,
+            "overflow": "auto"
+          }
+        ]
+      }
+    },
+    {
+      "status": "extracting",
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "editor": null,
+        "actions": [
+          {
+            "text": "common.loading",
+            "box": {
+              "x": 0,
+              "y": 0,
+              "width": 320,
+              "height": 568,
+              "bottom": 568
+            }
+          },
+          {
+            "text": "common.loading",
+            "box": {
+              "x": 0,
+              "y": 496,
+              "width": 320,
+              "height": 72,
+              "bottom": 568
+            }
+          }
+        ],
+        "scrolls": [
+          {
+            "box": {
+              "x": 20,
+              "y": 524,
+              "width": 280,
+              "height": 28,
+              "bottom": 552
+            },
+            "scrollHeight": 28,
+            "clientHeight": 28,
+            "scrollTop": 0,
+            "overflow": "auto"
+          }
+        ]
+      }
+    },
+    {
+      "status": "translating",
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "editor": null,
+        "actions": [
+          {
+            "text": "translation.cancelTranslation",
+            "box": {
+              "x": 20,
+              "y": 515,
+              "width": 280,
+              "height": 37,
+              "bottom": 552
+            }
+          }
+        ],
+        "scrolls": [
+          {
+            "box": {
+              "x": 20,
+              "y": 457,
+              "width": 280,
+              "height": 95,
+              "bottom": 552
+            },
+            "scrollHeight": 95,
+            "clientHeight": 95,
+            "scrollTop": 0,
+            "overflow": "auto"
+          }
+        ]
+      }
+    },
+    {
+      "status": "complete",
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "editor": null,
+        "actions": [
+          {
+            "text": "translation.targetLanguage▾",
+            "box": {
+              "x": 20,
+              "y": 309,
+              "width": 280,
+              "height": 41,
+              "bottom": 350
+            }
+          },
+          {
+            "text": "translation.translateChapter",
+            "box": {
+              "x": 20,
+              "y": 362,
+              "width": 280,
+              "height": 41,
+              "bottom": 403
+            }
+          },
+          {
+            "text": "translation.original",
+            "box": {
+              "x": 20,
+              "y": 415,
+              "width": 135,
+              "height": 43,
+              "bottom": 458
+            }
+          },
+          {
+            "text": "translation.translationLabel",
+            "box": {
+              "x": 165,
+              "y": 415,
+              "width": 135,
+              "height": 43,
+              "bottom": 458
+            }
+          },
+          {
+            "text": "common.remove",
+            "box": {
+              "x": 20,
+              "y": 470,
+              "width": 280,
+              "height": 37,
+              "bottom": 507
+            }
+          },
+          {
+            "text": "common.close",
+            "box": {
+              "x": 20,
+              "y": 519,
+              "width": 280,
+              "height": 33,
+              "bottom": 552
+            }
+          }
+        ],
+        "scrolls": [
+          {
+            "box": {
+              "x": 20,
+              "y": 279,
+              "width": 280,
+              "height": 228,
+              "bottom": 507
+            },
+            "scrollHeight": 228,
+            "clientHeight": 228,
+            "scrollTop": 0,
+            "overflow": "auto"
+          }
+        ]
+      }
+    },
+    {
+      "status": "error",
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "editor": null,
+        "actions": [
+          {
+            "text": "common.retry",
+            "box": {
+              "x": 20,
+              "y": 462,
+              "width": 280,
+              "height": 41,
+              "bottom": 503
+            }
+          },
+          {
+            "text": "common.remove",
+            "box": {
+              "x": 20,
+              "y": 515,
+              "width": 280,
+              "height": 37,
+              "bottom": 552
+            }
+          }
+        ],
+        "scrolls": [
+          {
+            "box": {
+              "x": 20,
+              "y": 416,
+              "width": 280,
+              "height": 136,
+              "bottom": 552
+            },
+            "scrollHeight": 136,
+            "clientHeight": 136,
+            "scrollTop": 0,
+            "overflow": "auto"
+          }
+        ]
+      }
+    },
+    {
+      "status": "idle-language-last",
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "editor": null,
+        "actions": [
+          {
+            "text": "translation.targetLanguage▾",
+            "box": {
+              "x": 20,
+              "y": 413,
+              "width": 280,
+              "height": 41,
+              "bottom": 454
+            }
+          },
+          {
+            "text": "translation.translateChapter",
+            "box": {
+              "x": 20,
+              "y": 466,
+              "width": 280,
+              "height": 41,
+              "bottom": 507
+            }
+          },
+          {
+            "text": "common.close",
+            "box": {
+              "x": 20,
+              "y": 519,
+              "width": 280,
+              "height": 33,
+              "bottom": 552
+            }
+          },
+          {
+            "text": "简体中文",
+            "box": {
+              "x": 34,
+              "y": -227,
+              "width": 237,
+              "height": 40,
+              "bottom": -187
+            }
+          },
+          {
+            "text": "繁體中文",
+            "box": {
+              "x": 34,
+              "y": -187,
+              "width": 237,
+              "height": 40,
+              "bottom": -147
+            }
+          },
+          {
+            "text": "日本語",
+            "box": {
+              "x": 34,
+              "y": -147,
+              "width": 237,
+              "height": 40,
+              "bottom": -107
+            }
+          },
+          {
+            "text": "한국어",
+            "box": {
+              "x": 34,
+              "y": -107,
+              "width": 237,
+              "height": 37,
+              "bottom": -70
+            }
+          },
+          {
+            "text": "English",
+            "box": {
+              "x": 34,
+              "y": -70,
+              "width": 237,
+              "height": 37,
+              "bottom": -33
+            }
+          },
+          {
+            "text": "Français",
+            "box": {
+              "x": 34,
+              "y": -33,
+              "width": 237,
+              "height": 37,
+              "bottom": 4
+            }
+          },
+          {
+            "text": "Deutsch",
+            "box": {
+              "x": 34,
+              "y": 4,
+              "width": 237,
+              "height": 37,
+              "bottom": 41
+            }
+          },
+          {
+            "text": "Español",
+            "box": {
+              "x": 34,
+              "y": 41,
+              "width": 237,
+              "height": 37,
+              "bottom": 78
+            }
+          },
+          {
+            "text": "Português",
+            "box": {
+              "x": 34,
+              "y": 78,
+              "width": 237,
+              "height": 37,
+              "bottom": 115
+            }
+          },
+          {
+            "text": "Italiano",
+            "box": {
+              "x": 34,
+              "y": 115,
+              "width": 237,
+              "height": 37,
+              "bottom": 152
+            }
+          },
+          {
+            "text": "Русский",
+            "box": {
+              "x": 34,
+              "y": 152,
+              "width": 237,
+              "height": 37,
+              "bottom": 189
+            }
+          },
+          {
+            "text": "العربية",
+            "box": {
+              "x": 34,
+              "y": 189,
+              "width": 237,
+              "height": 37,
+              "bottom": 226
+            }
+          },
+          {
+            "text": "ไทย",
+            "box": {
+              "x": 34,
+              "y": 226,
+              "width": 237,
+              "height": 39,
+              "bottom": 265
+            }
+          },
+          {
+            "text": "Tiếng Việt",
+            "box": {
+              "x": 34,
+              "y": 265,
+              "width": 237,
+              "height": 37,
+              "bottom": 302
+            }
+          },
+          {
+            "text": "Bahasa Indonesia",
+            "box": {
+              "x": 34,
+              "y": 302,
+              "width": 237,
+              "height": 37,
+              "bottom": 339
+            }
+          },
+          {
+            "text": "Türkçe",
+            "box": {
+              "x": 34,
+              "y": 339,
+              "width": 237,
+              "height": 37,
+              "bottom": 376
+            }
+          },
+          {
+            "text": "Polski",
+            "box": {
+              "x": 34,
+              "y": 376,
+              "width": 237,
+              "height": 37,
+              "bottom": 413
+            }
+          },
+          {
+            "text": "Nederlands",
+            "box": {
+              "x": 34,
+              "y": 413,
+              "width": 237,
+              "height": 37,
+              "bottom": 450
+            }
+          },
+          {
+            "text": "Svenska",
+            "box": {
+              "x": 34,
+              "y": 450,
+              "width": 237,
+              "height": 37,
+              "bottom": 487
+            }
+          },
+          {
+            "text": "ئۇيغۇرچە",
+            "box": {
+              "x": 34,
+              "y": 487,
+              "width": 237,
+              "height": 37,
+              "bottom": 524
+            }
+          }
+        ],
+        "scrolls": [
+          {
+            "box": {
+              "x": 20,
+              "y": 383,
+              "width": 280,
+              "height": 124,
+              "bottom": 507
+            },
+            "scrollHeight": 124,
+            "clientHeight": 124,
+            "scrollTop": 0,
+            "overflow": "auto"
+          },
+          {
+            "box": {
+              "x": 34,
+              "y": 77,
+              "width": 252,
+              "height": 447,
+              "bottom": 524
+            },
+            "scrollHeight": 751,
+            "clientHeight": 447,
+            "scrollTop": 304,
+            "overflow": "auto"
+          }
+        ]
+      },
+      "card": {
+        "maxHeight": "100%",
+        "height": 496
+      }
+    },
+    {
+      "status": "complete-language-last",
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "editor": null,
+        "actions": [
+          {
+            "text": "translation.targetLanguageئۇيغۇرچە▾",
+            "box": {
+              "x": -41,
+              "y": 309,
+              "width": 280,
+              "height": 41,
+              "bottom": 350
+            }
+          },
+          {
+            "text": "translation.translateChapter",
+            "box": {
+              "x": -41,
+              "y": 362,
+              "width": 280,
+              "height": 41,
+              "bottom": 403
+            }
+          },
+          {
+            "text": "translation.original",
+            "box": {
+              "x": -41,
+              "y": 415,
+              "width": 135,
+              "height": 43,
+              "bottom": 458
+            }
+          },
+          {
+            "text": "translation.translationLabel",
+            "box": {
+              "x": 104,
+              "y": 415,
+              "width": 135,
+              "height": 43,
+              "bottom": 458
+            }
+          },
+          {
+            "text": "common.remove",
+            "box": {
+              "x": -41,
+              "y": 470,
+              "width": 280,
+              "height": 37,
+              "bottom": 507
+            }
+          },
+          {
+            "text": "common.close",
+            "box": {
+              "x": 20,
+              "y": 519,
+              "width": 280,
+              "height": 33,
+              "bottom": 552
+            }
+          },
+          {
+            "text": "简体中文",
+            "box": {
+              "x": 34,
+              "y": 77,
+              "width": 237,
+              "height": 40,
+              "bottom": 117
+            }
+          },
+          {
+            "text": "繁體中文",
+            "box": {
+              "x": 34,
+              "y": 117,
+              "width": 237,
+              "height": 40,
+              "bottom": 157
+            }
+          },
+          {
+            "text": "日本語",
+            "box": {
+              "x": 34,
+              "y": 157,
+              "width": 237,
+              "height": 40,
+              "bottom": 197
+            }
+          },
+          {
+            "text": "한국어",
+            "box": {
+              "x": 34,
+              "y": 197,
+              "width": 237,
+              "height": 37,
+              "bottom": 234
+            }
+          },
+          {
+            "text": "English",
+            "box": {
+              "x": 34,
+              "y": 234,
+              "width": 237,
+              "height": 37,
+              "bottom": 271
+            }
+          },
+          {
+            "text": "Français",
+            "box": {
+              "x": 34,
+              "y": 271,
+              "width": 237,
+              "height": 37,
+              "bottom": 308
+            }
+          },
+          {
+            "text": "Deutsch",
+            "box": {
+              "x": 34,
+              "y": 308,
+              "width": 237,
+              "height": 37,
+              "bottom": 345
+            }
+          },
+          {
+            "text": "Español",
+            "box": {
+              "x": 34,
+              "y": 345,
+              "width": 237,
+              "height": 37,
+              "bottom": 382
+            }
+          },
+          {
+            "text": "Português",
+            "box": {
+              "x": 34,
+              "y": 382,
+              "width": 237,
+              "height": 37,
+              "bottom": 419
+            }
+          },
+          {
+            "text": "Italiano",
+            "box": {
+              "x": 34,
+              "y": 419,
+              "width": 237,
+              "height": 37,
+              "bottom": 456
+            }
+          },
+          {
+            "text": "Русский",
+            "box": {
+              "x": 34,
+              "y": 456,
+              "width": 237,
+              "height": 37,
+              "bottom": 493
+            }
+          },
+          {
+            "text": "العربية",
+            "box": {
+              "x": 34,
+              "y": 493,
+              "width": 237,
+              "height": 37,
+              "bottom": 530
+            }
+          },
+          {
+            "text": "ไทย",
+            "box": {
+              "x": 34,
+              "y": 530,
+              "width": 237,
+              "height": 39,
+              "bottom": 569
+            }
+          },
+          {
+            "text": "Tiếng Việt",
+            "box": {
+              "x": 34,
+              "y": 569,
+              "width": 237,
+              "height": 37,
+              "bottom": 606
+            }
+          },
+          {
+            "text": "Bahasa Indonesia",
+            "box": {
+              "x": 34,
+              "y": 606,
+              "width": 237,
+              "height": 37,
+              "bottom": 643
+            }
+          },
+          {
+            "text": "Türkçe",
+            "box": {
+              "x": 34,
+              "y": 643,
+              "width": 237,
+              "height": 37,
+              "bottom": 680
+            }
+          },
+          {
+            "text": "Polski",
+            "box": {
+              "x": 34,
+              "y": 680,
+              "width": 237,
+              "height": 37,
+              "bottom": 717
+            }
+          },
+          {
+            "text": "Nederlands",
+            "box": {
+              "x": 34,
+              "y": 717,
+              "width": 237,
+              "height": 37,
+              "bottom": 754
+            }
+          },
+          {
+            "text": "Svenska",
+            "box": {
+              "x": 34,
+              "y": 754,
+              "width": 237,
+              "height": 37,
+              "bottom": 791
+            }
+          },
+          {
+            "text": "ئۇيغۇرچە",
+            "box": {
+              "x": 34,
+              "y": 791,
+              "width": 237,
+              "height": 37,
+              "bottom": 828
+            }
+          }
+        ],
+        "scrolls": [
+          {
+            "box": {
+              "x": 20,
+              "y": 279,
+              "width": 280,
+              "height": 228,
+              "bottom": 507
+            },
+            "scrollHeight": 228,
+            "clientHeight": 228,
+            "scrollTop": 0,
+            "overflow": "auto"
+          },
+          {
+            "box": {
+              "x": 34,
+              "y": 77,
+              "width": 252,
+              "height": 447,
+              "bottom": 524
+            },
+            "scrollHeight": 751,
+            "clientHeight": 447,
+            "scrollTop": 0,
+            "overflow": "auto"
+          }
+        ]
+      },
+      "card": {
+        "maxHeight": "100%",
+        "height": 496
+      }
+    }
+  ],
+  "panel": [
+    {
+      "state": "resize",
+      "beforeResize": 1,
+      "afterResize": 1,
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "editor": null,
+        "actions": [
+          {
+            "text": "Endpoint A",
+            "box": {
+              "x": 58,
+              "y": 197.90625,
+              "width": 97.734375,
+              "height": 25,
+              "bottom": 222.90625
+            }
+          }
+        ],
+        "scrolls": [
+          {
+            "box": {
+              "x": 0,
+              "y": 239.40625,
+              "width": 320,
+              "height": 312.59375,
+              "bottom": 552
+            },
+            "scrollHeight": 3341,
+            "clientHeight": 313,
+            "scrollTop": 0,
+            "overflow": "auto"
+          }
+        ]
+      }
+    },
+    {
+      "state": "language-list-last",
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "editor": null,
+        "actions": [
+          {
+            "text": "Endpoint A",
+            "box": {
+              "x": 58,
+              "y": 197.90625,
+              "width": 97.734375,
+              "height": 25,
+              "bottom": 222.90625
+            }
+          },
+          {
+            "text": "简体中文",
+            "box": {
+              "x": 0,
+              "y": -414.59375,
+              "width": 305,
+              "height": 44,
+              "bottom": -370.59375
+            }
+          },
+          {
+            "text": "繁體中文",
+            "box": {
+              "x": 0,
+              "y": -370.59375,
+              "width": 305,
+              "height": 44,
+              "bottom": -326.59375
+            }
+          },
+          {
+            "text": "日本語",
+            "box": {
+              "x": 0,
+              "y": -326.59375,
+              "width": 305,
+              "height": 44,
+              "bottom": -282.59375
+            }
+          },
+          {
+            "text": "한국어",
+            "box": {
+              "x": 0,
+              "y": -282.59375,
+              "width": 305,
+              "height": 41,
+              "bottom": -241.59375
+            }
+          },
+          {
+            "text": "English",
+            "box": {
+              "x": 0,
+              "y": -241.59375,
+              "width": 305,
+              "height": 41,
+              "bottom": -200.59375
+            }
+          },
+          {
+            "text": "Français",
+            "box": {
+              "x": 0,
+              "y": -200.59375,
+              "width": 305,
+              "height": 41,
+              "bottom": -159.59375
+            }
+          },
+          {
+            "text": "Deutsch",
+            "box": {
+              "x": 0,
+              "y": -159.59375,
+              "width": 305,
+              "height": 41,
+              "bottom": -118.59375
+            }
+          },
+          {
+            "text": "Español",
+            "box": {
+              "x": 0,
+              "y": -118.59375,
+              "width": 305,
+              "height": 41,
+              "bottom": -77.59375
+            }
+          },
+          {
+            "text": "Português",
+            "box": {
+              "x": 0,
+              "y": -77.59375,
+              "width": 305,
+              "height": 41,
+              "bottom": -36.59375
+            }
+          },
+          {
+            "text": "Italiano",
+            "box": {
+              "x": 0,
+              "y": -36.59375,
+              "width": 305,
+              "height": 41,
+              "bottom": 4.40625
+            }
+          },
+          {
+            "text": "Русский",
+            "box": {
+              "x": 0,
+              "y": 4.40625,
+              "width": 305,
+              "height": 41,
+              "bottom": 45.40625
+            }
+          },
+          {
+            "text": "العربية",
+            "box": {
+              "x": 0,
+              "y": 45.40625,
+              "width": 305,
+              "height": 41,
+              "bottom": 86.40625
+            }
+          },
+          {
+            "text": "ไทย",
+            "box": {
+              "x": 0,
+              "y": 86.40625,
+              "width": 305,
+              "height": 43,
+              "bottom": 129.40625
+            }
+          },
+          {
+            "text": "Tiếng Việt",
+            "box": {
+              "x": 0,
+              "y": 129.40625,
+              "width": 305,
+              "height": 41,
+              "bottom": 170.40625
+            }
+          },
+          {
+            "text": "Bahasa Indonesia",
+            "box": {
+              "x": 0,
+              "y": 170.40625,
+              "width": 305,
+              "height": 41,
+              "bottom": 211.40625
+            }
+          },
+          {
+            "text": "Türkçe",
+            "box": {
+              "x": 0,
+              "y": 211.40625,
+              "width": 305,
+              "height": 41,
+              "bottom": 252.40625
+            }
+          },
+          {
+            "text": "Polski",
+            "box": {
+              "x": 0,
+              "y": 252.40625,
+              "width": 305,
+              "height": 41,
+              "bottom": 293.40625
+            }
+          },
+          {
+            "text": "Nederlands",
+            "box": {
+              "x": 0,
+              "y": 293.40625,
+              "width": 305,
+              "height": 41,
+              "bottom": 334.40625
+            }
+          },
+          {
+            "text": "Svenska",
+            "box": {
+              "x": 0,
+              "y": 334.40625,
+              "width": 305,
+              "height": 41,
+              "bottom": 375.40625
+            }
+          },
+          {
+            "text": "ئۇيغۇرچە",
+            "box": {
+              "x": 0,
+              "y": 375.40625,
+              "width": 305,
+              "height": 41,
+              "bottom": 416.40625
+            }
+          }
+        ],
+        "scrolls": [
+          {
+            "box": {
+              "x": 0,
+              "y": 239.40625,
+              "width": 320,
+              "height": 312.59375,
+              "bottom": 552
+            },
+            "scrollHeight": 4173,
+            "clientHeight": 313,
+            "scrollTop": 654,
+            "overflow": "auto"
+          }
+        ]
+      },
+      "translateCount": 1
+    },
+    {
+      "state": "provider-list-real-three",
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "editor": null,
+        "actions": [
+          {
+            "text": "ئۇيغۇرچە",
+            "box": {
+              "x": 16,
+              "y": 197.90625,
+              "width": 77.96875,
+              "height": 25,
+              "bottom": 222.90625
+            }
+          },
+          {
+            "text": "Endpoint A",
+            "box": {
+              "x": 101.96875,
+              "y": 197.90625,
+              "width": 97.734375,
+              "height": 25,
+              "bottom": 222.90625
+            }
+          },
+          {
+            "text": "translation.providerMicrosoft",
+            "box": {
+              "x": 0,
+              "y": 243.40625,
+              "width": 305,
+              "height": 41,
+              "bottom": 284.40625
+            }
+          },
+          {
+            "text": "translation.providerAI",
+            "box": {
+              "x": 0,
+              "y": 284.40625,
+              "width": 305,
+              "height": 41,
+              "bottom": 325.40625
+            }
+          },
+          {
+            "text": "translation.providerDeepL",
+            "box": {
+              "x": 0,
+              "y": 325.40625,
+              "width": 305,
+              "height": 41,
+              "bottom": 366.40625
+            }
+          }
+        ],
+        "scrolls": [
+          {
+            "box": {
+              "x": 0,
+              "y": 239.40625,
+              "width": 320,
+              "height": 312.59375,
+              "bottom": 552
+            },
+            "scrollHeight": 3473,
+            "clientHeight": 313,
+            "scrollTop": 0,
+            "overflow": "auto"
+          }
+        ]
+      }
+    },
+    {
+      "state": "translation-bottom",
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "editor": null,
+        "actions": [
+          {
+            "text": "ئۇيغۇرچە",
+            "box": {
+              "x": 16,
+              "y": 197.90625,
+              "width": 77.96875,
+              "height": 25,
+              "bottom": 222.90625
+            }
+          },
+          {
+            "text": "translation.providerMicrosoft",
+            "box": {
+              "x": 101.96875,
+              "y": 197.90625,
+              "width": 150,
+              "height": 25,
+              "bottom": 222.90625
+            }
+          }
+        ],
+        "scrolls": [
+          {
+            "box": {
+              "x": 0,
+              "y": 239.40625,
+              "width": 320,
+              "height": 312.59375,
+              "bottom": 552
+            },
+            "scrollHeight": 3341,
+            "clientHeight": 313,
+            "scrollTop": 3028,
+            "overflow": "auto"
+          }
+        ]
+      },
+      "translateCount": 3
+    },
+    {
+      "state": "long-error-retry",
+      "geometry": {
+        "viewport": {
+          "width": 320,
+          "height": 568
+        },
+        "editor": null,
+        "actions": [
+          {
+            "text": "ئۇيغۇرچە",
+            "box": {
+              "x": 16,
+              "y": 197.90625,
+              "width": 77.96875,
+              "height": 25,
+              "bottom": 222.90625
+            }
+          },
+          {
+            "text": "Endpoint A",
+            "box": {
+              "x": 101.96875,
+              "y": 197.90625,
+              "width": 97.734375,
+              "height": 25,
+              "bottom": 222.90625
+            }
+          },
+          {
+            "text": "重试",
+            "box": {
+              "x": 16,
+              "y": 488.40625,
+              "width": 52,
+              "height": 32,
+              "bottom": 520.40625
+            }
+          }
+        ],
+        "scrolls": [
+          {
+            "box": {
+              "x": 0,
+              "y": 239.40625,
+              "width": 320,
+              "height": 312.59375,
+              "bottom": 552
+            },
+            "scrollHeight": 1909,
+            "clientHeight": 313,
+            "scrollTop": 1596,
+            "overflow": "auto"
+          }
+        ]
+      },
+      "translateCount": 4
+    },
+    {
+      "state": "retried",
+      "translateCount": 5
+    }
+  ],
+  "tts": [
+    {
+      "version": "HEAD-baseline",
+      "viewport": {
+        "width": 390,
+        "height": 639
+      },
+      "outer": {
+        "box": {
+          "x": 0,
+          "y": 80,
+          "width": 390,
+          "height": 559,
+          "bottom": 639
+        },
+        "scrollHeight": 762,
+        "clientHeight": 559,
+        "scrollTop": 203,
+        "overflow": "auto",
+        "contentFlex": "0 0 auto"
+      },
+      "lastControl": {
+        "x": 191.53125,
+        "y": 569,
+        "width": 92.109375,
+        "height": 44,
+        "bottom": 613
+      },
+      "lyricArea": {
+        "x": 0,
+        "y": -33,
+        "width": 390,
+        "height": 256,
+        "bottom": 223
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "true",
+          "overflow": "auto",
+          "height": 559,
+          "scrollHeight": 762,
+          "scrollTop": 203,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 416,
+          "scrollHeight": 416,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 232,
+          "scrollHeight": 2821,
+          "scrollTop": 1119,
+          "contentStyle": "padding-top: 96px; padding-bottom: 96px; min-height: 448px;",
+          "contentFlex": "0 0 auto"
+        }
+      ]
+    },
+    {
+      "version": "HEAD-baseline",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "outer": {
+        "box": {
+          "x": 0,
+          "y": 80,
+          "width": 390,
+          "height": 560,
+          "bottom": 640
+        },
+        "scrollHeight": 560,
+        "clientHeight": 560,
+        "scrollTop": 0,
+        "overflow": "hidden",
+        "contentFlex": "0 0 auto"
+      },
+      "lastControl": {
+        "x": 191.53125,
+        "y": 570,
+        "width": 92.109375,
+        "height": 44,
+        "bottom": 614
+      },
+      "lyricArea": {
+        "x": 0,
+        "y": 170,
+        "width": 390,
+        "height": 54,
+        "bottom": 224
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 560,
+          "scrollHeight": 560,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 416,
+          "scrollHeight": 416,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 30,
+          "scrollHeight": 2821,
+          "scrollTop": 1119,
+          "contentStyle": "padding-top: 96px; padding-bottom: 96px; min-height: 448px;",
+          "contentFlex": "0 0 auto"
+        }
+      ]
+    },
+    {
+      "version": "HEAD-baseline",
+      "viewport": {
+        "width": 390,
+        "height": 700
+      },
+      "outer": {
+        "box": {
+          "x": 0,
+          "y": 80,
+          "width": 390,
+          "height": 620,
+          "bottom": 700
+        },
+        "scrollHeight": 620,
+        "clientHeight": 620,
+        "scrollTop": 0,
+        "overflow": "hidden",
+        "contentFlex": "0 0 auto"
+      },
+      "lastControl": {
+        "x": 191.53125,
+        "y": 630,
+        "width": 92.109375,
+        "height": 44,
+        "bottom": 674
+      },
+      "lyricArea": {
+        "x": 0,
+        "y": 170,
+        "width": 390,
+        "height": 114,
+        "bottom": 284
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 620,
+          "scrollHeight": 620,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 416,
+          "scrollHeight": 416,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 90,
+          "scrollHeight": 2821,
+          "scrollTop": 1119,
+          "contentStyle": "padding-top: 96px; padding-bottom: 96px; min-height: 448px;",
+          "contentFlex": "0 0 auto"
+        }
+      ]
+    },
+    {
+      "version": "current",
+      "viewport": {
+        "width": 390,
+        "height": 639
+      },
+      "outer": {
+        "box": {
+          "x": 0,
+          "y": 80,
+          "width": 390,
+          "height": 559,
+          "bottom": 639
+        },
+        "scrollHeight": 730,
+        "clientHeight": 559,
+        "scrollTop": 171,
+        "overflow": "auto",
+        "contentFlex": "0 0 auto"
+      },
+      "lastControl": {
+        "x": 191.53125,
+        "y": 569,
+        "width": 92.109375,
+        "height": 44,
+        "bottom": 613
+      },
+      "lyricArea": {
+        "x": 0,
+        "y": -1,
+        "width": 390,
+        "height": 224,
+        "bottom": 223
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "true",
+          "overflow": "auto",
+          "height": 559,
+          "scrollHeight": 730,
+          "scrollTop": 171,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 416,
+          "scrollHeight": 416,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 200,
+          "scrollHeight": 2789,
+          "scrollTop": 0,
+          "contentStyle": "padding-top: 80px; padding-bottom: 80px; min-height: 384px;",
+          "contentFlex": "0 0 auto"
+        }
+      ]
+    },
+    {
+      "version": "current",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "outer": {
+        "box": {
+          "x": 0,
+          "y": 80,
+          "width": 390,
+          "height": 560,
+          "bottom": 640
+        },
+        "scrollHeight": 730,
+        "clientHeight": 560,
+        "scrollTop": 170,
+        "overflow": "auto",
+        "contentFlex": "0 0 auto"
+      },
+      "lastControl": {
+        "x": 191.53125,
+        "y": 570,
+        "width": 92.109375,
+        "height": 44,
+        "bottom": 614
+      },
+      "lyricArea": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 224,
+        "bottom": 224
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "true",
+          "overflow": "auto",
+          "height": 560,
+          "scrollHeight": 730,
+          "scrollTop": 170,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 416,
+          "scrollHeight": 416,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 200,
+          "scrollHeight": 2789,
+          "scrollTop": 160,
+          "contentStyle": "padding-top: 80px; padding-bottom: 80px; min-height: 384px;",
+          "contentFlex": "0 0 auto"
+        }
+      ]
+    },
+    {
+      "version": "current",
+      "viewport": {
+        "width": 390,
+        "height": 700
+      },
+      "outer": {
+        "box": {
+          "x": 0,
+          "y": 80,
+          "width": 390,
+          "height": 620,
+          "bottom": 700
+        },
+        "scrollHeight": 754,
+        "clientHeight": 620,
+        "scrollTop": 134,
+        "overflow": "auto",
+        "contentFlex": "0 0 auto"
+      },
+      "lastControl": {
+        "x": 191.53125,
+        "y": 630,
+        "width": 92.109375,
+        "height": 44,
+        "bottom": 674
+      },
+      "lyricArea": {
+        "x": 0,
+        "y": 36,
+        "width": 390,
+        "height": 248,
+        "bottom": 284
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "true",
+          "overflow": "auto",
+          "height": 620,
+          "scrollHeight": 754,
+          "scrollTop": 134,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 416,
+          "scrollHeight": 416,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 224,
+          "scrollHeight": 2813,
+          "scrollTop": 944,
+          "contentStyle": "padding-top: 92px; padding-bottom: 92px; min-height: 432px;",
+          "contentFlex": "0 0 auto"
+        }
+      ]
+    },
+    {
+      "version": "current-split",
+      "viewport": {
+        "width": 960,
+        "height": 720
+      },
+      "outer": {
+        "box": {
+          "x": 0,
+          "y": 80,
+          "width": 960,
+          "height": 640,
+          "bottom": 720
+        },
+        "scrollHeight": 640,
+        "clientHeight": 640,
+        "scrollTop": 0,
+        "overflow": "hidden",
+        "contentFlex": "0 0 auto"
+      },
+      "lastControl": {
+        "x": 186.53125,
+        "y": 583,
+        "width": 92.109375,
+        "height": 44,
+        "bottom": 627
+      },
+      "lyricArea": {
+        "x": 380,
+        "y": 80,
+        "width": 580,
+        "height": 640,
+        "bottom": 720
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 640,
+          "scrollHeight": 640,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "true",
+          "overflow": "auto",
+          "height": 640,
+          "scrollHeight": 640,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "1 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 600,
+          "scrollHeight": 2550,
+          "scrollTop": 1081,
+          "contentStyle": "padding-top: 288px; padding-bottom: 288px; min-height: 1216px;",
+          "contentFlex": "0 0 auto"
+        }
+      ],
+      "contentHeight": 640
+    }
+  ],
+  "chapterCounts": {
+    "start": 2,
+    "cancel": 1,
+    "original": 1,
+    "translation": 1,
+    "reset": 1,
+    "chapterClose": 2
+  },
+  "noteCounts": {
+    "counts": {
+      "start": 2,
+      "cancel": 1,
+      "original": 1,
+      "translation": 1,
+      "reset": 1,
+      "chapterClose": 2,
+      "note": 1,
+      "dismiss": 1
+    },
+    "lastCallback": {
+      "name": "dismiss",
+      "args": []
+    }
+  },
+  "nativeLimitations": [
+    "Android device unavailable and no emulator; no native keyboard, actual fold, WebView gestures, audio or timer continuity proof.",
+    "Provider list has three real supported providers; no synthetic providers injected. Long-list scrolling proved with 20 real language entries.",
+    "RN DOM host explicitly maps Yoga flex:0 and emits onLayout with ResizeObserver; modal animation disabled at host to avoid frozen browser animation."
+  ],
+  "finalCounts": {
+    "start": 2,
+    "cancel": 1,
+    "original": 1,
+    "translation": 1,
+    "reset": 1,
+    "chapterClose": 2,
+    "note": 1,
+    "dismiss": 1,
+    "translate": 5
+  },
+  "buildErrors": {
+    "initial": "✘ [ERROR] Could not resolve \"/Users/yangchen/Code/myGithub/ReadAny/packages/app-expo/src/components/reader/tts/BookCoverImage\" [plugin baseline-relative]\n\n    baseline/TTSPage.tsx:36:31:\n      36 │ import { BookCoverImage } from \"./tts/BookCoverImage\";\n         ╵                                ~~~~~~~~~~~~~~~~~~~~~~\n\n  The plugin \"baseline-relative\" didn't set a resolve directory, so esbuild did not search for \"/Users/yangchen/Code/myGithub/ReadAny/packages/app-expo/src/components/reader/tts/BookCoverImage\" on the file system.\n\n✘ [ERROR] Could not resolve \"/Users/yangchen/Code/myGithub/ReadAny/packages/app-expo/src/components/reader/tts/tts-page-styles\" [plugin baseline-relative]\n\n    baseline/TTSPage.tsx:37:27:\n      37 │ import { makeStyles } from \"./tts/tts-page-styles\";\n         ╵                            ~~~~~~~~~~~~~~~~~~~~~~~\n\n  The plugin \"baseline-relative\" didn't set a resolve directory, so esbuild did not search for \"/Users/yangchen/Code/myGithub/ReadAny/packages/app-expo/src/components/reader/tts/tts-page-styles\" on the file system.\n\n✘ [ERROR] Could not resolve \"/Users/yangchen/Code/myGithub/ReadAny/packages/app-expo/src/components/reader/tts/VoicePickerModal\" [plugin baseline-relative]\n\n    baseline/TTSPage.tsx:38:33:\n      38 │ import { VoicePickerModal } from \"./tts/VoicePickerModal\";\n         ╵                                  ~~~~~~~~~~~~~~~~~~~~~~~~\n\n  The plugin \"baseline-relative\" didn't set a resolve directory, so esbuild did not search for \"/Users/yangchen/Code/myGithub/ReadAny/packages/app-expo/src/components/reader/tts/VoicePickerModal\" on the file system.\n\n3 errors\n/Users/yangchen/Code/myGithub/ReadAny/node_modules/esbuild/lib/main.js:1467\n  let error = new Error(text);\n              ^\n\nError: Build failed with 3 errors:\nbaseline/TTSPage.tsx:36:31: ERROR: [plugin: baseline-relative] Could not resolve \"/Users/yangchen/Code/myGithub/ReadAny/packages/app-expo/src/components/reader/tts/BookCoverImage\"\nbaseline/TTSPage.tsx:37:27: ERROR: [plugin: baseline-relative] Could not resolve \"/Users/yangchen/Code/myGithub/ReadAny/packages/app-expo/src/components/reader/tts/tts-page-styles\"\nbaseline/TTSPage.tsx:38:33: ERROR: [plugin: baseline-relative] Could not resolve \"/Users/yangchen/Code/myGithub/ReadAny/packages/app-expo/src/components/reader/tts/VoicePickerModal\"\n    at failureErrorWithLog (/Users/yangchen/Code/myGithub/ReadAny/node_modules/esbuild/lib/main.js:1467:15)\n    at /Users/yangchen/Code/myGithub/ReadAny/node_modules/esbuild/lib/main.js:926:25\n    at runOnEndCallbacks (/Users/yangchen/Code/myGithub/ReadAny/node_modules/esbuild/lib/main.js:1307:45)\n    at buildResponseToResult (/Users/yangchen/Code/myGithub/ReadAny/node_modules/esbuild/lib/main.js:924:7)\n    at /Users/yangchen/Code/myGithub/ReadAny/node_modules/esbuild/lib/main.js:951:16\n    at responseCallbacks.<computed> (/Users/yangchen/Code/myGithub/ReadAny/node_modules/esbuild/lib/main.js:603:9)\n    at handleIncomingPacket (/Users/yangchen/Code/myGithub/ReadAny/node_modules/esbuild/lib/main.js:658:12)\n    at Socket.readFromStdout (/Users/yangchen/Code/myGithub/ReadAny/node_modules/esbuild/lib/main.js:581:7)\n    at Socket.emit (node:events:507:28)\n    at addChunk (node:internal/streams/readable:559:12) {\n  errors: [Getter/Setter],\n  warnings: [Getter/Setter]\n}\n\nNode.js v24.3.0\n",
+    "resolved": "Baseline relative resolver supplied resolveDir; audio VoicePickerModal boundary stubbed after groupEdgeTTSVoices runtime error."
+  },
+  "ttsLargeText": [
+    {
+      "version": "HEAD-baseline",
+      "textScale": "CSS 150% host approximation, not system fontScale",
+      "viewport": {
+        "width": 390,
+        "height": 639
+      },
+      "outer": null,
+      "lastControl": {
+        "x": 196.765625,
+        "y": 569,
+        "width": 148.1875,
+        "height": 44,
+        "bottom": 613
+      },
+      "lyricArea": {
+        "x": 0,
+        "y": -120,
+        "width": 390,
+        "height": 256,
+        "bottom": 136
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "true",
+          "overflow": "auto",
+          "height": 557,
+          "scrollHeight": 890,
+          "scrollTop": 333,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 503,
+          "scrollHeight": 503,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 232,
+          "scrollHeight": 3988,
+          "scrollTop": 0,
+          "contentStyle": "padding-top: 96px; padding-bottom: 96px; min-height: 448px;",
+          "contentFlex": "0 0 auto"
+        }
+      ]
+    },
+    {
+      "version": "HEAD-baseline",
+      "textScale": "CSS 150% host approximation, not system fontScale",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "outer": null,
+      "lastControl": {
+        "x": 196.765625,
+        "y": 570,
+        "width": 148.1875,
+        "height": 44,
+        "bottom": 614
+      },
+      "lyricArea": {
+        "x": 0,
+        "y": 113,
+        "width": 390,
+        "height": 24,
+        "bottom": 137
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 558,
+          "scrollHeight": 558,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 503,
+          "scrollHeight": 503,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 0,
+          "scrollHeight": 3988,
+          "scrollTop": 662,
+          "contentStyle": "padding-top: 96px; padding-bottom: 96px; min-height: 448px;",
+          "contentFlex": "0 0 auto"
+        }
+      ]
+    },
+    {
+      "version": "HEAD-baseline",
+      "textScale": "CSS 150% host approximation, not system fontScale",
+      "viewport": {
+        "width": 390,
+        "height": 700
+      },
+      "outer": null,
+      "lastControl": {
+        "x": 196.765625,
+        "y": 630,
+        "width": 148.1875,
+        "height": 44,
+        "bottom": 674
+      },
+      "lyricArea": {
+        "x": 0,
+        "y": 173,
+        "width": 390,
+        "height": 24,
+        "bottom": 197
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 618,
+          "scrollHeight": 618,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 503,
+          "scrollHeight": 503,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 0,
+          "scrollHeight": 3988,
+          "scrollTop": 1245,
+          "contentStyle": "padding-top: 96px; padding-bottom: 96px; min-height: 448px;",
+          "contentFlex": "0 0 auto"
+        }
+      ]
+    },
+    {
+      "version": "current",
+      "textScale": "CSS 150% host approximation, not system fontScale",
+      "viewport": {
+        "width": 390,
+        "height": 639
+      },
+      "outer": null,
+      "lastControl": {
+        "x": 196.765625,
+        "y": 569,
+        "width": 148.1875,
+        "height": 44,
+        "bottom": 613
+      },
+      "lyricArea": {
+        "x": 0,
+        "y": -87,
+        "width": 390,
+        "height": 223,
+        "bottom": 136
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "true",
+          "overflow": "auto",
+          "height": 557,
+          "scrollHeight": 857,
+          "scrollTop": 300,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 503,
+          "scrollHeight": 503,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 199,
+          "scrollHeight": 3956,
+          "scrollTop": 0,
+          "contentStyle": "padding-top: 80px; padding-bottom: 80px; min-height: 383px;",
+          "contentFlex": "0 0 auto"
+        }
+      ]
+    },
+    {
+      "version": "current",
+      "textScale": "CSS 150% host approximation, not system fontScale",
+      "viewport": {
+        "width": 390,
+        "height": 640
+      },
+      "outer": null,
+      "lastControl": {
+        "x": 196.765625,
+        "y": 570,
+        "width": 148.1875,
+        "height": 44,
+        "bottom": 614
+      },
+      "lyricArea": {
+        "x": 0,
+        "y": -86,
+        "width": 390,
+        "height": 223,
+        "bottom": 137
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "true",
+          "overflow": "auto",
+          "height": 558,
+          "scrollHeight": 857,
+          "scrollTop": 299,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 503,
+          "scrollHeight": 503,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 199,
+          "scrollHeight": 3956,
+          "scrollTop": 140,
+          "contentStyle": "padding-top: 80px; padding-bottom: 80px; min-height: 383px;",
+          "contentFlex": "0 0 auto"
+        }
+      ]
+    },
+    {
+      "version": "current",
+      "textScale": "CSS 150% host approximation, not system fontScale",
+      "viewport": {
+        "width": 390,
+        "height": 700
+      },
+      "outer": null,
+      "lastControl": {
+        "x": 196.765625,
+        "y": 630,
+        "width": 148.1875,
+        "height": 44,
+        "bottom": 674
+      },
+      "lyricArea": {
+        "x": 0,
+        "y": -50,
+        "width": 390,
+        "height": 247,
+        "bottom": 197
+      },
+      "playCount": 0,
+      "hosts": [
+        {
+          "enabled": "true",
+          "overflow": "auto",
+          "height": 618,
+          "scrollHeight": 881,
+          "scrollTop": 263,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "false",
+          "overflow": "hidden",
+          "height": 503,
+          "scrollHeight": 503,
+          "scrollTop": 0,
+          "contentStyle": null,
+          "contentFlex": "0 0 auto"
+        },
+        {
+          "enabled": "default",
+          "overflow": "auto",
+          "height": 223,
+          "scrollHeight": 3980,
+          "scrollTop": 1138,
+          "contentStyle": "padding-top: 92px; padding-bottom: 92px; min-height: 431px;",
+          "contentFlex": "0 0 auto"
+        }
+      ]
+    }
+  ],
+  "baselineSource": {
+    "command": "git show HEAD:packages/app-expo/src/components/reader/TTSPage.tsx",
+    "head": "04b2a6c3eec2961c4e75250f2917325d0e520c2b",
+    "copy": "/tmp/foldable-reader-smoke/baseline/TTSPage.tsx"
+  },
+  "screenshots": [
+    "reader-note-320x568.png",
+    "reader-tts-current-700.png",
+    "reader-panel-translation-bottom.png",
+    "reader-panel-language-last.png",
+    "reader-tts-baseline-640.png",
+    "reader-tts-baseline-large-640.png",
+    "reader-chapter-translating.png",
+    "reader-chapter-extracting.png",
+    "reader-chapter-complete.png",
+    "reader-tts-current-large-640.png",
+    "reader-tts-current-639.png",
+    "reader-tts-baseline-700.png",
+    "reader-tts-baseline-large-700.png",
+    "reader-chapter-idle.png",
+    "reader-tts-current-large-700.png",
+    "reader-chapter-idle-language-last.png",
+    "reader-note-320x300.png",
+    "reader-note-390x600.png",
+    "reader-panel-error-retry.png",
+    "reader-tts-current-large-639.png",
+    "reader-tts-current-640.png",
+    "reader-panel-providers.png",
+    "reader-tts-baseline-639.png",
+    "reader-tts-current-split-960x720.png",
+    "reader-chapter-complete-language-last.png",
+    "reader-chapter-error.png",
+    "reader-tts-baseline-large-639.png"
+  ],
+  "noteSaveCallbacks": [
+    {
+      "name": "note",
+      "args": [
+        "Draft retained across outer screen resize",
+        "epubcfi(/6/2!/4/2:0)"
+      ]
+    },
+    {
+      "name": "dismiss",
+      "args": []
+    }
+  ]
+}

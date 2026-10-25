@@ -113,7 +113,9 @@ export default function BadgesScreen() {
   const posterWidth = Math.min(width - 32, 520);
   const categorySectionWidth = layout.supportsSplitView
     ? Math.floor((layout.contentWidth - 16) / 2)
-    : layout.contentWidth;
+    : layout.isContentMeasured
+      ? layout.contentWidth
+      : undefined;
 
   const capturePosterFile = React.useCallback(async () => {
     if (earnedBadgeDefinitions.length === 0 || !sharePosterRef.current) return null;
@@ -255,22 +257,24 @@ export default function BadgesScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View onLayout={layout.onContentLayout} style={{ width: "100%", maxWidth: 1200 }}>
-            <BadgeWallPoster
-              width={Math.min(layout.contentWidth, 560)}
-              badges={earnedBadgeDefinitions}
-              count={earnedBadgeDefinitions.length}
-              title={t("stats.desktop.myBadges")}
-              subtitle={t("stats.desktop.myBadgesDesc")}
-              countLabel={t("stats.desktop.badgesEarnedCount", {
-                count: earnedBadgeDefinitions.length,
-              })}
-              emptyLabel={t("stats.desktop.noBadges")}
-              remainingLabel={(remaining) =>
-                t("stats.desktop.badgesRemainingCount", { count: remaining })
-              }
-              resolveTitle={(badge) => t(`stats.desktop.badge_${badge.id}_title`)}
-              onBadgePress={setSelectedBadge}
-            />
+            {layout.isContentMeasured && (
+              <BadgeWallPoster
+                width={Math.min(layout.contentWidth, 560)}
+                badges={earnedBadgeDefinitions}
+                count={earnedBadgeDefinitions.length}
+                title={t("stats.desktop.myBadges")}
+                subtitle={t("stats.desktop.myBadgesDesc")}
+                countLabel={t("stats.desktop.badgesEarnedCount", {
+                  count: earnedBadgeDefinitions.length,
+                })}
+                emptyLabel={t("stats.desktop.noBadges")}
+                remainingLabel={(remaining) =>
+                  t("stats.desktop.badgesRemainingCount", { count: remaining })
+                }
+                resolveTitle={(badge) => t(`stats.desktop.badge_${badge.id}_title`)}
+                onBadgePress={setSelectedBadge}
+              />
+            )}
 
             <View
               style={{
@@ -459,7 +463,7 @@ function BadgeWallPoster({
   const maxVisibleCount = Number.isFinite(maxRows) ? columns * maxRows : badges.length;
   const visibleBadges = variant === "wall" ? badges.slice(0, maxVisibleCount) : badges;
   const remainingCount = Math.max(0, badges.length - visibleBadges.length);
-  const itemWidth = Math.floor((width - gap * (columns - 1)) / columns);
+  const itemWidth = Math.max(0, Math.floor((width - gap * (columns - 1)) / columns));
   const iconSize = Math.min(
     variant === "share" ? 86 : 92,
     itemWidth * (variant === "share" ? 0.82 : 0.84),

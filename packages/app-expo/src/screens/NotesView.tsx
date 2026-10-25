@@ -8,6 +8,7 @@ import {
   XIcon,
 } from "@/components/ui/Icon";
 import { KeyboardAwareScrollView } from "@/components/ui/KeyboardAwareScrollView";
+import { AdaptiveEmptyState } from "@/components/ui/AdaptiveEmptyState";
 import { SyncButton } from "@/components/ui/SyncButton";
 import { useContentLayout } from "@/hooks/use-responsive-layout";
 import { openMobileBook } from "@/lib/library/open-mobile-book";
@@ -325,11 +326,21 @@ export function NotesView({
             <Text style={s.headerTitle}>{t("notes.title", "笔记")}</Text>
           </View>
         )}
-        <View style={s.emptyWrap}>
-          <Image source={isDark ? NOTE_DARK_PNG : NOTE_PNG} style={{ width: 160, height: 160 }} />
-          <Text style={s.emptyTitle}>{t("notes.empty", "暂无笔记")}</Text>
-          <Text style={s.emptyHint}>{t("notes.emptyHint", "阅读时长按文字添加高亮和笔记")}</Text>
-        </View>
+        <AdaptiveEmptyState contentContainerStyle={{ paddingHorizontal: 24 }}>
+          {(compact) => (
+            <View style={s.emptyWrap}>
+              <Image
+                source={isDark ? NOTE_DARK_PNG : NOTE_PNG}
+                style={{ width: compact ? 96 : 160, height: compact ? 96 : 160 }}
+                resizeMode="contain"
+              />
+              <Text style={s.emptyTitle}>{t("notes.empty", "暂无笔记")}</Text>
+              <Text style={s.emptyHint}>
+                {t("notes.emptyHint", "阅读时长按文字添加高亮和笔记")}
+              </Text>
+            </View>
+          )}
+        </AdaptiveEmptyState>
       </SafeAreaView>
     );
   }

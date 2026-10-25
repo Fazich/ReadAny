@@ -11,7 +11,6 @@ import {
   Alert,
   Animated,
   Image,
-  Keyboard,
   Modal,
   Platform,
   Pressable,
@@ -19,7 +18,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
@@ -47,6 +45,7 @@ import {
 } from "@readany/core/utils";
 import * as Clipboard from "expo-clipboard";
 
+import { AdaptiveEmptyState } from "@/components/ui/AdaptiveEmptyState";
 import { ChatInput } from "@/components/chat/ChatInput";
 import { MessageList } from "@/components/chat/MessageList";
 import { ModelSelector } from "@/components/chat/ModelSelector";
@@ -99,16 +98,13 @@ export function BookChatScreen({ route, navigation }: Props) {
   const [quotes, setQuotes] = useState<AttachedQuote[]>([]);
 
   useEffect(() => {
-    if (selectedText && quotes.length === 0) {
-      setQuotes([
-        {
-          id: `quote-${Date.now()}`,
-          text: selectedText,
-          source: chapterTitle || undefined,
-        },
-      ]);
-    }
-  }, [selectedText, chapterTitle, quotes.length]);
+    if (!selectedText) return;
+    setQuotes((previous) =>
+      previous.length === 0
+        ? [{ id: `quote-${Date.now()}`, text: selectedText, source: chapterTitle || undefined }]
+        : previous,
+    );
+  }, [selectedText, chapterTitle]);
 
   const handleRemoveQuote = useCallback((id: string) => {
     setQuotes((prev) => prev.filter((q) => q.id !== id));
@@ -550,34 +546,48 @@ export function BookChatScreen({ route, navigation }: Props) {
                   onCitationClick={handleCitationClick}
                 />
               ) : (
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                  <View style={[s.emptyContainer, isTabletLandscape && s.emptyContainerCompact]}>
-                    <View style={s.emptyInner}>
-                      <Image
-                        source={isDark ? THINK_DARK_PNG : THINK_PNG}
-                        style={{ width: 120, height: 120 }}
-                      />
-                      <Text style={s.emptyTitle}>{t("chat.aiAssistant", "AI 阅读助手")}</Text>
-                      <Text style={s.emptySubtitle}>
-                        {t("chat.aiAssistantDesc", "分析内容、回答问题...")}
-                      </Text>
+                <AdaptiveEmptyState
+                  contentContainerStyle={{
+                    paddingHorizontal: isTabletLandscape ? 52 : 24,
+                  }}
+                >
+                  {(compact) => (
+                    <View style={[s.emptyContainer, compact && s.emptyContainerCompact]}>
+                      <View style={s.emptyInner}>
+                        <Image
+                          source={isDark ? THINK_DARK_PNG : THINK_PNG}
+                          style={{ width: compact ? 96 : 120, height: compact ? 96 : 120 }}
+                          resizeMode="contain"
+                        />
+                        <Text style={s.emptyTitle}>{t("chat.aiAssistant", "AI 阅读助手")}</Text>
+                        <Text style={s.emptySubtitle}>
+                          {t("chat.aiAssistantDesc", "分析内容、回答问题...")}
+                        </Text>
+                      </View>
+                      <View style={s.suggestionsContainer}>
+                        {suggestions.map((text) => (
+                          <TouchableOpacity
+                            key={text}
+                            style={s.suggestionCard}
+                            onPress={() => handleSend(text, false, false)}
+                            activeOpacity={0.7}
+                          >
+                            <Text style={s.suggestionText}>{text}</Text>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
                     </View>
-                    <View style={s.suggestionsContainer}>
-                      {suggestions.map((text) => (
-                        <TouchableOpacity
-                          key={text}
-                          style={s.suggestionCard}
-                          onPress={() => handleSend(text, false, false)}
-                          activeOpacity={0.7}
-                        >
-                          <Text style={s.suggestionText}>{text}</Text>
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-                  </View>
-                </TouchableWithoutFeedback>
+                  )}
+                </AdaptiveEmptyState>
               )}
             </View>
+            {error && (
+              <View style={s.errorBanner}>
+                <Text style={s.errorText} numberOfLines={2}>
+                  {error.message}
+                </Text>
+              </View>
+            )}
             <ChatInput
               onSend={handleSend}
               onStop={stopStream}
@@ -590,14 +600,6 @@ export function BookChatScreen({ route, navigation }: Props) {
           </KeyboardAvoidingView>
         </View>
       </View>
-
-      {error && (
-        <View style={s.errorBanner}>
-          <Text style={s.errorText} numberOfLines={2}>
-            {error.message}
-          </Text>
-        </View>
-      )}
 
       {!isTabletLandscape && (
         <View
@@ -699,14 +701,10 @@ const makeStyles = (
       color: colors.foreground,
     },
     emptyContainer: {
-      flex: 1,
-      justifyContent: "center",
-      paddingHorizontal: 24,
       gap: 24,
     },
     emptyContainerCompact: {
-      paddingHorizontal: 52,
-      gap: 20,
+      gap: 16,
     },
     emptyInner: {
       alignItems: "center",
@@ -717,6 +715,7 @@ const makeStyles = (
       fontWeight: fw.semibold,
       color: colors.foreground,
       marginTop: 4,
+      textAlign: "center",
     },
     emptySubtitle: {
       fontSize: fs.sm,
@@ -730,6 +729,8 @@ const makeStyles = (
     },
     suggestionCard: {
       width: layout.isTabletLandscape ? "48%" : undefined,
+      minHeight: 44,
+      justifyContent: "center",
       backgroundColor: colors.muted,
       borderRadius: radius.lg,
       paddingHorizontal: 14,
@@ -740,10 +741,8 @@ const makeStyles = (
       color: colors.foreground,
     },
     errorBanner: {
-      position: "absolute",
-      bottom: 80,
-      left: 16,
-      right: 16,
+      marginHorizontal: 12,
+      marginBottom: 4,
       backgroundColor: withOpacity(colors.destructive, 0.9),
       borderRadius: radius.lg,
       padding: 12,

@@ -91,6 +91,11 @@ export const makeStyles = (colors: ThemeColors) =>
       justifyContent: "space-between",
       marginBottom: 20,
     },
+    heroPeriodCopy: {
+      flex: 1,
+      minWidth: 0,
+      marginRight: 8,
+    },
     heroLifetimeHeader: {
       gap: 8,
       marginBottom: 14,
@@ -119,6 +124,7 @@ export const makeStyles = (colors: ThemeColors) =>
       flexDirection: "row",
       alignItems: "center",
       gap: 2,
+      flexShrink: 0,
     },
     heroNavBtn: {
       width: 30,
@@ -136,6 +142,11 @@ export const makeStyles = (colors: ThemeColors) =>
       color: colors.foreground,
       letterSpacing: -2,
       lineHeight: 52,
+    },
+    heroValueCompact: {
+      fontSize: 32,
+      lineHeight: 40,
+      letterSpacing: -1,
     },
     heroSubRow: {
       flexDirection: "row",

@@ -149,7 +149,7 @@ export function WebDavImportBrowserScreen({ navigation, route }: Props) {
         },
         headerInner: {
           width: "100%",
-          maxWidth: layout.centeredContentWidth,
+          maxWidth: layout.isContentMeasured ? layout.centeredContentWidth : undefined,
           gap: 12,
         },
         headerRow: {
@@ -349,7 +349,7 @@ export function WebDavImportBrowserScreen({ navigation, route }: Props) {
         },
         footerInner: {
           width: "100%",
-          maxWidth: layout.centeredContentWidth,
+          maxWidth: layout.isContentMeasured ? layout.centeredContentWidth : undefined,
           borderRadius: 24,
           borderWidth: 1,
           borderColor: withOpacity(colors.border, 0.9),
@@ -416,7 +416,13 @@ export function WebDavImportBrowserScreen({ navigation, route }: Props) {
           color: colors.primaryForeground,
         },
       }),
-    [colors, isDark, layout.centeredContentWidth, layout.horizontalPadding],
+    [
+      colors,
+      isDark,
+      layout.centeredContentWidth,
+      layout.horizontalPadding,
+      layout.isContentMeasured,
+    ],
   );
 
   const loadEntries = useCallback(

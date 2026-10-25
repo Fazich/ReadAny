@@ -1,4 +1,10 @@
 import { GroupPickerSheet } from "@/components/library/GroupPickerSheet";
+import { SheetShell } from "@/components/ui/SheetShell";
+import {
+  BOOK_MENU_BORDER_WIDTH,
+  BOOK_MENU_CONTENT_PADDING,
+  resolveBookMenuLayout,
+} from "./book-card-menu-layout";
 import {
   CheckIcon,
   DatabaseIcon,
@@ -17,12 +23,14 @@ import {
   type LayoutRectangle,
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   useWindowDimensions,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface BookCardActionSheetProps {
   visible: boolean;
@@ -33,6 +41,69 @@ interface BookCardActionSheetProps {
   onManageTags?: (book: Book) => void;
   onVectorize?: (book: Book) => void;
   onDelete: (bookId: string, options?: { preserveData?: boolean }) => void;
+}
+
+type BookMenuItem = {
+  key: string;
+  icon: ReactNode;
+  label: string;
+  destructive?: boolean;
+  onPress: () => void;
+};
+
+function MeasuredBookMenu({
+  anchor,
+  items,
+}: { anchor: LayoutRectangle | null; items: readonly BookMenuItem[] }): React.JSX.Element | null {
+  const colors = useColors();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  const [naturalContentHeight, setNaturalContentHeight] = useState<number | null>(null);
+  const layout = resolveBookMenuLayout({
+    anchor, naturalContentHeight, screenWidth, screenHeight, insets,
+  });
+  if (layout.width === 0 || layout.height <= 2 * BOOK_MENU_BORDER_WIDTH) return null;
+
+  return (
+    <View
+      style={[
+        styles.menu,
+        { left: layout.left, top: layout.top, width: layout.width, height: layout.height,
+          opacity: layout.ready ? 1 : 0 },
+      ]}
+      pointerEvents={layout.ready ? "auto" : "none"}
+      accessibilityElementsHidden={!layout.ready}
+      importantForAccessibility={layout.ready ? "auto" : "no-hide-descendants"}
+    >
+      <ScrollView
+        style={styles.menuScroll}
+        contentContainerStyle={styles.menuContent}
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+        onContentSizeChange={(_, height) => {
+          if (!Number.isFinite(height) || height <= 0) return;
+          setNaturalContentHeight((previous) =>
+            previous === null || Math.abs(previous - height) > 0.5 ? height : previous,
+          );
+        }}
+      >
+        {items.map((item, index) => (
+          <TouchableOpacity
+            key={item.key}
+            style={[styles.item, index < items.length - 1 && styles.itemDivider]}
+            activeOpacity={0.85}
+            onPress={item.onPress}
+          >
+            <View style={styles.itemIcon}>{item.icon}</View>
+            <Text style={item.destructive ? styles.itemTextDestructive : styles.itemText}>
+              {item.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </View>
+  );
 }
 
 export function BookCardActionSheet({
@@ -47,7 +118,8 @@ export function BookCardActionSheet({
 }: BookCardActionSheetProps) {
   const colors = useColors();
   const styles = useMemo(() => makeStyles(colors), [colors]);
-  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+  const { width: screenWidth, height: screenHeight, fontScale } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
   const { t } = useTranslation();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [preserveDataOnDelete, setPreserveDataOnDelete] = useState(true);
@@ -131,70 +203,54 @@ export function BookCardActionSheet({
         setShowDeleteConfirm(true);
       },
     },
-  ].filter(Boolean) as Array<{
-    key: string;
-    icon: ReactNode;
-    label: string;
-    destructive?: boolean;
-    onPress: () => void;
-  }>;
+  ].filter(Boolean) as BookMenuItem[];
 
-  const menuWidth = 188;
-  const rowHeight = 48;
-  const menuHeight = items.length * rowHeight + 12;
-  const safePadding = 12;
-  const fallbackX = Math.max(safePadding, screenWidth - menuWidth - safePadding);
-  const fallbackY = Math.max(
-    80,
-    Math.min(screenHeight / 2 - menuHeight / 2, screenHeight - menuHeight - 80),
-  );
-
-  const menuLeft = anchor
-    ? Math.min(
-        Math.max(anchor.x + anchor.width - menuWidth, safePadding),
-        screenWidth - menuWidth - safePadding,
-      )
-    : fallbackX;
-  const preferredTop = anchor ? anchor.y + anchor.height + 8 : fallbackY;
-  const menuTop = anchor
-    ? preferredTop + menuHeight <= screenHeight - safePadding
-      ? preferredTop
-      : Math.max(safePadding, anchor.y - menuHeight - 8)
-    : fallbackY;
+  const menuLayout = resolveBookMenuLayout({
+    anchor, naturalContentHeight: null, screenWidth, screenHeight, insets,
+  });
+  const menuMeasurementKey = JSON.stringify([
+    menuLayout.width, fontScale, items.map(({ key, label }) => [key, label]),
+  ]);
 
   return (
     <>
       <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-        <Pressable style={styles.overlay} onPress={onClose}>
-          <Pressable
-            style={[styles.menu, { left: menuLeft, top: menuTop, width: menuWidth }]}
-            onPress={() => {}}
-          >
-            {items.map((item, index) => (
-              <TouchableOpacity
-                key={item.key}
-                style={[styles.item, index < items.length - 1 && styles.itemDivider]}
-                activeOpacity={0.85}
-                onPress={item.onPress}
-              >
-                <View style={styles.itemIcon}>{item.icon}</View>
-                <Text style={item.destructive ? styles.itemTextDestructive : styles.itemText}>
-                  {item.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </Pressable>
-        </Pressable>
+        <View style={styles.overlay}>
+          <Pressable style={StyleSheet.absoluteFill} onPress={onClose} />
+          {visible && menuLayout.width > 0 && menuLayout.height > 2 * BOOK_MENU_BORDER_WIDTH && (
+            <MeasuredBookMenu key={menuMeasurementKey} anchor={anchor} items={items} />
+          )}
+        </View>
       </Modal>
 
-      <Modal
+      <SheetShell
         visible={showDeleteConfirm}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowDeleteConfirm(false)}
+        onClose={() => setShowDeleteConfirm(false)}
+        placement="center"
+        maxWidth={360}
+        backdropColor="rgba(0,0,0,0.32)"
+        surfaceStyle={styles.confirmCard}
+        footer={
+          <View style={styles.confirmActions}>
+            <TouchableOpacity
+              style={styles.confirmSecondary}
+              onPress={() => setShowDeleteConfirm(false)}
+            >
+              <Text style={styles.confirmSecondaryText}>{t("common.cancel", "取消")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.confirmDanger}
+              onPress={() => {
+                setShowDeleteConfirm(false);
+                onDelete(book.id, { preserveData: preserveDataOnDelete });
+              }}
+            >
+              <Text style={styles.confirmDangerText}>{t("common.remove", "删除")}</Text>
+            </TouchableOpacity>
+          </View>
+        }
       >
-        <Pressable style={styles.confirmOverlay} onPress={() => setShowDeleteConfirm(false)}>
-          <Pressable style={styles.confirmCard} onPress={() => {}}>
+        <ScrollView style={styles.confirmScroll} contentContainerStyle={styles.confirmContent}>
             <Text style={styles.confirmTitle}>{t("library.deleteBookTitle", "删除这本书？")}</Text>
             <Text style={styles.confirmDescription}>
               {t(
@@ -225,27 +281,8 @@ export function BookCardActionSheet({
                 </Text>
               </View>
             </TouchableOpacity>
-
-            <View style={styles.confirmActions}>
-              <TouchableOpacity
-                style={styles.confirmSecondary}
-                onPress={() => setShowDeleteConfirm(false)}
-              >
-                <Text style={styles.confirmSecondaryText}>{t("common.cancel", "取消")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.confirmDanger}
-                onPress={() => {
-                  setShowDeleteConfirm(false);
-                  onDelete(book.id, { preserveData: preserveDataOnDelete });
-                }}
-              >
-                <Text style={styles.confirmDangerText}>{t("common.remove", "删除")}</Text>
-              </TouchableOpacity>
-            </View>
-          </Pressable>
-        </Pressable>
-      </Modal>
+        </ScrollView>
+      </SheetShell>
       <GroupPickerSheet
         visible={showGroupPicker}
         groups={groups}
@@ -276,7 +313,7 @@ const makeStyles = (colors: ThemeColors) =>
     menu: {
       position: "absolute",
       borderRadius: radius.xl,
-      borderWidth: 1,
+      borderWidth: BOOK_MENU_BORDER_WIDTH,
       borderColor: colors.border,
       backgroundColor: colors.card,
       shadowColor: "#000",
@@ -285,8 +322,9 @@ const makeStyles = (colors: ThemeColors) =>
       shadowRadius: 18,
       elevation: 14,
       overflow: "hidden",
-      paddingVertical: 6,
     },
+    menuScroll: { flex: 1, minHeight: 0 },
+    menuContent: { paddingVertical: BOOK_MENU_CONTENT_PADDING },
     item: {
       minHeight: 48,
       flexDirection: "row",
@@ -304,25 +342,22 @@ const makeStyles = (colors: ThemeColors) =>
       justifyContent: "center",
     },
     itemText: {
+      flex: 1,
+      minWidth: 0,
       fontSize: fontSize.sm,
       fontWeight: fontWeight.medium,
       color: colors.foreground,
     },
     itemTextDestructive: {
+      flex: 1,
+      minWidth: 0,
       fontSize: fontSize.sm,
       fontWeight: fontWeight.medium,
       color: colors.destructive,
     },
-    confirmOverlay: {
-      flex: 1,
-      backgroundColor: "rgba(0,0,0,0.32)",
-      justifyContent: "center",
-      alignItems: "center",
-      paddingHorizontal: spacing.xl,
-    },
+    confirmScroll: { flexGrow: 0, flexShrink: 1, minHeight: 0 },
+    confirmContent: { gap: spacing.md },
     confirmCard: {
-      width: "100%",
-      maxWidth: 360,
       backgroundColor: colors.card,
       borderRadius: radius.xxl,
       borderWidth: 1,
@@ -380,6 +415,7 @@ const makeStyles = (colors: ThemeColors) =>
       flexDirection: "row",
       justifyContent: "flex-end",
       gap: 10,
+      marginTop: spacing.md,
     },
     confirmSecondary: {
       minWidth: 92,

@@ -1,0 +1,4333 @@
+{
+  "scope": "ComponentSmoke owns steps 1–5 and existing scroll pages; ReaderSmoke separately owns Reader/TTS steps6–7",
+  "environment": {
+    "renderer": "React DOM with react-native-web0.21.1 host adapter",
+    "browser": "Isolated Google Chrome --headless=new --disable-gpu",
+    "cssViewports": [
+      [
+        320,
+        568
+      ],
+      [
+        390,
+        600
+      ],
+      [
+        529,
+        773
+      ],
+      [
+        608,
+        860
+      ],
+      [
+        840,
+        390
+      ],
+      [
+        960,
+        720
+      ]
+    ],
+    "extraShortViewports": [
+      [
+        320,
+        220
+      ],
+      [
+        320,
+        240
+      ],
+      [
+        320,
+        280
+      ],
+      [
+        320,
+        300
+      ],
+      [
+        320,
+        350
+      ]
+    ],
+    "insets": {
+      "top": 24,
+      "left": 0,
+      "right": 0,
+      "bottom": 16
+    },
+    "fontScale": [
+      1,
+      1.5
+    ],
+    "fontScaleMethod": "Text/TextInput host multiplies fontSize and lineHeight; respects maxFontSizeMultiplier, not native OS accessibility scaling",
+    "locales": [
+      "zh",
+      "en"
+    ],
+    "themes": [
+      "sepia",
+      "dark",
+      "oled"
+    ]
+  },
+  "passedBrowserScenarios": [
+    "AdaptiveEmptyState actual onLayout0/439/440/180/650; compact threshold and tall content last marker scrolling; short content centered",
+    "Real ChatScreen and real ChatInput all6 window sizes: Chinese font1 and English font1.5; final card reachable without input overlap",
+    "Real ChatInput multiline draft and both toggles retain across320→960→320x300→320x568",
+    "No-config suggestion triggers one alert; configured memory send failure triggers one send and error is position relative above input",
+    "BookChat four-line selection and one real quote; actual remove remains absent across960x720→320x350→320x568; draft retained",
+    "Library empty import button scroll, real import-source sheet opens from button anchor; no-results branch;30 real BookCards",
+    "Library long press enters multiselect; six44x44 actions within320 width atEnglish font1.5; selection persists resize",
+    "BookCardActionSheet all5 options; out-of-bounds top-left/bottom-right anchors clamped at320x220; last delete entry scroll/click opens confirmation only; details/tags/vectorize callbacks each exactly once",
+    "Appearance language list choose Español and restore Chinese",
+    "TranslationSettings20 models last row scroll and choose; GroupPicker10 groups last row choose and empty create disabled; English font1.5 short-list repeats",
+    "WebDAV real4-field form memory submit once; long failure scroll with footer visible at320x350",
+    "BookDetails104x150 cover above hero text at320 width; description edit draft retains through320x280→960→320; Done/Cancel visible; Cancel no updateBook callback",
+    "Stats actual report builder with typed sorted facts; English font1.5 cross-month Sep28–Oct4 label wraps and both date-nav buttons inside hero",
+    "Profile long2057613h9m value wraps without ellipsis; bottom settings/ICP reachable",
+    "Notes empty state and nonempty actual notebook/detail; rich-editor host boundary only; uncommitted edit draft and search survive resize",
+    "Existing Skills/Badges/Fonts/AI/Sync/TTS/Vector/Feedback/WebDAV browser components mounted without final runtime errors; scroll to bottom and real back callbacks for Skills/Badges/SettingsHeaders",
+    "Sync real unsaved URL+username retain across960→320 short viewport"
+  ],
+  "productDefectsFoundAndParentFixed": [
+    {
+      "surface": "ChatScreen",
+      "issue": "width48%+gap10 caused1x4 at320",
+      "resolution": "Parent changed width47%; final actual2x2 geometry/screens captured"
+    },
+    {
+      "surface": "BookChatScreen",
+      "issue": "quotes.length dependency reseeded removed last quote",
+      "resolution": "Parent changed seed effect dependency; actual remove plus resize now chipCount0"
+    }
+  ],
+  "limitations": [
+    "No Android device available: no physical fold, native keyboard/IME/adjustResize, WebView gestures, CFI, native audio, playback, system insets or native accessibility proof",
+    "Actual screen components imported from repository; no copied page JSX. Store/navigation/network/storage/editor/animation/native picker boundaries are temporary memory adapters",
+    "RN-web FlatList stable-callback shim and initial100/maxbatch100 render-all used to avoid legacy host invariant/virtualized jumps; native LibraryGrid visible-key anchoring not proven",
+    "KeyboardAvoidingView maps to RN-web View; short viewport simulates available height only, not actual keyboard behavior",
+    "Native setNativeProps selection mapped to DOM selection for BookDetails; rich editor mapped to TextInput; native rich-editor behavior not proven",
+    "Badge gradient/animation host adapted; badge scroll layout proven, animation/media export not tested",
+    "Direct settings screen fixtures do not exercise SettingsLayout side-category route switch/leave guard; same-screen resize retention only",
+    "Chat existing-message/streaming continuation not exercised by this fixture; memory failure path and empty state tested",
+    "No real import/delete/sync/download/font installation/vectorization/feedback submission/persistence or external network request performed",
+    "Settings back callbacks proven, but navigation adapter intentionally does not navigate actual app routes",
+    "Pre-correction screenshots without -final remain historical evidence; use indexed final screenshots for current acceptance"
+  ],
+  "verification": {
+    "fixtureTypecheck": "node node_modules/typescript/bin/tsc --project /tmp/foldable-smoke/tsconfig.json --pretty false exited0",
+    "harnessBuild": "repository esbuild bundled actual components, latest successful build11.7MB",
+    "productChecks": "Parent-owned, not run by this worker"
+  },
+  "evidence": [
+    {
+      "scenario": "adaptive",
+      "height": 0,
+      "compact": "true",
+      "clientHeight": 0,
+      "scrollHeight": 658,
+      "top": 0
+    },
+    {
+      "scenario": "adaptive",
+      "height": 439,
+      "compact": "true",
+      "clientHeight": 439,
+      "scrollHeight": 658,
+      "scrollTop": 219,
+      "last": {
+        "x": 0,
+        "y": 410,
+        "width": 320,
+        "height": 17,
+        "top": 410,
+        "right": 320,
+        "bottom": 427,
+        "left": 0
+      }
+    },
+    {
+      "scenario": "adaptive",
+      "height": 440,
+      "compact": "false",
+      "clientHeight": 440,
+      "scrollHeight": 658,
+      "scrollTop": 218,
+      "last": {
+        "x": 0,
+        "y": 411,
+        "width": 320,
+        "height": 17,
+        "top": 411,
+        "right": 320,
+        "bottom": 428,
+        "left": 0
+      }
+    },
+    {
+      "scenario": "adaptive",
+      "height": 180,
+      "compact": "true",
+      "clientHeight": 180,
+      "scrollHeight": 658,
+      "scrollTop": 478,
+      "last": {
+        "x": 0,
+        "y": 151,
+        "width": 320,
+        "height": 17,
+        "top": 151,
+        "right": 320,
+        "bottom": 168,
+        "left": 0
+      }
+    },
+    {
+      "scenario": "adaptive",
+      "height": 650,
+      "compact": "false",
+      "clientHeight": 650,
+      "scrollHeight": 658,
+      "scrollTop": 8,
+      "last": {
+        "x": 0,
+        "y": 621,
+        "width": 320,
+        "height": 17,
+        "top": 621,
+        "right": 320,
+        "bottom": 638,
+        "left": 0
+      }
+    },
+    {
+      "scenario": "chat",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "scroll": {
+        "client": 407,
+        "content": 496,
+        "top": 89
+      },
+      "last": {
+        "x": 40,
+        "y": 397,
+        "width": 240,
+        "height": 66,
+        "top": 397,
+        "right": 280,
+        "bottom": 463,
+        "left": 40
+      },
+      "input": {
+        "x": 29,
+        "y": 480,
+        "width": 262,
+        "height": 46,
+        "top": 480,
+        "right": 291,
+        "bottom": 526,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "chat",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "scroll": {
+        "client": 439,
+        "content": 439,
+        "top": 0
+      },
+      "last": {
+        "x": 200,
+        "y": 381.5,
+        "width": 150,
+        "height": 66,
+        "top": 381.5,
+        "right": 350,
+        "bottom": 447.5,
+        "left": 200
+      },
+      "input": {
+        "x": 29,
+        "y": 512,
+        "width": 332,
+        "height": 46,
+        "top": 512,
+        "right": 361,
+        "bottom": 558,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "chat",
+      "viewport": {
+        "width": 529,
+        "height": 773
+      },
+      "scroll": {
+        "client": 612,
+        "content": 612,
+        "top": 0
+      },
+      "last": {
+        "x": 269.5,
+        "y": 468,
+        "width": 219.5,
+        "height": 66,
+        "top": 468,
+        "right": 489,
+        "bottom": 534,
+        "left": 269.5
+      },
+      "input": {
+        "x": 29,
+        "y": 685,
+        "width": 471,
+        "height": 46,
+        "top": 685,
+        "right": 500,
+        "bottom": 731,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "chat",
+      "viewport": {
+        "width": 608,
+        "height": 860
+      },
+      "scroll": {
+        "client": 699,
+        "content": 699,
+        "top": 0
+      },
+      "last": {
+        "x": 309,
+        "y": 541.5,
+        "width": 259,
+        "height": 72,
+        "top": 541.5,
+        "right": 568,
+        "bottom": 613.5,
+        "left": 309
+      },
+      "input": {
+        "x": 29,
+        "y": 772,
+        "width": 550,
+        "height": 46,
+        "top": 772,
+        "right": 579,
+        "bottom": 818,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "chat",
+      "viewport": {
+        "width": 840,
+        "height": 390
+      },
+      "scroll": {
+        "client": 298,
+        "content": 298,
+        "top": 0
+      },
+      "last": {
+        "x": 537,
+        "y": 334,
+        "width": 231,
+        "height": 66,
+        "top": 334,
+        "right": 768,
+        "bottom": 400,
+        "left": 537
+      },
+      "input": {
+        "x": 257,
+        "y": 302,
+        "width": 550,
+        "height": 46,
+        "top": 302,
+        "right": 807,
+        "bottom": 348,
+        "left": 257
+      }
+    },
+    {
+      "scenario": "chat",
+      "viewport": {
+        "width": 960,
+        "height": 720
+      },
+      "scroll": {
+        "client": 628,
+        "content": 628,
+        "top": 0
+      },
+      "last": {
+        "x": 597,
+        "y": 441.5,
+        "width": 291,
+        "height": 66,
+        "top": 441.5,
+        "right": 888,
+        "bottom": 507.5,
+        "left": 597
+      },
+      "input": {
+        "x": 257,
+        "y": 632,
+        "width": 670,
+        "height": 46,
+        "top": 632,
+        "right": 927,
+        "bottom": 678,
+        "left": 257
+      }
+    },
+    {
+      "scenario": "chat-state-resize",
+      "before": {
+        "draft": "Draft survives fold\nsecond line",
+        "toggles": [
+          {
+            "text": "深度思考",
+            "background": "rgba(107, 76, 42, 0.1)",
+            "color": "rgb(0, 0, 0)"
+          },
+          {
+            "text": "防剧透",
+            "background": "rgba(107, 76, 42, 0.1)",
+            "color": "rgb(0, 0, 0)"
+          }
+        ]
+      },
+      "after": {
+        "draft": "Draft survives fold\nsecond line",
+        "toggles": [
+          {
+            "text": "深度思考",
+            "background": "rgba(107, 76, 42, 0.1)",
+            "color": "rgb(0, 0, 0)"
+          },
+          {
+            "text": "防剧透",
+            "background": "rgba(107, 76, 42, 0.1)",
+            "color": "rgb(0, 0, 0)"
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "appearance-select",
+      "events": [
+        {
+          "event": "language",
+          "value": "es"
+        }
+      ]
+    },
+    {
+      "scenario": "chat-no-config",
+      "events": [
+        {
+          "event": "alert",
+          "args": [
+            "需要配置 AI",
+            "请先在设置中配置 AI 端点和模型"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "chat-error",
+      "events": [
+        {
+          "event": "send",
+          "args": [
+            "生成阅读笔记",
+            null,
+            false,
+            false,
+            null,
+            {
+              "activeEndpointId": "ep1",
+              "activeModel": "model-1-long-name",
+              "endpoints": [
+                {
+                  "id": "ep1",
+                  "name": "Endpoint A",
+                  "baseUrl": "https://a.example.com",
+                  "models": [
+                    "model-1-long-name",
+                    "model-2-long-name",
+                    "model-3-long-name",
+                    "model-4-long-name",
+                    "model-5-long-name",
+                    "model-6-long-name",
+                    "model-7-long-name",
+                    "model-8-long-name",
+                    "model-9-long-name",
+                    "model-10-long-name",
+                    "model-11-long-name",
+                    "model-12-long-name",
+                    "model-13-long-name",
+                    "model-14-long-name",
+                    "model-15-long-name",
+                    "model-16-long-name",
+                    "model-17-long-name",
+                    "model-18-long-name",
+                    "model-19-long-name",
+                    "model-20-long-name"
+                  ]
+                },
+                {
+                  "id": "ep2",
+                  "name": "Endpoint B",
+                  "baseUrl": "https://b.example.com",
+                  "models": [
+                    "model-1-long-name",
+                    "model-2-long-name",
+                    "model-3-long-name"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "error": {
+        "x": 28,
+        "y": 430,
+        "width": 264,
+        "height": 41,
+        "top": 430,
+        "right": 292,
+        "bottom": 471,
+        "left": 28
+      },
+      "input": {
+        "x": 29,
+        "y": 480,
+        "width": 262,
+        "height": 46,
+        "top": 480,
+        "right": 291,
+        "bottom": 526,
+        "left": 29
+      },
+      "errorPosition": "relative",
+      "cards": [
+        {
+          "text": "总结最近读过的内容",
+          "rect": {
+            "x": 40,
+            "y": 259,
+            "width": 115,
+            "height": 82,
+            "top": 259,
+            "right": 155,
+            "bottom": 341,
+            "left": 40
+          }
+        },
+        {
+          "text": "分析文中论点",
+          "rect": {
+            "x": 165,
+            "y": 259,
+            "width": 115,
+            "height": 82,
+            "top": 259,
+            "right": 280,
+            "bottom": 341,
+            "left": 165
+          }
+        },
+        {
+          "text": "查找关键概念",
+          "rect": {
+            "x": 40,
+            "y": 351,
+            "width": 115,
+            "height": 66,
+            "top": 351,
+            "right": 155,
+            "bottom": 417,
+            "left": 40
+          }
+        },
+        {
+          "text": "生成阅读笔记",
+          "rect": {
+            "x": 165,
+            "y": 351,
+            "width": 115,
+            "height": 66,
+            "top": 351,
+            "right": 280,
+            "bottom": 417,
+            "left": 165
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "bookchat",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "selectedText": true,
+      "scroll": {
+        "height": 8,
+        "content": 376,
+        "top": 338
+      },
+      "input": {
+        "x": 29,
+        "y": 246,
+        "width": 262,
+        "height": 46,
+        "top": 246,
+        "right": 291,
+        "bottom": 292,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "bookmenu-short",
+      "viewport": {
+        "width": 320,
+        "height": 220
+      },
+      "menu": {
+        "x": 12,
+        "y": 36,
+        "width": 188,
+        "height": 156,
+        "top": 36,
+        "right": 200,
+        "bottom": 192,
+        "left": 12
+      },
+      "scroll": {
+        "client": 142,
+        "content": 240,
+        "top": 98
+      },
+      "last": {
+        "x": 13,
+        "y": 137,
+        "width": 186,
+        "height": 48,
+        "top": 137,
+        "right": 199,
+        "bottom": 185,
+        "left": 13
+      }
+    },
+    {
+      "scenario": "bookmenu-delete-confirm-only",
+      "events": [
+        {
+          "event": "close",
+          "args": []
+        }
+      ],
+      "text": "书籍详情\n更换分组\n管理标签\n向量化\n删除\n删除这本书？\n你可以选择保留笔记和阅读统计，之后重新导入同一本书时会继续接上。\n保留笔记和阅读统计\n勾选后会从书架移除书籍文件，但保留笔记、高亮和阅读历史，重新导入时可恢复。\n取消\n删除"
+    },
+    {
+      "scenario": "groups-last",
+      "scroll": {
+        "client": 61,
+        "content": 730,
+        "top": 663
+      },
+      "last": {
+        "x": 17,
+        "y": 128.40625,
+        "width": 271,
+        "height": 73,
+        "top": 128.40625,
+        "right": 288,
+        "bottom": 201.40625,
+        "left": 17
+      }
+    },
+    {
+      "scenario": "groups-select-create-disabled",
+      "events": [
+        {
+          "event": "group-select",
+          "args": [
+            "g-10"
+          ]
+        },
+        {
+          "event": "close",
+          "args": []
+        }
+      ],
+      "disabled": [
+        {
+          "text": "确定",
+          "disabled": "true"
+        }
+      ]
+    },
+    {
+      "scenario": "models-20",
+      "scroll": {
+        "client": 231,
+        "content": 1028,
+        "top": 734
+      },
+      "last": {
+        "x": 20,
+        "y": 182,
+        "width": 265,
+        "height": 42,
+        "top": 182,
+        "right": 285,
+        "bottom": 224,
+        "left": 20
+      }
+    },
+    {
+      "scenario": "webdav-short-error",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "scroll": {
+        "client": 196,
+        "content": 1073,
+        "top": 730
+      },
+      "submit": {
+        "x": 153.8125,
+        "y": 272,
+        "width": 146.1875,
+        "height": 48,
+        "top": 272,
+        "right": 300,
+        "bottom": 320,
+        "left": 153.8125
+      },
+      "events": [
+        {
+          "event": "webdav-submit",
+          "args": [
+            {
+              "kind": "temporary",
+              "url": "https://memory.invalid",
+              "username": "f",
+              "password": "[redacted]",
+              "remoteRoot": "/books",
+              "allowInsecure": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "library-empty",
+      "scroll": {
+        "client": 144,
+        "content": 240,
+        "top": 96
+      },
+      "button": {
+        "x": 108,
+        "y": 188,
+        "width": 104,
+        "height": 40,
+        "top": 188,
+        "right": 212,
+        "bottom": 228,
+        "left": 108
+      }
+    },
+    {
+      "scenario": "library-no-results",
+      "text": "书库\n没有找到匹配的书籍"
+    },
+    {
+      "scenario": "details-editor-shrink",
+      "draft": "Uncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\n",
+      "editor": {
+        "x": 17,
+        "y": 176.921875,
+        "width": 286,
+        "height": 86.078125,
+        "top": 176.921875,
+        "right": 303,
+        "bottom": 263,
+        "left": 17
+      },
+      "done": {
+        "x": 249,
+        "y": 130.921875,
+        "width": 54,
+        "height": 34,
+        "top": 130.921875,
+        "right": 303,
+        "bottom": 164.921875,
+        "left": 249
+      },
+      "viewport": {
+        "width": 320,
+        "height": 280
+      },
+      "draftAfter": "Uncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\nUncommitted description draft\n"
+    },
+    {
+      "scenario": "library-selection-en-font1.5",
+      "fontScale": 1.5,
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "title": "\n    Group oneBook 1 外屏测试",
+      "controls": [
+        {
+          "x": 16,
+          "y": 37,
+          "width": 44,
+          "height": 44,
+          "top": 37,
+          "right": 60,
+          "bottom": 81,
+          "left": 16
+        },
+        {
+          "x": 116,
+          "y": 37,
+          "width": 44,
+          "height": 44,
+          "top": 37,
+          "right": 160,
+          "bottom": 81,
+          "left": 116
+        },
+        {
+          "x": 164,
+          "y": 37,
+          "width": 44,
+          "height": 44,
+          "top": 37,
+          "right": 208,
+          "bottom": 81,
+          "left": 164
+        },
+        {
+          "x": 212,
+          "y": 37,
+          "width": 44,
+          "height": 44,
+          "top": 37,
+          "right": 256,
+          "bottom": 81,
+          "left": 212
+        },
+        {
+          "x": 260,
+          "y": 37,
+          "width": 44,
+          "height": 44,
+          "top": 37,
+          "right": 304,
+          "bottom": 81,
+          "left": 260
+        },
+        {
+          "x": 16,
+          "y": 102,
+          "width": 88,
+          "height": 218.84375,
+          "top": 102,
+          "right": 104,
+          "bottom": 320.84375,
+          "left": 16
+        },
+        {
+          "x": 70,
+          "y": 196.84375,
+          "width": 28,
+          "height": 28,
+          "top": 196.84375,
+          "right": 98,
+          "bottom": 224.84375,
+          "left": 70
+        }
+      ]
+    },
+    {
+      "scenario": "profile-long-values",
+      "fontScale": 1.5,
+      "locale": "en",
+      "text": "Me\nTotal Time\n2057613h 9m\nCharacters\n1234568k chars\nRead\n100\nbooks\nStreak\n33\ndays\nReading Activity\nView Details\nLess\nMore\nGENERAL\nGeneral\nfonts.title\nSync\nSTORAGE\nClear Cache\nSKILLS\nAI Configuration\ntts.title\nTranslation\nSkills\nVector Model\nMORE\nFeedback\nSupport Center\nAbout\nReadAny Mobile vsmoke\n粤ICP备2025444251号-2A"
+    },
+    {
+      "scenario": "stats-week-font1.5",
+      "text": "Reading Statistics\nDay\nWeek\nMonth\nYear\nAll\nTHIS WEEK\nOct 19, 2026 – Oct 25, 2026\n14403h 12m\nReading time\nYou kept a reading rhythm on 7 days this week, with your longest focus stretch reaching 500h.\nACTIVE DAYS\n7 days\nAvg active day\nSESSIONS\n35 sessions\n411h 31m\nBOOKS TOUCHED\n1\n864198k chars\nREADING STREAK\n7 days\nLongest session 500h\nREADING SPEED\n1,000 chars/min\nCharacters rea",
+      "fontScale": 1.5,
+      "locale": "en"
+    },
+    {
+      "scenario": "notes-nonempty-draft",
+      "draft": "Uncommitted notebook draft",
+      "text": "Notebook fixture\nFixture author\n笔记 (1)\n高亮 (0)\nChapter one\n\"Selected quote for notebook\"\n取消\n保存"
+    },
+    {
+      "scenario": "library-selection-en-font1.5-final",
+      "fontScale": 1.5,
+      "locale": "en",
+      "title": "\n    1 selectedBook 1 外屏测",
+      "controls": [
+        {
+          "x": 16,
+          "y": 37,
+          "width": 44,
+          "height": 44,
+          "top": 37,
+          "right": 60,
+          "bottom": 81,
+          "left": 16
+        },
+        {
+          "x": 20,
+          "y": 86,
+          "width": 44,
+          "height": 44,
+          "top": 86,
+          "right": 64,
+          "bottom": 130,
+          "left": 20
+        },
+        {
+          "x": 68,
+          "y": 86,
+          "width": 44,
+          "height": 44,
+          "top": 86,
+          "right": 112,
+          "bottom": 130,
+          "left": 68
+        },
+        {
+          "x": 116,
+          "y": 86,
+          "width": 44,
+          "height": 44,
+          "top": 86,
+          "right": 160,
+          "bottom": 130,
+          "left": 116
+        },
+        {
+          "x": 164,
+          "y": 86,
+          "width": 44,
+          "height": 44,
+          "top": 86,
+          "right": 208,
+          "bottom": 130,
+          "left": 164
+        },
+        {
+          "x": 212,
+          "y": 86,
+          "width": 44,
+          "height": 44,
+          "top": 86,
+          "right": 256,
+          "bottom": 130,
+          "left": 212
+        },
+        {
+          "x": 260,
+          "y": 86,
+          "width": 44,
+          "height": 44,
+          "top": 86,
+          "right": 304,
+          "bottom": 130,
+          "left": 260
+        }
+      ]
+    },
+    {
+      "scenario": "chat-final",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "fontScale": 1,
+      "locale": "zh",
+      "theme": "sepia",
+      "scroll": {
+        "client": 407,
+        "content": 407,
+        "top": 0
+      },
+      "cards": [
+        {
+          "text": "总结我最近的阅读",
+          "rect": {
+            "x": 40,
+            "y": 281.5,
+            "width": 115,
+            "height": 82,
+            "top": 281.5,
+            "right": 155,
+            "bottom": 363.5,
+            "left": 40
+          }
+        },
+        {
+          "text": "分析核心论点",
+          "rect": {
+            "x": 165,
+            "y": 281.5,
+            "width": 115,
+            "height": 82,
+            "top": 281.5,
+            "right": 280,
+            "bottom": 363.5,
+            "left": 165
+          }
+        },
+        {
+          "text": "帮我整理书库",
+          "rect": {
+            "x": 40,
+            "y": 373.5,
+            "width": 115,
+            "height": 66,
+            "top": 373.5,
+            "right": 155,
+            "bottom": 439.5,
+            "left": 40
+          }
+        },
+        {
+          "text": "生成学习笔记",
+          "rect": {
+            "x": 165,
+            "y": 373.5,
+            "width": 115,
+            "height": 66,
+            "top": 373.5,
+            "right": 280,
+            "bottom": 439.5,
+            "left": 165
+          }
+        }
+      ],
+      "input": {
+        "x": 29,
+        "y": 480,
+        "width": 262,
+        "height": 46,
+        "top": 480,
+        "right": 291,
+        "bottom": 526,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "chat-final",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "fontScale": 1,
+      "locale": "zh",
+      "theme": "sepia",
+      "scroll": {
+        "client": 439,
+        "content": 439,
+        "top": 0
+      },
+      "cards": [
+        {
+          "text": "总结我最近的阅读",
+          "rect": {
+            "x": 40,
+            "y": 305.5,
+            "width": 150,
+            "height": 66,
+            "top": 305.5,
+            "right": 190,
+            "bottom": 371.5,
+            "left": 40
+          }
+        },
+        {
+          "text": "分析核心论点",
+          "rect": {
+            "x": 200,
+            "y": 305.5,
+            "width": 150,
+            "height": 66,
+            "top": 305.5,
+            "right": 350,
+            "bottom": 371.5,
+            "left": 200
+          }
+        },
+        {
+          "text": "帮我整理书库",
+          "rect": {
+            "x": 40,
+            "y": 381.5,
+            "width": 150,
+            "height": 66,
+            "top": 381.5,
+            "right": 190,
+            "bottom": 447.5,
+            "left": 40
+          }
+        },
+        {
+          "text": "生成学习笔记",
+          "rect": {
+            "x": 200,
+            "y": 381.5,
+            "width": 150,
+            "height": 66,
+            "top": 381.5,
+            "right": 350,
+            "bottom": 447.5,
+            "left": 200
+          }
+        }
+      ],
+      "input": {
+        "x": 29,
+        "y": 512,
+        "width": 332,
+        "height": 46,
+        "top": 512,
+        "right": 361,
+        "bottom": 558,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "chat-final",
+      "viewport": {
+        "width": 529,
+        "height": 773
+      },
+      "fontScale": 1,
+      "locale": "zh",
+      "theme": "sepia",
+      "scroll": {
+        "client": 612,
+        "content": 612,
+        "top": 0
+      },
+      "cards": [
+        {
+          "text": "总结我最近的阅读",
+          "rect": {
+            "x": 40,
+            "y": 416,
+            "width": 219.5,
+            "height": 72,
+            "top": 416,
+            "right": 259.5,
+            "bottom": 488,
+            "left": 40
+          }
+        },
+        {
+          "text": "分析核心论点",
+          "rect": {
+            "x": 269.5,
+            "y": 416,
+            "width": 219.5,
+            "height": 72,
+            "top": 416,
+            "right": 489,
+            "bottom": 488,
+            "left": 269.5
+          }
+        },
+        {
+          "text": "帮我整理书库",
+          "rect": {
+            "x": 40,
+            "y": 498,
+            "width": 219.5,
+            "height": 72,
+            "top": 498,
+            "right": 259.5,
+            "bottom": 570,
+            "left": 40
+          }
+        },
+        {
+          "text": "生成学习笔记",
+          "rect": {
+            "x": 269.5,
+            "y": 498,
+            "width": 219.5,
+            "height": 72,
+            "top": 498,
+            "right": 489,
+            "bottom": 570,
+            "left": 269.5
+          }
+        }
+      ],
+      "input": {
+        "x": 29,
+        "y": 685,
+        "width": 471,
+        "height": 46,
+        "top": 685,
+        "right": 500,
+        "bottom": 731,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "chat-final",
+      "viewport": {
+        "width": 608,
+        "height": 860
+      },
+      "fontScale": 1,
+      "locale": "zh",
+      "theme": "sepia",
+      "scroll": {
+        "client": 699,
+        "content": 699,
+        "top": 0
+      },
+      "cards": [
+        {
+          "text": "总结我最近的阅读",
+          "rect": {
+            "x": 44,
+            "y": 459.5,
+            "width": 255,
+            "height": 72,
+            "top": 459.5,
+            "right": 299,
+            "bottom": 531.5,
+            "left": 44
+          }
+        },
+        {
+          "text": "分析核心论点",
+          "rect": {
+            "x": 309,
+            "y": 459.5,
+            "width": 255,
+            "height": 72,
+            "top": 459.5,
+            "right": 564,
+            "bottom": 531.5,
+            "left": 309
+          }
+        },
+        {
+          "text": "帮我整理书库",
+          "rect": {
+            "x": 44,
+            "y": 541.5,
+            "width": 255,
+            "height": 72,
+            "top": 541.5,
+            "right": 299,
+            "bottom": 613.5,
+            "left": 44
+          }
+        },
+        {
+          "text": "生成学习笔记",
+          "rect": {
+            "x": 309,
+            "y": 541.5,
+            "width": 255,
+            "height": 72,
+            "top": 541.5,
+            "right": 564,
+            "bottom": 613.5,
+            "left": 309
+          }
+        }
+      ],
+      "input": {
+        "x": 33,
+        "y": 772,
+        "width": 542,
+        "height": 46,
+        "top": 772,
+        "right": 575,
+        "bottom": 818,
+        "left": 33
+      }
+    },
+    {
+      "scenario": "chat-final",
+      "viewport": {
+        "width": 840,
+        "height": 390
+      },
+      "fontScale": 1,
+      "locale": "zh",
+      "theme": "sepia",
+      "scroll": {
+        "client": 229,
+        "content": 344,
+        "top": 115
+      },
+      "cards": [
+        {
+          "text": "总结我最近的阅读",
+          "rect": {
+            "x": 296,
+            "y": 143,
+            "width": 231,
+            "height": 66,
+            "top": 143,
+            "right": 527,
+            "bottom": 209,
+            "left": 296
+          }
+        },
+        {
+          "text": "分析核心论点",
+          "rect": {
+            "x": 537,
+            "y": 143,
+            "width": 231,
+            "height": 66,
+            "top": 143,
+            "right": 768,
+            "bottom": 209,
+            "left": 537
+          }
+        },
+        {
+          "text": "帮我整理书库",
+          "rect": {
+            "x": 296,
+            "y": 219,
+            "width": 231,
+            "height": 66,
+            "top": 219,
+            "right": 527,
+            "bottom": 285,
+            "left": 296
+          }
+        },
+        {
+          "text": "生成学习笔记",
+          "rect": {
+            "x": 537,
+            "y": 219,
+            "width": 231,
+            "height": 66,
+            "top": 219,
+            "right": 768,
+            "bottom": 285,
+            "left": 537
+          }
+        }
+      ],
+      "input": {
+        "x": 257,
+        "y": 302,
+        "width": 550,
+        "height": 46,
+        "top": 302,
+        "right": 807,
+        "bottom": 348,
+        "left": 257
+      }
+    },
+    {
+      "scenario": "chat-final",
+      "viewport": {
+        "width": 960,
+        "height": 720
+      },
+      "fontScale": 1,
+      "locale": "zh",
+      "theme": "sepia",
+      "scroll": {
+        "client": 559,
+        "content": 559,
+        "top": 0
+      },
+      "cards": [
+        {
+          "text": "总结我最近的阅读",
+          "rect": {
+            "x": 333.109375,
+            "y": 389.5,
+            "width": 268.4375,
+            "height": 72,
+            "top": 389.5,
+            "right": 601.546875,
+            "bottom": 461.5,
+            "left": 333.109375
+          }
+        },
+        {
+          "text": "分析核心论点",
+          "rect": {
+            "x": 611.546875,
+            "y": 389.5,
+            "width": 268.453125,
+            "height": 72,
+            "top": 389.5,
+            "right": 880,
+            "bottom": 461.5,
+            "left": 611.546875
+          }
+        },
+        {
+          "text": "帮我整理书库",
+          "rect": {
+            "x": 333.109375,
+            "y": 471.5,
+            "width": 268.4375,
+            "height": 72,
+            "top": 471.5,
+            "right": 601.546875,
+            "bottom": 543.5,
+            "left": 333.109375
+          }
+        },
+        {
+          "text": "生成学习笔记",
+          "rect": {
+            "x": 611.546875,
+            "y": 471.5,
+            "width": 268.453125,
+            "height": 72,
+            "top": 471.5,
+            "right": 880,
+            "bottom": 543.5,
+            "left": 611.546875
+          }
+        }
+      ],
+      "input": {
+        "x": 294.109375,
+        "y": 632,
+        "width": 624.890625,
+        "height": 46,
+        "top": 632,
+        "right": 919,
+        "bottom": 678,
+        "left": 294.109375
+      }
+    },
+    {
+      "scenario": "chat-theme-font",
+      "theme": "sepia",
+      "fontScale": 1.5,
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "background": "rgb(240, 230, 210)",
+      "text": "model-1-long-name\nHow can I help you today?\nAsk questions about your books, get summaries, and more\nSummarize my recent reading\nAnalyze key arguments\nHelp organize my library\nGenerate study notes\nDeep Thinking\nSpoiler-Free\nHistory\nNo conversations yet"
+    },
+    {
+      "scenario": "chat-theme-font",
+      "theme": "dark",
+      "fontScale": 1.5,
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "background": "rgb(28, 28, 30)",
+      "text": "model-1-long-name\nHow can I help you today?\nAsk questions about your books, get summaries, and more\nSummarize my recent reading\nAnalyze key arguments\nHelp organize my library\nGenerate study notes\nDeep Thinking\nSpoiler-Free\nHistory\nNo conversations yet"
+    },
+    {
+      "scenario": "chat-theme-font",
+      "theme": "oled",
+      "fontScale": 1.5,
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "background": "rgb(0, 0, 0)",
+      "text": "model-1-long-name\nHow can I help you today?\nAsk questions about your books, get summaries, and more\nSummarize my recent reading\nAnalyze key arguments\nHelp organize my library\nGenerate study notes\nDeep Thinking\nSpoiler-Free\nHistory\nNo conversations yet"
+    },
+    {
+      "scenario": "adaptive-final",
+      "requestedHeight": 0,
+      "content": 600,
+      "compact": "true",
+      "scroll": {
+        "client": 0,
+        "content": 658,
+        "top": 0
+      },
+      "first": {
+        "x": 0,
+        "y": 12,
+        "width": 320,
+        "height": 17,
+        "top": 12,
+        "right": 320,
+        "bottom": 29,
+        "left": 0
+      },
+      "last": {
+        "x": 0,
+        "y": 629,
+        "width": 320,
+        "height": 17,
+        "top": 629,
+        "right": 320,
+        "bottom": 646,
+        "left": 0
+      }
+    },
+    {
+      "scenario": "adaptive-final",
+      "requestedHeight": 439,
+      "content": 600,
+      "compact": "true",
+      "scroll": {
+        "client": 439,
+        "content": 658,
+        "top": 219
+      },
+      "first": {
+        "x": 0,
+        "y": -207,
+        "width": 320,
+        "height": 17,
+        "top": -207,
+        "right": 320,
+        "bottom": -190,
+        "left": 0
+      },
+      "last": {
+        "x": 0,
+        "y": 410,
+        "width": 320,
+        "height": 17,
+        "top": 410,
+        "right": 320,
+        "bottom": 427,
+        "left": 0
+      }
+    },
+    {
+      "scenario": "adaptive-final",
+      "requestedHeight": 440,
+      "content": 600,
+      "compact": "false",
+      "scroll": {
+        "client": 440,
+        "content": 658,
+        "top": 218
+      },
+      "first": {
+        "x": 0,
+        "y": -206,
+        "width": 320,
+        "height": 17,
+        "top": -206,
+        "right": 320,
+        "bottom": -189,
+        "left": 0
+      },
+      "last": {
+        "x": 0,
+        "y": 411,
+        "width": 320,
+        "height": 17,
+        "top": 411,
+        "right": 320,
+        "bottom": 428,
+        "left": 0
+      }
+    },
+    {
+      "scenario": "adaptive-final",
+      "requestedHeight": 180,
+      "content": 600,
+      "compact": "true",
+      "scroll": {
+        "client": 180,
+        "content": 658,
+        "top": 478
+      },
+      "first": {
+        "x": 0,
+        "y": -466,
+        "width": 320,
+        "height": 17,
+        "top": -466,
+        "right": 320,
+        "bottom": -449,
+        "left": 0
+      },
+      "last": {
+        "x": 0,
+        "y": 151,
+        "width": 320,
+        "height": 17,
+        "top": 151,
+        "right": 320,
+        "bottom": 168,
+        "left": 0
+      }
+    },
+    {
+      "scenario": "adaptive-final",
+      "requestedHeight": 650,
+      "content": 100,
+      "compact": "false",
+      "scroll": {
+        "client": 650,
+        "content": 650,
+        "top": 0
+      },
+      "first": {
+        "x": 0,
+        "y": 258,
+        "width": 320,
+        "height": 17,
+        "top": 258,
+        "right": 320,
+        "bottom": 275,
+        "left": 0
+      },
+      "last": {
+        "x": 0,
+        "y": 375,
+        "width": 320,
+        "height": 17,
+        "top": 375,
+        "right": 320,
+        "bottom": 392,
+        "left": 0
+      }
+    },
+    {
+      "scenario": "bookchat-quote-remove-fixed",
+      "removed": {
+        "chipCount": 0,
+        "draft": "Book draft survives"
+      },
+      "after": {
+        "chipCount": 0,
+        "draft": "Book draft survives"
+      }
+    },
+    {
+      "scenario": "menu-edge",
+      "anchor": {
+        "x": -100,
+        "y": -200
+      },
+      "fontScale": 1.5,
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 220
+      },
+      "menu": {
+        "x": 12,
+        "y": 36,
+        "width": 188,
+        "height": 156,
+        "top": 36,
+        "right": 200,
+        "bottom": 192,
+        "left": 12
+      },
+      "scroll": {
+        "client": 142,
+        "content": 241,
+        "top": 99
+      },
+      "last": {
+        "x": 13,
+        "y": 137,
+        "width": 186,
+        "height": 48,
+        "top": 137,
+        "right": 199,
+        "bottom": 185,
+        "left": 13
+      }
+    },
+    {
+      "scenario": "menu-edge",
+      "anchor": {
+        "x": 500,
+        "y": 600
+      },
+      "fontScale": 1.5,
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 220
+      },
+      "menu": {
+        "x": 120,
+        "y": 36,
+        "width": 188,
+        "height": 156,
+        "top": 36,
+        "right": 308,
+        "bottom": 192,
+        "left": 120
+      },
+      "scroll": {
+        "client": 142,
+        "content": 241,
+        "top": 99
+      },
+      "last": {
+        "x": 121,
+        "y": 137,
+        "width": 186,
+        "height": 48,
+        "top": 137,
+        "right": 307,
+        "bottom": 185,
+        "left": 121
+      }
+    },
+    {
+      "scenario": "menu-edge",
+      "anchor": {
+        "x": 300,
+        "y": 10
+      },
+      "fontScale": 1.5,
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 220
+      },
+      "menu": {
+        "x": 120,
+        "y": 36,
+        "width": 188,
+        "height": 156,
+        "top": 36,
+        "right": 308,
+        "bottom": 192,
+        "left": 120
+      },
+      "scroll": {
+        "client": 142,
+        "content": 241,
+        "top": 99
+      },
+      "last": {
+        "x": 121,
+        "y": 137,
+        "width": 186,
+        "height": 48,
+        "top": 137,
+        "right": 307,
+        "bottom": 185,
+        "left": 121
+      }
+    },
+    {
+      "scenario": "bookmenu-callback",
+      "action": "书籍详情",
+      "events": [
+        {
+          "event": "close",
+          "args": []
+        },
+        {
+          "event": "details",
+          "args": [
+            {
+              "id": "book-1",
+              "filePath": "memory.txt",
+              "format": "txt",
+              "meta": {
+                "title": "外屏测试书籍",
+                "author": "测试作者"
+              },
+              "groupId": "g-1",
+              "isVectorized": false,
+              "vectorizeProgress": 0,
+              "progress": 0.4,
+              "tags": [],
+              "addedAt": 1,
+              "updatedAt": 1,
+              "syncStatus": "local"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "bookmenu-callback",
+      "action": "管理标签",
+      "events": [
+        {
+          "event": "close",
+          "args": []
+        },
+        {
+          "event": "tags",
+          "args": [
+            {
+              "id": "book-1",
+              "filePath": "memory.txt",
+              "format": "txt",
+              "meta": {
+                "title": "外屏测试书籍",
+                "author": "测试作者"
+              },
+              "groupId": "g-1",
+              "isVectorized": false,
+              "vectorizeProgress": 0,
+              "progress": 0.4,
+              "tags": [],
+              "addedAt": 1,
+              "updatedAt": 1,
+              "syncStatus": "local"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "bookmenu-callback",
+      "action": "向量化",
+      "events": [
+        {
+          "event": "close",
+          "args": []
+        },
+        {
+          "event": "vectorize",
+          "args": [
+            {
+              "id": "book-1",
+              "filePath": "memory.txt",
+              "format": "txt",
+              "meta": {
+                "title": "外屏测试书籍",
+                "author": "测试作者"
+              },
+              "groupId": "g-1",
+              "isVectorized": false,
+              "vectorizeProgress": 0,
+              "progress": 0.4,
+              "tags": [],
+              "addedAt": 1,
+              "updatedAt": 1,
+              "syncStatus": "local"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "appearance-final-choose-restore",
+      "events": [
+        {
+          "event": "language",
+          "value": "es"
+        },
+        {
+          "event": "language",
+          "value": "zh"
+        }
+      ]
+    },
+    {
+      "scenario": "chat-en-font1.5-last",
+      "theme": "oled",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "fontScale": 1.5,
+      "locale": "en",
+      "scrolls": [
+        {
+          "client": 367,
+          "content": 556,
+          "top": 189
+        },
+        {
+          "client": 464,
+          "content": 464,
+          "top": 0
+        }
+      ],
+      "input": {
+        "x": 29,
+        "y": 440,
+        "width": 262,
+        "height": 46,
+        "top": 440,
+        "right": 291,
+        "bottom": 486,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "notes-search-resize",
+      "searchBefore": "Selected",
+      "searchAfter": "Selected",
+      "resultVisible": true
+    },
+    {
+      "scenario": "details-hero-narrow",
+      "fontScale": 1.5,
+      "locale": "en",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "title": {
+        "x": 24,
+        "y": 319,
+        "width": 257,
+        "height": 75,
+        "top": 319,
+        "right": 281,
+        "bottom": 394,
+        "left": 24
+      },
+      "cover": {
+        "x": 100.5,
+        "y": 117,
+        "width": 104,
+        "height": 150,
+        "top": 117,
+        "right": 204.5,
+        "bottom": 267,
+        "left": 100.5
+      },
+      "stars": []
+    },
+    {
+      "scenario": "profile-long-value-geometry",
+      "fontScale": 1.5,
+      "locale": "en",
+      "value": "2057613h 9m",
+      "rect": {
+        "x": 29,
+        "y": 156.59375,
+        "width": 112,
+        "height": 96,
+        "top": 156.59375,
+        "right": 141,
+        "bottom": 252.59375,
+        "left": 29
+      },
+      "whiteSpace": "normal",
+      "textOverflow": "clip"
+    },
+    {
+      "scenario": "stats-cross-month-navigation",
+      "fontScale": 1.5,
+      "locale": "en",
+      "nav": [
+        {
+          "x": 180.5,
+          "y": 248,
+          "width": 30,
+          "height": 30,
+          "top": 248,
+          "right": 210.5,
+          "bottom": 278,
+          "left": 180.5
+        },
+        {
+          "x": 212.5,
+          "y": 248,
+          "width": 30,
+          "height": 30,
+          "top": 248,
+          "right": 242.5,
+          "bottom": 278,
+          "left": 212.5
+        }
+      ]
+    },
+    {
+      "scenario": "stats-cross-month-final",
+      "fontScale": 1.5,
+      "locale": "en",
+      "dateText": "Sep 28, 2026 – Oct 4, 2026",
+      "date": {
+        "x": 77.5,
+        "y": 219,
+        "width": 95,
+        "height": 108,
+        "top": 219,
+        "right": 172.5,
+        "bottom": 327,
+        "left": 77.5
+      },
+      "nav": [
+        {
+          "r": {
+            "x": 180.5,
+            "y": 248,
+            "width": 30,
+            "height": 30,
+            "top": 248,
+            "right": 210.5,
+            "bottom": 278,
+            "left": 180.5
+          },
+          "disabled": null
+        },
+        {
+          "r": {
+            "x": 212.5,
+            "y": 248,
+            "width": 30,
+            "height": 30,
+            "top": 248,
+            "right": 242.5,
+            "bottom": 278,
+            "left": 212.5
+          },
+          "disabled": null
+        }
+      ]
+    },
+    {
+      "scenario": "chat-six-en-font1.5",
+      "locale": "en",
+      "fontScale": 1.5,
+      "theme": "oled",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "scroll": {
+        "client": 367,
+        "content": 556,
+        "top": 189
+      },
+      "last": {
+        "x": 165,
+        "y": 301,
+        "width": 115,
+        "height": 122,
+        "top": 301,
+        "right": 280,
+        "bottom": 423,
+        "left": 165
+      },
+      "input": {
+        "x": 29,
+        "y": 440,
+        "width": 262,
+        "height": 46,
+        "top": 440,
+        "right": 291,
+        "bottom": 486,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "chat-six-en-font1.5",
+      "locale": "en",
+      "fontScale": 1.5,
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "scroll": {
+        "client": 399,
+        "content": 484,
+        "top": 85
+      },
+      "last": {
+        "x": 200,
+        "y": 357,
+        "width": 150,
+        "height": 98,
+        "top": 357,
+        "right": 350,
+        "bottom": 455,
+        "left": 200
+      },
+      "input": {
+        "x": 29,
+        "y": 472,
+        "width": 332,
+        "height": 46,
+        "top": 472,
+        "right": 361,
+        "bottom": 518,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "chat-six-en-font1.5",
+      "locale": "en",
+      "fontScale": 1.5,
+      "theme": "sepia",
+      "viewport": {
+        "width": 529,
+        "height": 773
+      },
+      "scroll": {
+        "client": 609,
+        "content": 609,
+        "top": 0
+      },
+      "last": {
+        "x": 269.5,
+        "y": 515,
+        "width": 219.5,
+        "height": 104,
+        "top": 515,
+        "right": 489,
+        "bottom": 619,
+        "left": 269.5
+      },
+      "input": {
+        "x": 29,
+        "y": 682,
+        "width": 471,
+        "height": 46,
+        "top": 682,
+        "right": 500,
+        "bottom": 728,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "chat-six-en-font1.5",
+      "locale": "en",
+      "fontScale": 1.5,
+      "theme": "sepia",
+      "viewport": {
+        "width": 608,
+        "height": 860
+      },
+      "scroll": {
+        "client": 696,
+        "content": 696,
+        "top": 0
+      },
+      "last": {
+        "x": 309,
+        "y": 570.5,
+        "width": 255,
+        "height": 80,
+        "top": 570.5,
+        "right": 564,
+        "bottom": 650.5,
+        "left": 309
+      },
+      "input": {
+        "x": 33,
+        "y": 769,
+        "width": 542,
+        "height": 46,
+        "top": 769,
+        "right": 575,
+        "bottom": 815,
+        "left": 33
+      }
+    },
+    {
+      "scenario": "chat-six-en-font1.5",
+      "locale": "en",
+      "fontScale": 1.5,
+      "theme": "oled",
+      "viewport": {
+        "width": 840,
+        "height": 390
+      },
+      "scroll": {
+        "client": 226,
+        "content": 421,
+        "top": 195
+      },
+      "last": {
+        "x": 537,
+        "y": 208,
+        "width": 231,
+        "height": 74,
+        "top": 208,
+        "right": 768,
+        "bottom": 282,
+        "left": 537
+      },
+      "input": {
+        "x": 257,
+        "y": 299,
+        "width": 550,
+        "height": 46,
+        "top": 299,
+        "right": 807,
+        "bottom": 345,
+        "left": 257
+      }
+    },
+    {
+      "scenario": "chat-six-en-font1.5",
+      "locale": "en",
+      "fontScale": 1.5,
+      "theme": "dark",
+      "viewport": {
+        "width": 960,
+        "height": 720
+      },
+      "scroll": {
+        "client": 556,
+        "content": 556,
+        "top": 0
+      },
+      "last": {
+        "x": 611.546875,
+        "y": 476.5,
+        "width": 268.453125,
+        "height": 80,
+        "top": 476.5,
+        "right": 880,
+        "bottom": 556.5,
+        "left": 611.546875
+      },
+      "input": {
+        "x": 294.109375,
+        "y": 629,
+        "width": 624.890625,
+        "height": 46,
+        "top": 629,
+        "right": 919,
+        "bottom": 675,
+        "left": 294.109375
+      }
+    },
+    {
+      "scenario": "groups-largefont-final",
+      "fontScale": 1.5,
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "scrolls": [
+        {
+          "client": 42,
+          "content": 950,
+          "top": 881,
+          "rect": {
+            "x": 16,
+            "y": 488.4667053222656,
+            "width": 288,
+            "height": 43.593719482421875,
+            "top": 488.4667053222656,
+            "right": 304,
+            "bottom": 532.0604248046875,
+            "left": 16
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "groups-largefont-selected",
+      "events": [
+        {
+          "event": "group-select",
+          "args": [
+            "g-10"
+          ]
+        },
+        {
+          "event": "close",
+          "args": []
+        }
+      ]
+    },
+    {
+      "scenario": "translationsettings-largefont-final",
+      "fontScale": 1.5,
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "scrolls": [
+        {
+          "client": 237,
+          "content": 898,
+          "top": 280,
+          "rect": {
+            "x": 0,
+            "y": 113,
+            "width": 320,
+            "height": 237,
+            "top": 113,
+            "right": 320,
+            "bottom": 350,
+            "left": 0
+          }
+        },
+        {
+          "client": 318,
+          "content": 989,
+          "top": 0,
+          "rect": {
+            "x": 17,
+            "y": 320,
+            "width": 271,
+            "height": 318,
+            "top": 320,
+            "right": 288,
+            "bottom": 638,
+            "left": 17
+          }
+        },
+        {
+          "client": 225,
+          "content": 1203,
+          "top": 881,
+          "rect": {
+            "x": 20,
+            "y": 93,
+            "width": 280,
+            "height": 225,
+            "top": 93,
+            "right": 300,
+            "bottom": 318,
+            "left": 20
+          }
+        }
+      ]
+    },
+    {
+      "scenario": "translationsettings-largefont-selected",
+      "events": []
+    },
+    {
+      "scenario": "ttssettings-outer-scroll-final",
+      "scrolls": [
+        {
+          "client": 255,
+          "content": 607,
+          "top": 352
+        },
+        {
+          "client": 238,
+          "content": 6038,
+          "top": 0
+        }
+      ]
+    },
+    {
+      "scenario": "library-selection-resize",
+      "before": "1 selected\nBook 1 外屏测试\n测试作者\nBo",
+      "after": "1 selected\nBook 1 外屏测试\n测试作者\nBo",
+      "limitations": "RN host forces stable callback and mounts all rows; native visible-key anchor is not proven"
+    },
+    {
+      "scenario": "chat-draft-toggles-final",
+      "before": {
+        "draft": "Persistent multiline draft\nSecond line",
+        "toggles": [
+          {
+            "text": "深度思考",
+            "background": "rgba(107, 76, 42, 0.1)"
+          },
+          {
+            "text": "防剧透",
+            "background": "rgba(107, 76, 42, 0.1)"
+          }
+        ]
+      },
+      "after": {
+        "draft": "Persistent multiline draft\nSecond line",
+        "toggles": [
+          {
+            "text": "深度思考",
+            "background": "rgba(107, 76, 42, 0.1)"
+          },
+          {
+            "text": "防剧透",
+            "background": "rgba(107, 76, 42, 0.1)"
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "chat-no-config-final",
+      "events": [
+        {
+          "event": "alert",
+          "args": [
+            "需要配置 AI",
+            "请先在设置中配置 AI 端点和模型"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "chat-error-final",
+      "events": [
+        {
+          "event": "send",
+          "args": [
+            "生成学习笔记",
+            null,
+            false,
+            false,
+            null,
+            {
+              "activeEndpointId": "ep1",
+              "activeModel": "model-1-long-name",
+              "endpoints": [
+                {
+                  "id": "ep1",
+                  "name": "Endpoint A",
+                  "baseUrl": "https://a.example.com",
+                  "models": [
+                    "model-1-long-name",
+                    "model-2-long-name",
+                    "model-3-long-name",
+                    "model-4-long-name",
+                    "model-5-long-name",
+                    "model-6-long-name",
+                    "model-7-long-name",
+                    "model-8-long-name",
+                    "model-9-long-name",
+                    "model-10-long-name",
+                    "model-11-long-name",
+                    "model-12-long-name",
+                    "model-13-long-name",
+                    "model-14-long-name",
+                    "model-15-long-name",
+                    "model-16-long-name",
+                    "model-17-long-name",
+                    "model-18-long-name",
+                    "model-19-long-name",
+                    "model-20-long-name"
+                  ]
+                },
+                {
+                  "id": "ep2",
+                  "name": "Endpoint B",
+                  "baseUrl": "https://b.example.com",
+                  "models": [
+                    "model-1-long-name",
+                    "model-2-long-name",
+                    "model-3-long-name"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "error": {
+        "x": 40,
+        "y": 442,
+        "width": 240,
+        "height": 17,
+        "top": 442,
+        "right": 280,
+        "bottom": 459,
+        "left": 40
+      },
+      "position": "relative",
+      "input": {
+        "x": 29,
+        "y": 480,
+        "width": 262,
+        "height": 46,
+        "top": 480,
+        "right": 291,
+        "bottom": 526,
+        "left": 29
+      }
+    },
+    {
+      "scenario": "details-editor-cancel-no-write",
+      "events": [],
+      "originalRetained": true
+    },
+    {
+      "scenario": "webdav-memory-submit-final",
+      "events": [
+        {
+          "event": "webdav-submit",
+          "args": [
+            {
+              "kind": "temporary",
+              "url": "https://memory.invalid",
+              "username": "fixture-user",
+              "password": "[redacted]",
+              "remoteRoot": "/books/test",
+              "allowInsecure": false
+            }
+          ]
+        }
+      ],
+      "values": [
+        {
+          "placeholder": "https://dav.example.com",
+          "value": "https://memory.invalid"
+        },
+        {
+          "placeholder": "用户名",
+          "value": "fixture-user"
+        },
+        {
+          "placeholder": "应用密码",
+          "value": "[redacted]"
+        },
+        {
+          "placeholder": "留空则从服务器基准目录开始",
+          "value": "/books/test"
+        },
+        {
+          "placeholder": "",
+          "value": "on"
+        }
+      ]
+    },
+    {
+      "scenario": "existing-page-return-callbacks",
+      "coverage": [
+        {
+          "scenario": "skills",
+          "events": [
+            {
+              "event": "goBack"
+            }
+          ]
+        },
+        {
+          "scenario": "badges",
+          "events": [
+            {
+              "event": "goBack"
+            }
+          ]
+        },
+        {
+          "scenario": "fonts",
+          "events": []
+        },
+        {
+          "scenario": "aisettings",
+          "events": []
+        },
+        {
+          "scenario": "syncsettings",
+          "events": []
+        },
+        {
+          "scenario": "ttssettings",
+          "events": []
+        },
+        {
+          "scenario": "vectorsettings",
+          "events": []
+        },
+        {
+          "scenario": "feedback",
+          "events": []
+        }
+      ]
+    },
+    {
+      "scenario": "settings-header-back-final",
+      "coverage": [
+        {
+          "scenario": "fonts",
+          "events": [
+            {
+              "event": "goBack"
+            }
+          ]
+        },
+        {
+          "scenario": "aisettings",
+          "events": [
+            {
+              "event": "goBack"
+            }
+          ]
+        },
+        {
+          "scenario": "syncsettings",
+          "events": [
+            {
+              "event": "goBack"
+            }
+          ]
+        },
+        {
+          "scenario": "ttssettings",
+          "events": [
+            {
+              "event": "goBack"
+            }
+          ]
+        },
+        {
+          "scenario": "vectorsettings",
+          "events": [
+            {
+              "event": "goBack"
+            }
+          ]
+        },
+        {
+          "scenario": "feedback",
+          "events": [
+            {
+              "event": "goBack"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "sync-settings-unsaved-resize",
+      "before": "https://unsaved.invalid",
+      "after": "https://unsaved.invalid",
+      "username": "unsaved-user",
+      "limitation": "Direct real screen fixture; SettingsLayout side category routing not exercised"
+    }
+  ],
+  "existingCoverage": [
+    {
+      "scenario": "skills",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "text": " and development arcs in the book\n✨\nQuote Collector\nDiscover and collect notable quotes and passages from the book\n📖\nReading Guide\nProvide reading suggestions, discussion questions, and reflection prompts\n🌐\nSmart Translator\nTranslate foreign language content from the book into a target language\n🔧\nVocabulary Helper\nExplain unfamiliar words, idioms, and technical terms\n自定义技能\n还没有自定义技能，点击右上角创建\n添加技能",
+      "scrolls": [
+        {
+          "client": 256,
+          "content": 984,
+          "top": 728,
+          "rect": {
+            "x": 0,
+            "y": 78,
+            "width": 320,
+            "height": 256,
+            "top": 78,
+            "right": 320,
+            "bottom": 334,
+            "left": 0
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "scenario": "badges",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "text": "我的勋章\n记录我的阅读成就\n20\n10\n起步\n30\n养成习惯\n7\n周读达人\n14\n双周不辍\n30\n月度坚持\n10\n初涉书海\n50\n稳步前行\n100\n百时读者\n500\n深度阅读者\n还有 11 枚\n阅读天数\n10\n起步\n30\n养成习惯\n百日坚持\n深耕细作\n一年有你\n千日之约\n连续阅读\n7\n周读达人\n14\n双周不辍\n30\n月度坚持\n百日之约\n全年不断\n阅读时长\n10\n初涉书海\n50\n稳步前行\n100\n百时读者\n500\n深度阅读者\n1K\n阅读宗师\n阅读书籍\n初建书架\n书架初成\n探索者\n书海漫游\n百书斩\n读完书籍\n初次完读\n五本完读\n十本完读\n读书达人\n百本完读\n笔记高亮\n1\n第一条笔记\n10\n笔记新手\n50\n标注达人\n200\n学者\n深度阅读\n30\n初入专注\n60\n深度阅读\n2h\n沉浸其中\n3h\n马拉松\n特殊习惯\n早起鸟\n夜猫子\n周末战士\n完美阅读周\n凌晨读者",
+      "scrolls": [
+        {
+          "client": 246,
+          "content": 2943,
+          "top": 2697,
+          "rect": {
+            "x": 0,
+            "y": 88,
+            "width": 320,
+            "height": 246,
+            "top": 88,
+            "right": 320,
+            "bottom": 334,
+            "left": 0
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "scenario": "fonts",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "text": "字体\n导入自定义字体，在阅读器中使用。支持 TTF、OTF、WOFF、WOFF2 格式。\n支持 TTF / OTF / WOFF / WOFF2，推荐 WOFF2（同款字体体积约为 TTF 的 1/3）\n本地文件\n在线链接\n推荐字体（在线，点击即可添加）\n霞鹜文楷 屏幕版\nOFL-1.1\n专为屏幕阅读优化的楷体，兼有仿宋特点，中文阅读体验极佳\n添加\n霞鹜文楷\nOFL-1.1\n开源楷体，基于 Klee One 衍生，简繁日韩均支持\n添加\n思源宋体\nOFL-1.1\nGoogle 出品开源宋体，正式感强，适合严肃阅读场景\n添加\nLiterata\nOFL-1.1\n专为长文阅读设计的英文字体，Google Play Books 御用字体\n添加\n暂无自定义字体\n点击上方按钮导入字体文件",
+      "scrolls": [
+        {
+          "client": 257,
+          "content": 903,
+          "top": 646,
+          "rect": {
+            "x": 0,
+            "y": 93,
+            "width": 320,
+            "height": 257,
+            "top": 93,
+            "right": 320,
+            "bottom": 350,
+            "left": 0
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "scenario": "aisettings",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "text": "AI 配置\n所有改动实时生效，无需手动保存\n添加\nEndpoint A\n当前\n▼\nEndpoint B\n▼\n全局参数\nTemperature\nMax Tokens\n上下文窗口\n配置迁移\n导出 AI 配置\n导入 AI 配置",
+      "scrolls": [
+        {
+          "client": 255,
+          "content": 549,
+          "top": 294,
+          "rect": {
+            "x": 0,
+            "y": 95,
+            "width": 320,
+            "height": 255,
+            "top": 95,
+            "right": 320,
+            "bottom": 350,
+            "left": 0
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "scenario": "syncsettings",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "text": "WebDAV 同步\n远端布局已升级，请确保所有同步设备都升级到此版本\n同步方式\nWebDAV\nS3\nLAN\n连接设置\n服务器地址\n用户名\n密码\n远端文件夹\n可自定义同步写入的远端目录，支持多级路径；测试连接和首次同步时会自动创建。该目录由 ReadAny 独占用于双向同步，不会读取你已存放在远端的书；如需导入已有 WebDAV 书库，请使用“连接其他 WebDAV”。\n允许不安全连接\n对自签名证书服务器使用 HTTP 代替 HTTPS\n测试连接\n保存配置\n配置迁移\n导出 同步配置\n导入 同步配置",
+      "scrolls": [
+        {
+          "client": 257,
+          "content": 1002,
+          "top": 745,
+          "rect": {
+            "x": 0,
+            "y": 93,
+            "width": 320,
+            "height": 257,
+            "top": 93,
+            "right": 320,
+            "bottom": 350,
+            "left": 0
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "scenario": "ttssettings",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "text": "ingual\nInJoon\nSunHi\n马来语 (马来西亚)\nOsman\nYasmin\n书面挪威语 (挪威)\nFinn\nPernille\n荷兰语 (荷兰)\nColette\nFenna\nMaarten\n波兰语 (波兰)\nMarek\nZofia\n葡萄牙语 (巴西)\nAntonio\nFrancisca\nThalitaMultilingual\n葡萄牙语 (葡萄牙)\nDuarte\nRaquel\n罗马尼亚语 (罗马尼亚)\nAlina\nEmil\n俄语 (俄罗斯)\nDmitry\nSvetlana\n斯洛伐克语 (斯洛伐克)\nLukas\nViktoria\n瑞典语 (瑞典)\nMattias\nSofie\n泰语 (泰国)\nNiwat\nPremwadee\n土耳其语 (土耳其)\nAhmet\nEmel\n乌克兰语 (乌克兰)\nOstap\nPolina\n越南语 (越南)\nHoaiMy\nNamMinh\n语音参数\n语速\n1.0x",
+      "scrolls": [
+        {
+          "client": 255,
+          "content": 607,
+          "top": 0,
+          "rect": {
+            "x": 0,
+            "y": 95,
+            "width": 320,
+            "height": 255,
+            "top": 95,
+            "right": 320,
+            "bottom": 350,
+            "left": 0
+          }
+        },
+        {
+          "client": 238,
+          "content": 6038,
+          "top": 5800,
+          "rect": {
+            "x": 16,
+            "y": 213,
+            "width": 273,
+            "height": 240,
+            "top": 213,
+            "right": 289,
+            "bottom": 453,
+            "left": 16
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "scenario": "vectorsettings",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "text": "向量模型\n向量模型\n配置嵌入模型，用于语义搜索和 RAG 检索\n导入后自动向量化\n开启后，导入或从同步端下载的新书会自动排队建立索引。默认关闭，避免意外消耗模型额度。\n远程模型\n连接外部嵌入 API 服务\n添加模型\n暂无远程模型配置，添加一个以使用外部嵌入 API。\n本地模型\n模型下载到本机后离线运行，不会发送书籍内容。BGE 适合中文，MiniLM 适合英文；不同模型需要分别重新向量化。\nBGE Small ZH v1.5\n512 维 · ~24 MB\n下载并使用\nall-MiniLM-L6-v2\n384 维 · ~23 MB · 英文\n下载并使用\n配置迁移\n导出 向量化配置\n导入 向量化配置",
+      "scrolls": [
+        {
+          "client": 257,
+          "content": 878,
+          "top": 621,
+          "rect": {
+            "x": 0,
+            "y": 93,
+            "width": 320,
+            "height": 257,
+            "top": 93,
+            "right": 320,
+            "bottom": 350,
+            "left": 0
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "scenario": "feedback",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "text": "反馈建议\n提交反馈\n我的反馈\n反馈建议\n提交 bug 报告或功能建议，我们会尽快处理。\n类型\nBug\n建议\n其他\n标题 *\n详细描述 *\n上传应用日志\n仅在勾选时附带最近 1 小时诊断日志，帮助定位问题。\nplatform · vversion · locale\n提交反馈\n今日还可提交 count 次",
+      "scrolls": [
+        {
+          "client": 210,
+          "content": 724,
+          "top": 514,
+          "rect": {
+            "x": 0,
+            "y": 140,
+            "width": 320,
+            "height": 210,
+            "top": 140,
+            "right": 320,
+            "bottom": 350,
+            "left": 0
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "scenario": "webdavbrowser",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "text": "xture book 3.epub\n1000 B · 1970-01-01\nFixture book 4.epub\n1000 B · 1970-01-01\nFixture book 5.epub\n1000 B · 1970-01-01\nFixture book 6.epub\n1000 B · 1970-01-01\nFixture book 7.epub\n1000 B · 1970-01-01\nFixture book 8.epub\n1000 B · 1970-01-01\nFixture book 9.epub\n1000 B · 1970-01-01\nFixture book 10.epub\n1000 B · 1970-01-01\nFixture book 11.epub\n1000 B · 1970-01-01\nFixture book 12.epub\n1000 B · 1970-01-01",
+      "scrolls": [
+        {
+          "client": 84,
+          "content": 1048,
+          "top": 0,
+          "rect": {
+            "x": 16,
+            "y": 266,
+            "width": 288,
+            "height": 84,
+            "top": 266,
+            "right": 304,
+            "bottom": 350,
+            "left": 16
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "scenario": "webdavbrowser-final",
+      "last": "000 B · 1970-01-01\nFixture book 29.epub\n1000 B · 1970-01-01\nFixture book 30.epub\n1000 B · 1970-01-01",
+      "scrolls": [
+        {
+          "client": 84,
+          "content": 2452,
+          "top": 2243
+        }
+      ]
+    },
+    {
+      "scenario": "ttssettings-outer-final",
+      "scrolls": [
+        {
+          "client": 255,
+          "content": 607,
+          "top": 0
+        },
+        {
+          "client": 238,
+          "content": 6038,
+          "top": 0
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "adaptive-0-final.png",
+      "bytes": 2917,
+      "pngWidth": 400,
+      "pngHeight": 900,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "adaptive-180-final.png",
+      "bytes": 3470,
+      "pngWidth": 400,
+      "pngHeight": 900,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "adaptive-439-final.png",
+      "bytes": 3470,
+      "pngWidth": 400,
+      "pngHeight": 900,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "adaptive-440-final.png",
+      "bytes": 3470,
+      "pngWidth": 400,
+      "pngHeight": 900,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "adaptive-650-final.png",
+      "bytes": 4150,
+      "pngWidth": 400,
+      "pngHeight": 900,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 720
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "appearance-language-last.png",
+      "bytes": 21200,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "bookchat-quote-removed-resize-final.png",
+      "bytes": 63287,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "bookchat-selected-quote-short.png",
+      "bytes": 43073,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "bookmenu-edge--100--200.png",
+      "bytes": 9613,
+      "pngWidth": 400,
+      "pngHeight": 275,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 220
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "bookmenu-edge-300-10.png",
+      "bytes": 8855,
+      "pngWidth": 400,
+      "pngHeight": 275,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 220
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "bookmenu-edge-500-600.png",
+      "bytes": 9579,
+      "pngWidth": 400,
+      "pngHeight": 275,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 220
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "bookmenu-short-last.png",
+      "bytes": 9284,
+      "pngWidth": 400,
+      "pngHeight": 275,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 220
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-320x568-en-font1.5-oled.png",
+      "bytes": 54762,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "oled"
+    },
+    {
+      "file": "chat-320x568-error-two-columns.png",
+      "bytes": 55145,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-320x568-final.png",
+      "bytes": 51688,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-320x568.png",
+      "bytes": 45583,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "earlier capture: chat320 was pre-grid-fix; use matching -final",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-390x600-en-font1.5-dark.png",
+      "bytes": 61676,
+      "pngWidth": 488,
+      "pngHeight": 750,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "dark"
+    },
+    {
+      "file": "chat-390x600-final.png",
+      "bytes": 52418,
+      "pngWidth": 488,
+      "pngHeight": 750,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-390x600.png",
+      "bytes": 52900,
+      "pngWidth": 488,
+      "pngHeight": 750,
+      "classification": "earlier capture: chat320 was pre-grid-fix; use matching -final",
+      "viewport": {
+        "width": 390,
+        "height": 600
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-529x773-en-font1.5-sepia.png",
+      "bytes": 75643,
+      "pngWidth": 661,
+      "pngHeight": 966,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 529,
+        "height": 773
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-529x773-final.png",
+      "bytes": 58901,
+      "pngWidth": 661,
+      "pngHeight": 966,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 529,
+        "height": 773
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-529x773.png",
+      "bytes": 59294,
+      "pngWidth": 661,
+      "pngHeight": 966,
+      "classification": "earlier capture: chat320 was pre-grid-fix; use matching -final",
+      "viewport": {
+        "width": 529,
+        "height": 773
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-608x860-en-font1.5-sepia.png",
+      "bytes": 76837,
+      "pngWidth": 760,
+      "pngHeight": 1075,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 608,
+        "height": 860
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-608x860-final.png",
+      "bytes": 60495,
+      "pngWidth": 760,
+      "pngHeight": 1075,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 608,
+        "height": 860
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-608x860.png",
+      "bytes": 60692,
+      "pngWidth": 760,
+      "pngHeight": 1075,
+      "classification": "earlier capture: chat320 was pre-grid-fix; use matching -final",
+      "viewport": {
+        "width": 608,
+        "height": 860
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-840x390-en-font1.5-oled.png",
+      "bytes": 52130,
+      "pngWidth": 1050,
+      "pngHeight": 488,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 840,
+        "height": 390
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "oled"
+    },
+    {
+      "file": "chat-840x390-final.png",
+      "bytes": 50711,
+      "pngWidth": 1050,
+      "pngHeight": 488,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 840,
+        "height": 390
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-840x390.png",
+      "bytes": 45478,
+      "pngWidth": 1050,
+      "pngHeight": 488,
+      "classification": "earlier capture: chat320 was pre-grid-fix; use matching -final",
+      "viewport": {
+        "width": 840,
+        "height": 390
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-960x720-en-font1.5-dark.png",
+      "bytes": 80391,
+      "pngWidth": 1200,
+      "pngHeight": 900,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 960,
+        "height": 720
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "dark"
+    },
+    {
+      "file": "chat-960x720-final.png",
+      "bytes": 65981,
+      "pngWidth": 1200,
+      "pngHeight": 900,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 960,
+        "height": 720
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-960x720.png",
+      "bytes": 66542,
+      "pngWidth": 1200,
+      "pngHeight": 900,
+      "classification": "earlier capture: chat320 was pre-grid-fix; use matching -final",
+      "viewport": {
+        "width": 960,
+        "height": 720
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-dark-en-font1.5.png",
+      "bytes": 53828,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "dark"
+    },
+    {
+      "file": "chat-draft-toggles-resize-final.png",
+      "bytes": 61488,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-draft-toggles-resize.png",
+      "bytes": 56948,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-error-normal-flow-final.png",
+      "bytes": 54901,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "chat-oled-en-font1.5-last.png",
+      "bytes": 54762,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "oled"
+    },
+    {
+      "file": "chat-oled-en-font1.5.png",
+      "bytes": 53982,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "oled"
+    },
+    {
+      "file": "chat-sepia-en-font1.5.png",
+      "bytes": 57867,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "details-editor-short-draft.png",
+      "bytes": 19000,
+      "pngWidth": 400,
+      "pngHeight": 350,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 280
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "details-hero-en-font1.5.png",
+      "bytes": 44588,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "existing-aisettings-short-bottom.png",
+      "bytes": 20764,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "existing-badges-short-bottom.png",
+      "bytes": 36975,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "existing-feedback-short-bottom.png",
+      "bytes": 18826,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "existing-fonts-short-bottom.png",
+      "bytes": 12250,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "existing-skills-short-bottom.png",
+      "bytes": 20911,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "existing-sync-unsaved-resize.png",
+      "bytes": 21094,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "existing-syncsettings-short-bottom.png",
+      "bytes": 18685,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "existing-ttssettings-outer-bottom.png",
+      "bytes": 17573,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "existing-ttssettings-short-bottom.png",
+      "bytes": 21621,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "existing-vectorsettings-short-bottom.png",
+      "bytes": 10462,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "existing-webdavbrowser-short-bottom.png",
+      "bytes": 39043,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "groups-en-font1.5-last-final.png",
+      "bytes": 1537,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "groups-short-last.png",
+      "bytes": 21366,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "library-empty-short-import.png",
+      "bytes": 13887,
+      "pngWidth": 400,
+      "pngHeight": 300,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 240
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "library-selection-en-font1.5.png",
+      "bytes": 60314,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "library-selection-resize-final.png",
+      "bytes": 60448,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "models-20-last-short.png",
+      "bytes": 35718,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "notes-empty-short.png",
+      "bytes": 18311,
+      "pngWidth": 400,
+      "pngHeight": 300,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 240
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "notes-nonempty-draft-resize.png",
+      "bytes": 31542,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "profile-long-values-en-font1.5.png",
+      "bytes": 41665,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "profile-settings-bottom.png",
+      "bytes": 33040,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "stats-week-cross-month-en-font1.5.png",
+      "bytes": 42414,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "stats-week-en-font1.5.png",
+      "bytes": 42353,
+      "pngWidth": 400,
+      "pngHeight": 710,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "translationsettings-en-font1.5-last-final.png",
+      "bytes": 38488,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1.5,
+      "locale": "en",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "webdav-short-error-footer-final.png",
+      "bytes": 37979,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    },
+    {
+      "file": "webdav-short-error-footer.png",
+      "bytes": 38036,
+      "pngWidth": 400,
+      "pngHeight": 438,
+      "classification": "browser component smoke",
+      "viewport": {
+        "width": 320,
+        "height": 350
+      },
+      "pixelDimensionsNote": "PNG pixels include deviceScaleFactor1.25 in isolated Chrome; CSS viewport from browser geometry is authoritative",
+      "fontScale": 1,
+      "locale": "zh",
+      "insets": {
+        "top": 24,
+        "left": 0,
+        "right": 0,
+        "bottom": 16
+      },
+      "theme": "sepia"
+    }
+  ],
+  "cleanup": {
+    "tabs": "Isolated tab released and spawned Chrome terminated; initial managed tab already absent when closed",
+    "service": "foldable-smoke-components stopped",
+    "temporaryHarness": "/tmp/foldable-smoke removed after fixture-snapshot JSON saved; product files untouched by worker"
+  },
+  "evidenceInterpretation": "Raw observations retain early fixture measurements for audit. Final-suffixed scenarios and final screenshot files supersede earlier same-surface captures. Initial i18n boundary used fallback/key labels; final i18n merges actual app locale resources. Earlier stats-cross-month-navigation record had no date because unsorted fixture facts disabled navigation; stats-cross-month-final uses sorted typed facts and confirms Sep28-Oct4. Raw existing-page-return-callbacks with empty events were mis-targeted clicks; settings-header-back-final uses actual accessible Back button and records goBack once.",
+  "primaryCurrentArtifacts": [
+    "chat-320x568-final.png",
+    "chat-840x390-final.png",
+    "chat-320x568-en-font1.5-oled.png",
+    "chat-840x390-en-font1.5-oled.png",
+    "chat-draft-toggles-resize-final.png",
+    "chat-error-normal-flow-final.png",
+    "bookchat-quote-removed-resize-final.png",
+    "library-selection-en-font1.5.png",
+    "library-selection-resize-final.png",
+    "bookmenu-edge-500-600.png",
+    "appearance-language-last.png",
+    "groups-en-font1.5-last-final.png",
+    "translationsettings-en-font1.5-last-final.png",
+    "webdav-short-error-footer-final.png",
+    "details-hero-en-font1.5.png",
+    "details-editor-short-draft.png",
+    "profile-long-values-en-font1.5.png",
+    "stats-week-cross-month-en-font1.5.png",
+    "notes-nonempty-draft-resize.png",
+    "existing-skills-short-bottom.png",
+    "existing-badges-short-bottom.png",
+    "existing-fonts-short-bottom.png",
+    "existing-aisettings-short-bottom.png",
+    "existing-syncsettings-short-bottom.png",
+    "existing-ttssettings-outer-bottom.png",
+    "existing-vectorsettings-short-bottom.png",
+    "existing-feedback-short-bottom.png",
+    "existing-webdavbrowser-short-bottom.png"
+  ]
+}

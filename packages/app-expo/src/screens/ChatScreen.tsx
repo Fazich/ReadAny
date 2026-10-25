@@ -11,7 +11,6 @@ import { useTranslation } from "react-i18next";
 import {
   Animated,
   Image,
-  Keyboard,
   Modal,
   Platform,
   Pressable,
@@ -19,7 +18,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
@@ -50,6 +48,7 @@ import { ChatInput } from "@/components/chat/ChatInput";
 import { ContextPopover } from "@/components/chat/ContextPopover";
 import { MessageList } from "@/components/chat/MessageList";
 import { ModelSelector } from "@/components/chat/ModelSelector";
+import { AdaptiveEmptyState } from "@/components/ui/AdaptiveEmptyState";
 import {
   BookOpenIcon,
   CopyIcon,
@@ -92,9 +91,8 @@ export function ChatScreen() {
       makeStyles(colors, {
         isTabletLandscape,
         sidebarWidth,
-        horizontalPadding: layout.horizontalPadding,
       }),
-    [colors, isTabletLandscape, layout.horizontalPadding, sidebarWidth],
+    [colors, isTabletLandscape, sidebarWidth],
   );
 
   // Thread sidebar
@@ -479,17 +477,24 @@ export function ChatScreen() {
                   currentStep={currentStep}
                 />
               ) : (
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                  <View style={s.content}>
-                    <EmptyState
-                      colors={colors}
-                      onSuggestionPress={handleSend}
-                      compact={isTabletLandscape}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
+                <AdaptiveEmptyState
+                  contentContainerStyle={{
+                    paddingHorizontal: isTabletLandscape ? 52 : 24,
+                  }}
+                >
+                  {(compact) => (
+                    <EmptyState colors={colors} onSuggestionPress={handleSend} compact={compact} />
+                  )}
+                </AdaptiveEmptyState>
               )}
             </View>
+            {error && (
+              <View style={s.errorBanner}>
+                <Text style={s.errorText} numberOfLines={2}>
+                  {error.message}
+                </Text>
+              </View>
+            )}
             <ChatInput
               onSend={handleSend}
               onStop={stopStream}
@@ -499,16 +504,6 @@ export function ChatScreen() {
           </KeyboardAvoidingView>
         </View>
       </View>
-
-      {/* Error */}
-      {error && (
-        <View style={s.errorBanner}>
-          <Text style={s.errorText} numberOfLines={2}>
-            {error.message}
-          </Text>
-        </View>
-      )}
-
       {/* Thread sidebar overlay */}
       {!isTabletLandscape && (
         <View
@@ -547,7 +542,7 @@ function EmptyState({
   const { t } = useTranslation();
   const { isDark } = useTheme();
   const s = useMemo(
-    () => makeStyles(colors, { isTabletLandscape: false, sidebarWidth: 0, horizontalPadding: 16 }),
+    () => makeStyles(colors, { isTabletLandscape: false, sidebarWidth: 0 }),
     [colors],
   );
 
@@ -573,10 +568,16 @@ function EmptyState({
     [t, colors],
   );
 
+  const artSize = compact ? 96 : 140;
+
   return (
     <View style={[s.emptyContainer, compact && s.emptyContainerCompact]}>
       <View style={s.emptyInner}>
-        <Image source={isDark ? THINK_DARK_PNG : THINK_PNG} style={{ width: 140, height: 140 }} />
+        <Image
+          source={isDark ? THINK_DARK_PNG : THINK_PNG}
+          style={{ width: artSize, height: artSize }}
+          resizeMode="contain"
+        />
         <Text style={s.emptyTitle}>{t("chat.howCanIHelp", "有什么我可以帮你的？")}</Text>
         <Text style={s.emptySubtitle}>
           {t("chat.askAboutBooks", "关于书籍的任何问题都可以问我")}
@@ -586,7 +587,7 @@ function EmptyState({
         {suggestions.map(({ icon, text }) => (
           <TouchableOpacity
             key={text}
-            style={s.suggestionCard}
+            style={[s.suggestionCard, compact && s.suggestionCardCompact]}
             onPress={() => onSuggestionPress(text, false, false)}
             activeOpacity={0.7}
           >
@@ -601,7 +602,7 @@ function EmptyState({
 
 const makeStyles = (
   colors: ThemeColors,
-  layout: { isTabletLandscape: boolean; sidebarWidth: number; horizontalPadding: number },
+  layout: { isTabletLandscape: boolean; sidebarWidth: number },
 ) =>
   StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -647,14 +648,10 @@ const makeStyles = (
 
     // Empty state — matching mobile ChatPage
     emptyContainer: {
-      flex: 1,
-      justifyContent: "center",
-      paddingHorizontal: 24,
       gap: 32,
     },
     emptyContainerCompact: {
-      paddingHorizontal: 52,
-      gap: 24,
+      gap: 16,
     },
     emptyInner: {
       alignItems: "center",
@@ -664,6 +661,7 @@ const makeStyles = (
       fontSize: fs.xl,
       fontWeight: fw.semibold,
       color: colors.foreground,
+      textAlign: "center",
     },
     emptySubtitle: {
       fontSize: fs.sm,
@@ -676,12 +674,17 @@ const makeStyles = (
       gap: 10,
     },
     suggestionCard: {
-      width: "48%",
+      width: "47%",
       flexGrow: 1,
+      minHeight: 64,
       backgroundColor: colors.muted,
       borderRadius: radius.xl,
       padding: 14,
       gap: 10,
+    },
+    suggestionCardCompact: {
+      padding: 12,
+      gap: 8,
     },
     suggestionText: {
       fontSize: fs.xs,
@@ -691,10 +694,8 @@ const makeStyles = (
 
     // Error
     errorBanner: {
-      position: "absolute",
-      bottom: 80,
-      left: 16,
-      right: 16,
+      marginHorizontal: 12,
+      marginBottom: 4,
       backgroundColor: withOpacity(colors.destructive, 0.9),
       borderRadius: radius.lg,
       padding: 12,

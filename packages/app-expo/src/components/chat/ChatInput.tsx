@@ -282,15 +282,18 @@ const makeStyles = (colors: ThemeColors) =>
     },
     toggleRow: {
       flexDirection: "row",
+      flexWrap: "wrap",
       alignItems: "center",
       gap: 6,
       flexShrink: 1,
+      minWidth: 0,
     },
     actionButtons: {
       flexDirection: "row",
       alignItems: "center",
       gap: 6,
       marginLeft: 8,
+      flexShrink: 0,
     },
     deepThinkBtn: {
       flexDirection: "row",
@@ -301,6 +304,7 @@ const makeStyles = (colors: ThemeColors) =>
       borderColor: colors.border,
       paddingHorizontal: 8,
       paddingVertical: 4,
+      maxWidth: "100%",
     },
     deepThinkBtnActive: {
       borderColor: withOpacity(colors.primary, 0.5),
@@ -309,6 +313,7 @@ const makeStyles = (colors: ThemeColors) =>
     deepThinkText: {
       fontSize: fs.xs,
       color: colors.mutedForeground,
+      flexShrink: 1,
     },
     deepThinkTextActive: {
       color: colors.primary,

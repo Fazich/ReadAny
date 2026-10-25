@@ -1,4 +1,5 @@
 import { KeyboardAwareScrollView } from "@/components/ui/KeyboardAwareScrollView";
+import { SheetShell } from "@/components/ui/SheetShell";
 import { useSettingsStore } from "@/stores";
 import {
   TRANSLATOR_LANGS,
@@ -8,7 +9,6 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -224,21 +224,16 @@ export default function TranslationSettingsScreen() {
           </View>
       </KeyboardAwareScrollView>
 
-      {/* Model Picker Modal */}
-      <Modal
+      <SheetShell
         visible={showModelPicker}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowModelPicker(false)}
+        onClose={() => setShowModelPicker(false)}
+        placement="center"
+        maxWidth={280}
+        maxHeight={400}
+        surfaceStyle={styles.modalContent}
+        header={<Text style={styles.modalTitle}>{t("settings.selectModel", "选择模型")}</Text>}
       >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          activeOpacity={1}
-          onPress={() => setShowModelPicker(false)}
-        >
-          <View style={styles.modalContent} onStartShouldSetResponder={() => true}>
-            <Text style={styles.modalTitle}>{t("settings.selectModel", "选择模型")}</Text>
-            <ScrollView nestedScrollEnabled>
+            <ScrollView style={styles.modelList} nestedScrollEnabled>
               {endpointsWithModels.map((ep) => (
                 <View key={ep.id}>
                   {multipleEndpoints && (
@@ -266,9 +261,7 @@ export default function TranslationSettingsScreen() {
                 </View>
               ))}
             </ScrollView>
-          </View>
-        </TouchableOpacity>
-      </Modal>
+      </SheetShell>
     </SafeAreaView>
   );
 }
@@ -276,7 +269,6 @@ export default function TranslationSettingsScreen() {
 const makeStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
-    keyboardView: { flex: 1 },
     scroll: { flex: 1 },
     scrollContent: {
       paddingHorizontal: spacing.lg,
@@ -387,19 +379,13 @@ const makeStyles = (colors: ThemeColors) =>
       color: colors.mutedForeground,
       marginLeft: 8,
     },
-    modalOverlay: {
-      flex: 1,
-      backgroundColor: "rgba(0,0,0,0.4)",
-      justifyContent: "center",
-      alignItems: "center",
-    },
     modalContent: {
-      width: 280,
-      maxHeight: 400,
       backgroundColor: colors.background,
       borderRadius: radius.xl,
+      padding: 0,
       overflow: "hidden",
     },
+    modelList: { flexGrow: 0, flexShrink: 1, minHeight: 0 },
     modalTitle: {
       fontSize: fontSize.base,
       fontWeight: fontWeight.semibold,

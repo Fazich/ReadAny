@@ -127,7 +127,7 @@ function StatCard({
         </Text>
       </View>
       <View style={s.statCardBody}>
-        <Text style={s.statCardValue} numberOfLines={1} maxFontSizeMultiplier={1.8}>
+        <Text style={s.statCardValue} maxFontSizeMultiplier={1.8}>
           {value}
         </Text>
         {unit && (
@@ -731,7 +731,7 @@ const makeStyles = (colors: ThemeColors) =>
       fontWeight: fontWeight.medium,
       color: withOpacity(colors.mutedForeground, 0.8),
     },
-    statCardBody: { flexDirection: "row", alignItems: "baseline", gap: 4 },
+    statCardBody: { flexDirection: "row", flexWrap: "wrap", alignItems: "baseline", gap: 4 },
     statCardValue: {
       flexShrink: 1,
       fontSize: 25,

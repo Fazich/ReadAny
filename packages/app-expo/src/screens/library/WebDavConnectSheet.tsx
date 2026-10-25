@@ -1,3 +1,4 @@
+import { SheetShell } from "@/components/ui/SheetShell";
 import {
   DEFAULT_WEBDAV_IMPORT_REMOTE_ROOT,
   getPlatformService,
@@ -11,10 +12,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Switch,
@@ -23,7 +20,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface WebDavConnectSheetProps {
   visible: boolean;
@@ -38,7 +34,6 @@ export function WebDavConnectSheet({
 }: WebDavConnectSheetProps) {
   const { t } = useTranslation();
   const colors = useColors();
-  const insets = useSafeAreaInsets();
 
   const [url, setUrl] = useState("");
   const [username, setUsername] = useState("");
@@ -86,30 +81,11 @@ export function WebDavConnectSheet({
   const s = useMemo(
     () =>
       StyleSheet.create({
-        overlay: {
-          flex: 1,
-          backgroundColor: "rgba(0,0,0,0.36)",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          paddingLeft: insets.left,
-          paddingRight: insets.right,
-          paddingTop: insets.top,
-        },
         sheet: {
           backgroundColor: colors.background,
-          borderTopLeftRadius: 26,
-          borderTopRightRadius: 26,
           paddingHorizontal: 20,
           paddingTop: 12,
-          paddingBottom: Math.max(insets.bottom, 16) + 14,
           gap: 14,
-          maxHeight: "92%",
-        },
-        keyboardWrap: {
-          width: "100%",
-          maxWidth: 600,
-          maxHeight: "95%",
-          justifyContent: "flex-end",
         },
         handle: {
           alignSelf: "center",
@@ -133,6 +109,8 @@ export function WebDavConnectSheet({
         },
         scroll: {
           flexGrow: 0,
+          flexShrink: 1,
+          minHeight: 0,
         },
         scrollContent: {
           gap: 14,
@@ -236,7 +214,7 @@ export function WebDavConnectSheet({
           color: colors.primaryForeground,
         },
       }),
-    [canSubmit, colors, insets.bottom, insets.left, insets.right, insets.top],
+    [canSubmit, colors],
   );
 
   const handleConnect = async () => {
@@ -275,20 +253,38 @@ export function WebDavConnectSheet({
   };
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable style={s.overlay} onPress={onClose}>
-        <KeyboardAvoidingView
-          style={s.keyboardWrap}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <Pressable
-            style={s.sheet}
-            onPress={(event) => event.stopPropagation()}
-          >
+    <SheetShell
+      visible={visible}
+      onClose={onClose}
+      placement="bottom"
+      keyboardAware
+      surfaceStyle={s.sheet}
+      footer={
+            <View style={s.footer}>
+              <TouchableOpacity style={s.secondaryBtn} onPress={onClose} activeOpacity={0.85}>
+                <Text style={s.secondaryBtnText}>{t("common.cancel", "取消")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={s.primaryBtn}
+                onPress={handleConnect}
+                activeOpacity={0.9}
+                disabled={!canSubmit}
+              >
+                {submitting ? (
+                  <ActivityIndicator size="small" color={colors.primaryForeground} />
+                ) : null}
+                <Text style={s.primaryBtnText}>
+                  {submitting
+                    ? t("library.webdavImportConnecting", "连接中...")
+                    : t("library.webdavImportConnectAndBrowse", "连接并浏览")}
+                </Text>
+              </TouchableOpacity>
+            </View>
+      }
+    >
             <ScrollView
               style={s.scroll}
               contentContainerStyle={s.scrollContent}
-              automaticallyAdjustKeyboardInsets={Platform.OS === "ios"}
               keyboardDismissMode="on-drag"
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
@@ -389,29 +385,6 @@ export function WebDavConnectSheet({
               ) : null}
             </ScrollView>
 
-            <View style={s.footer}>
-              <TouchableOpacity style={s.secondaryBtn} onPress={onClose} activeOpacity={0.85}>
-                <Text style={s.secondaryBtnText}>{t("common.cancel", "取消")}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={s.primaryBtn}
-                onPress={handleConnect}
-                activeOpacity={0.9}
-                disabled={!canSubmit}
-              >
-                {submitting ? (
-                  <ActivityIndicator size="small" color={colors.primaryForeground} />
-                ) : null}
-                <Text style={s.primaryBtnText}>
-                  {submitting
-                    ? t("library.webdavImportConnecting", "连接中...")
-                    : t("library.webdavImportConnectAndBrowse", "连接并浏览")}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </Pressable>
-        </KeyboardAvoidingView>
-      </Pressable>
-    </Modal>
+    </SheetShell>
   );
 }
