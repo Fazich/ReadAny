@@ -9,6 +9,7 @@ export class ExpoSpeechTTSPlayer implements ITTSPlayer {
   onStateChange?: (state: "playing" | "paused" | "stopped") => void;
   onChunkChange?: (index: number, total: number) => void;
   onEnd?: () => void;
+  onError?: (error: Error) => void;
 
   private _chunks: string[] = [];
   private _currentIndex = 0;
@@ -66,6 +67,7 @@ export class ExpoSpeechTTSPlayer implements ITTSPlayer {
             resolve();
             return;
           }
+          this.onError?.(new Error("System TTS failed"));
           this._currentIndex++;
           this._speakChunk(config).then(resolve);
         },

@@ -31,6 +31,7 @@ export class TrackPlayerEdgeTTSPlayer implements ITTSPlayer {
   onStateChange?: (state: "playing" | "paused" | "stopped") => void;
   onChunkChange?: (index: number, total: number) => void;
   onEnd?: () => void;
+  onError?: (error: Error) => void;
 
   private _stopped = false;
   private _paused = false;
@@ -97,6 +98,7 @@ export class TrackPlayerEdgeTTSPlayer implements ITTSPlayer {
     }
 
     await TrackPlayer.reset();
+    if (gen !== this._speakGen) return;
 
     this._subscribeToEvents(gen);
 
@@ -181,8 +183,7 @@ export class TrackPlayerEdgeTTSPlayer implements ITTSPlayer {
           TrackPlayer.retry().catch((err) => console.warn("[TTS] TrackPlayer retry failed:", err));
         } else {
           console.error("[TrackPlayerEdgeTTSPlayer] playback error, max retries reached");
-          this._stopped = true;
-          this.onStateChange?.("stopped");
+          this._failPlayback(new Error("Edge TTS playback failed after retries"));
         }
       } else if (event.state === State.Ended || event.state === State.Stopped) {
         this._handlePlaybackEnded(gen);
@@ -275,8 +276,7 @@ export class TrackPlayerEdgeTTSPlayer implements ITTSPlayer {
     } catch (err) {
       if (!this._stopped && (err as Error)?.message !== "aborted") {
         console.error("[TrackPlayerEdgeTTSPlayer] download error:", err);
-        this._stopped = true;
-        this.onStateChange?.("stopped");
+        this._failPlayback(err);
       }
     }
   }
@@ -298,9 +298,7 @@ export class TrackPlayerEdgeTTSPlayer implements ITTSPlayer {
 
     const queue = await TrackPlayer.getQueue();
     if (queue.length === 0) {
-      this._stopped = true;
-      this.onStateChange?.("stopped");
-      this.onEnd?.();
+      this._failPlayback(new Error("Edge TTS produced no audio"));
       return;
     }
 
@@ -656,6 +654,19 @@ export class TrackPlayerEdgeTTSPlayer implements ITTSPlayer {
     this.onEnd?.();
   }
 
+  private _failPlayback(error: unknown): void {
+    if (this._stopped) return;
+    this._stopped = true;
+    this._paused = false;
+    this._queueStarved = false;
+    this._stopProgressPolling();
+    this._cleanupEvents();
+    TrackPlayer.stop().catch(() => {});
+    TrackPlayer.reset().catch(() => {});
+    this.onStateChange?.("stopped");
+    this.onError?.(error instanceof Error ? error : new Error(String(error)));
+  }
+
   private async _fetchChunkFile(index: number, gen: number): Promise<string> {
     if (this._stopped || gen !== this._speakGen || !this._config) throw new Error("aborted");
 
@@ -699,6 +710,7 @@ export class TrackPlayerEdgeTTSPlayer implements ITTSPlayer {
   }
 
   stop(): void {
+    this._speakGen += 1;
     this._stopped = true;
     this._paused = false;
     this._downloadComplete = false;

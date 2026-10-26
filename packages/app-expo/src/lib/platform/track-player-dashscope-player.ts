@@ -100,6 +100,7 @@ export class TrackPlayerDashScopeTTSPlayer implements ITTSPlayer {
     }
 
     await TrackPlayer.reset();
+    if (gen !== this._speakGen) return;
 
     this._subscribeToEvents(gen);
 
@@ -711,6 +712,7 @@ export class TrackPlayerDashScopeTTSPlayer implements ITTSPlayer {
   }
 
   stop(): void {
+    this._speakGen += 1;
     this._stopped = true;
     this._paused = false;
     this._downloadComplete = false;

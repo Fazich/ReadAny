@@ -24,6 +24,7 @@ import type { TFunction } from "i18next";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -141,6 +142,13 @@ export default function TTSSettingsScreen() {
         if (state === "stopped") endPreviewFeedback(run);
       },
       onEnd: () => endPreviewFeedback(run),
+      onError: (error) => {
+        endPreviewFeedback(run);
+        Alert.alert(
+          t("common.failed", "失败"),
+          error.message || t("tts.previewFailed", "试听失败，请检查该方案的配置"),
+        );
+      },
     });
   }, [clearPreviewTimer, config, endPreviewFeedback, isPreviewing, stop, t]);
 

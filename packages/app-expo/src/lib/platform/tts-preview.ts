@@ -1,29 +1,39 @@
-import type { TTSConfig } from "@readany/core/tts";
-import { ExpoAVEdgeTTSPlayer } from "./expo-av-edge-player";
+import type { ITTSPlayer, TTSConfig } from "@readany/core/tts";
 import { ExpoSpeechTTSPlayer } from "./expo-speech-player";
-import { TrackPlayerCloudTTSPlayer } from "./track-player-cloud-tts-player";
+import { rnTTSPlayerFactories } from "./rn-tts-factories";
 
-const systemPreviewPlayer = new ExpoSpeechTTSPlayer();
-const edgePreviewPlayer = new ExpoAVEdgeTTSPlayer();
-const dashscopePreviewPlayer = new ExpoSpeechTTSPlayer();
-const cloudPreviewPlayer = new TrackPlayerCloudTTSPlayer();
+let activePreview: ITTSPlayer | null = null;
 
 export interface TTSPreviewCallbacks {
   onStateChange?: (state: "playing" | "paused" | "stopped") => void;
   onEnd?: () => void;
+  onError?: (error: Error) => void;
 }
 
-function stopPlayer(player: { stop: () => void }) {
-  try {
-    player.stop();
-  } catch {}
+function createPreviewPlayer(engine: TTSConfig["engine"]): ITTSPlayer {
+  switch (engine) {
+    case "edge":
+      return rnTTSPlayerFactories.createEdgeTTS();
+    case "dashscope":
+      return rnTTSPlayerFactories.createDashScopeTTS();
+    case "xiaomi":
+    case "openai-compatible":
+      return rnTTSPlayerFactories.createXiaomiTTS();
+    default:
+      return new ExpoSpeechTTSPlayer();
+  }
 }
 
 export function stopTTSPreview() {
-  stopPlayer(systemPreviewPlayer);
-  stopPlayer(edgePreviewPlayer);
-  stopPlayer(dashscopePreviewPlayer);
-  stopPlayer(cloudPreviewPlayer);
+  const player = activePreview;
+  activePreview = null;
+  if (!player) return;
+  player.onStateChange = undefined;
+  player.onEnd = undefined;
+  player.onError = undefined;
+  try {
+    player.stop();
+  } catch {}
 }
 
 export async function previewTTSConfig(
@@ -32,23 +42,24 @@ export async function previewTTSConfig(
   callbacks: TTSPreviewCallbacks = {},
 ) {
   stopTTSPreview();
-  const player =
-    config.engine === "edge"
-      ? edgePreviewPlayer
-      : config.engine === "dashscope"
-        ? dashscopePreviewPlayer
-        : config.engine === "xiaomi" || config.engine === "openai-compatible"
-          ? cloudPreviewPlayer
-          : systemPreviewPlayer;
-  player.onStateChange = undefined;
-  player.onEnd = undefined;
+  const player = createPreviewPlayer(config.engine);
+  activePreview = player;
+  // 回调必须在 speak 之前挂上，否则首帧的 playing/stopped 会丢
+  player.onStateChange = (state) => {
+    if (activePreview === player) callbacks.onStateChange?.(state);
+  };
+  player.onEnd = () => {
+    if (activePreview === player) callbacks.onEnd?.();
+  };
+  player.onError = (error) => {
+    if (activePreview === player) callbacks.onError?.(error);
+  };
   try {
-    const preview = Promise.resolve(player.speak(text, config));
-    player.onStateChange = callbacks.onStateChange;
-    player.onEnd = callbacks.onEnd;
-    await preview;
+    await player.speak(text, config);
   } catch (error) {
+    if (activePreview !== player) return;
     console.error("[TTSPreview] Preview failed", error);
-    callbacks.onStateChange?.("stopped");
+    callbacks.onError?.(error instanceof Error ? error : new Error(String(error)));
+    if (activePreview === player) callbacks.onStateChange?.("stopped");
   }
 }
