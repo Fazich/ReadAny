@@ -32,6 +32,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { UAProbe } from "@/components/common/UAProbe";
+import { ExtractorHost } from "@/components/rag/ExtractorHost";
 import { AnimatedSplash } from "@/components/splash/AnimatedSplash";
 import { rnSessionEventSource } from "@/hooks";
 import { setStreamingFetch } from "@readany/core/ai/llm-provider";
@@ -300,6 +301,7 @@ function AppInner() {
           <UpdateDialog />
           <FloatingTTSBubble tabsVisible={tabsVisible} />
           <UAProbe />
+          <ExtractorHost />
         </SafeAreaProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>

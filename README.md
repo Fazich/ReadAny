@@ -230,6 +230,17 @@ Android emulator first, then run `pnpm expo:android`.
 
 Mobile app source lives in [`packages/app-expo`](packages/app-expo).
 
+Mobile original-file search and manual/automatic vectorization share an application-level extractor
+that remains mounted during chat. EPUB extraction parses the file directly, using TOC titles while
+preserving section indices and CFIs. Requests run serially with a 45-second deadline including queue
+time. After changing the reader template, run `pnpm --filter @readany/app-expo build:reader` and
+include the generated `reader.html`.
+
+```bash
+pnpm --filter @readany/app-expo build:reader
+pnpm --filter @readany/app-expo exec vitest run src/components/rag/extraction-request-queue.test.ts src/screens/reader/extraction.test.ts
+```
+
 ### AI Configuration
 
 | Provider | Get API Key |

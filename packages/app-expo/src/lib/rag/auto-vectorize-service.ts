@@ -1,11 +1,10 @@
-import type { ChapterData } from "@readany/core/rag";
 import type { Book } from "@readany/core/types";
+import { extractChapters } from "./extraction-service";
 
-export type AutoVectorizeCallback = (bookId: string, progress: { status: string; progress: number }) => void;
-
-interface ExtractorRef {
-  extractChapters: (base64BookData: string, mimeType?: string) => Promise<ChapterData[]>;
-}
+export type AutoVectorizeCallback = (
+  bookId: string,
+  progress: { status: string; progress: number },
+) => void;
 
 interface QueueItem {
   book: Book;
@@ -13,14 +12,9 @@ interface QueueItem {
   mimeType: string;
 }
 
-let extractorRef: ExtractorRef | null = null;
 let callback: AutoVectorizeCallback | null = null;
-let queue: QueueItem[] = [];
+const queue: QueueItem[] = [];
 let processing = false;
-
-export function setExtractorRef(ref: ExtractorRef | null) {
-  extractorRef = ref;
-}
 
 export function setCallback(cb: AutoVectorizeCallback | null) {
   callback = cb;
@@ -56,12 +50,7 @@ async function processQueue() {
     try {
       callback?.(book.id, { status: "extracting", progress: 0 });
 
-      if (!extractorRef) {
-        console.warn("[AutoVectorize] Extractor not ready, skipping");
-        continue;
-      }
-
-      const chapters = await extractorRef.extractChapters(base64Data, mimeType);
+      const chapters = await extractChapters(base64Data, mimeType);
       if (!chapters || chapters.length === 0) {
         console.warn(`[AutoVectorize] No chapters for ${book.meta.title}`);
         continue;

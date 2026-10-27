@@ -1,5 +1,5 @@
-import type { ExtractorRef } from "@/components/rag/ExtractorWebView";
 import { inspectMobileBookForVectorize } from "@/lib/rag/auto-vectorize-book";
+import { extractChapters } from "@/lib/rag/extraction-service";
 import { triggerVectorizeBook } from "@/lib/rag/vectorize-trigger";
 import type { RootStackParamList } from "@/navigation/RootNavigator";
 import { useVectorModelStore } from "@/stores/vector-model-store";
@@ -13,11 +13,10 @@ import { Alert } from "react-native";
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 interface UseVectorizationQueueOptions {
-  extractorRef: React.RefObject<ExtractorRef | null>;
   nav: Nav;
 }
 
-export function useVectorizationQueue({ extractorRef, nav }: UseVectorizationQueueOptions) {
+export function useVectorizationQueue({ nav }: UseVectorizationQueueOptions) {
   const { t } = useTranslation();
   const [vectorQueue, setVectorQueue] = useState<Book[]>([]);
   const vectorQueueRef = useRef<Book[]>([]);
@@ -26,63 +25,53 @@ export function useVectorizationQueue({ extractorRef, nav }: UseVectorizationQue
   const [vectorProgress, setVectorProgress] = useState<VectorizeProgress | null>(null);
   const isProcessingRef = useRef(false);
 
-  const processOneBook = useCallback(
-    async (book: Book) => {
-      setVectorizingBookId(book.id);
-      setVectorizingBookTitle(book.meta.title);
+  const processOneBook = useCallback(async (book: Book) => {
+    setVectorizingBookId(book.id);
+    setVectorizingBookTitle(book.meta.title);
+    setVectorProgress({
+      bookId: book.id,
+      status: "chunking",
+      processedChunks: 0,
+      totalChunks: 0,
+    });
+
+    try {
+      const info = await inspectMobileBookForVectorize(book);
+      if (!info.canVectorize || !info.mimeType) {
+        throw new Error(`Book cannot be vectorized on mobile: ${info.reason ?? "unknown"}`);
+      }
+
+      const base64 = await FileSystem.readAsStringAsync(info.absPath, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      const chapters = await extractChapters(base64, info.mimeType);
+      if (!chapters || chapters.length === 0) {
+        throw new Error("No chapters extracted from book");
+      }
+
+      await triggerVectorizeBook(book.id, book.filePath, chapters, (progress) => {
+        setVectorProgress({ ...progress });
+      });
+
       setVectorProgress({
         bookId: book.id,
-        status: "chunking",
+        status: "completed",
+        processedChunks: 1,
+        totalChunks: 1,
+      });
+      await new Promise((resolve) => setTimeout(resolve, 800));
+    } catch (err) {
+      console.error(`[useVectorizationQueue] Vectorization failed for "${book.meta.title}":`, err);
+      setVectorProgress({
+        bookId: book.id,
+        status: "error",
         processedChunks: 0,
         totalChunks: 0,
       });
-
-      try {
-        if (!extractorRef.current) {
-          throw new Error("Extractor WebView not ready");
-        }
-
-        const info = await inspectMobileBookForVectorize(book);
-        if (!info.canVectorize || !info.mimeType) {
-          throw new Error(`Book cannot be vectorized on mobile: ${info.reason ?? "unknown"}`);
-        }
-
-        const base64 = await FileSystem.readAsStringAsync(info.absPath, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-
-        const chapters = await extractorRef.current.extractChapters(base64, info.mimeType);
-        if (!chapters || chapters.length === 0) {
-          throw new Error("No chapters extracted from book");
-        }
-
-        await triggerVectorizeBook(book.id, book.filePath, chapters, (progress) => {
-          setVectorProgress({ ...progress });
-        });
-
-        setVectorProgress({
-          bookId: book.id,
-          status: "completed",
-          processedChunks: 1,
-          totalChunks: 1,
-        });
-        await new Promise((resolve) => setTimeout(resolve, 800));
-      } catch (err) {
-        console.error(
-          `[useVectorizationQueue] Vectorization failed for "${book.meta.title}":`,
-          err,
-        );
-        setVectorProgress({
-          bookId: book.id,
-          status: "error",
-          processedChunks: 0,
-          totalChunks: 0,
-        });
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-      }
-    },
-    [extractorRef],
-  );
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+    }
+  }, []);
 
   const processQueue = useCallback(async () => {
     if (isProcessingRef.current) return;

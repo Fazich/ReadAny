@@ -10,6 +10,7 @@ const path = require("node:path");
 
 const FOLIATE_DIR = path.resolve(__dirname, "../../foliate-js");
 const CORE_READER = path.resolve(__dirname, "../../core/src/reader");
+const CHAPTER_STRUCTURE = path.resolve(__dirname, "../../core/src/rag/chapter-structure.ts");
 const ASSETS_DIR = path.resolve(__dirname, "../assets/reader");
 const TEMPLATE = path.resolve(ASSETS_DIR, "reader.template.html");
 const OUTPUT = path.resolve(ASSETS_DIR, "reader.html");
@@ -42,6 +43,7 @@ async function buildReader() {
     import { configure, ZipReader, BlobReader, TextWriter, BlobWriter } from "${FOLIATE_DIR.replace(/\\/g, "/")}/vendor/zip.js";
     import { EPUB } from "${FOLIATE_DIR.replace(/\\/g, "/")}/epub.js";
     import { extractPDFChapters, makePDFFromURL } from "${FOLIATE_DIR.replace(/\\/g, "/")}/pdf.js";
+    import { buildChapterSectionGroups } from "${CHAPTER_STRUCTURE.replace(/\\/g, "/")}";
 
     window.makeBook = makeBook;
     window.Overlayer = Overlayer;
@@ -52,6 +54,7 @@ async function buildReader() {
     window._EPUB = EPUB;
     window._makePDFFromURL = makePDFFromURL;
     window._extractPDFChapters = extractPDFChapters;
+    window._buildChapterSectionGroups = buildChapterSectionGroups;
 
     if (!customElements.get('foliate-view')) {
       customElements.define('foliate-view', View);
@@ -73,7 +76,7 @@ async function buildReader() {
       target: "es2020",
       minify: true,
       write: false,
-      resolveExtensions: [".js", ".mjs"],
+      resolveExtensions: [".ts", ".js", ".mjs"],
     });
 
     const bundledJS = result.outputFiles[0].text;

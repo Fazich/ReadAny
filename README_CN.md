@@ -229,6 +229,16 @@ Expo Go。Expo Go 无法加载 ReadAny 当前依赖的原生模块和应用配�
 
 移动端源码位于 [`packages/app-expo`](packages/app-expo)。
 
+移动端原文检索与手动、自动向量化共用应用级提取器，切换到聊天页后仍可读取本地书籍。
+EPUB 直接解析原文件，章节标题沿用目录规则并保留原 section 索引和 CFI；并发请求串行执行，
+45 秒上限包含排队时间。修改 reader 模板后运行
+`pnpm --filter @readany/app-expo build:reader`，同步提交生成的 `reader.html`。
+
+```bash
+pnpm --filter @readany/app-expo build:reader
+pnpm --filter @readany/app-expo exec vitest run src/components/rag/extraction-request-queue.test.ts src/screens/reader/extraction.test.ts
+```
+
 ### AI 配置
 
 | Provider | 获取方式 |

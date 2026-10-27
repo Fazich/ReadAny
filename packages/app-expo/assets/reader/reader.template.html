@@ -4491,6 +4491,7 @@ html, body {
     }
 
     async function handleExtractBookChapters(msg) {
+      let book;
       try {
         if (isPDFBookMessage(msg)) {
           if (typeof window._extractPDFChapters !== 'function') {
@@ -4520,15 +4521,22 @@ html, body {
             })}`
           });
 
-          postToRN('chaptersExtracted', { chapters });
+          postToRN('chaptersExtracted', { requestId: msg.requestId, chapters });
           return;
         }
 
-        currentBook = await makeBook(await createBookFileFromMessage(msg));
-        await handleExtractChapters();
+        book = await makeBook(await createBookFileFromMessage(msg));
+        const chapters = await extractChaptersFromBook(book);
+        postToRN('chaptersExtracted', { requestId: msg.requestId, chapters });
       } catch (err) {
         console.error('[WebView] Error extracting book chapters:', err);
-        postToRN('chaptersExtracted', { error: String(err) });
+        postToRN('chaptersExtracted', { requestId: msg.requestId, error: String(err) });
+      } finally {
+        try {
+          await book?.destroy?.();
+        } catch (err) {
+          console.warn('[WebView] Failed to release extracted book:', err);
+        }
       }
     }
 
@@ -4539,27 +4547,25 @@ html, body {
       }
 
       try {
-        const sections = currentBook.sections || [];
-        const toc = currentBook.toc || [];
+        const chapters = await extractChaptersFromBook(currentBook);
+        postToRN('chaptersExtracted', { chapters });
+      } catch (err) {
+        console.error('[WebView] Error extracting chapters:', err);
+        postToRN('chaptersExtracted', { error: String(err) });
+      }
+    }
 
-        // Build map of href to title mapping
-        const tocMap = new Map();
-        function walkToc(items) {
-          for (const item of items) {
-            if (item.label) {
-              tocMap.set(item.index, item.label);
-              if (item.href) {
-                const base = item.href.split("#")[0];
-                tocMap.set(base, item.label);
-                tocMap.set(item.href, item.label);
-              }
-            }
-            if (item.subitems && item.subitems.length) {
-              walkToc(item.subitems);
-            }
-          }
+    async function extractChaptersFromBook(book) {
+        const sections = book.sections || [];
+        const toc = book.toc || [];
+
+        const titleBySection = new Map();
+        const groups = window._buildChapterSectionGroups(
+          sections.map(section => ({ href: section.id || section.href })), toc
+        );
+        for (const group of groups) {
+          for (const index of group.sectionIndices) titleBySection.set(index, group.title);
         }
-        walkToc(toc);
 
         const chapters = [];
         let skippedNoCreateDocument = 0;
@@ -4575,7 +4581,7 @@ html, body {
             const doc = await section.createDocument();
             if (!doc.body) continue;
 
-            const title = tocMap.get(i) || tocMap.get(section.href || "") || `Section ${i + 1}`;
+            const title = titleBySection.get(i) || `Section ${i + 1}`;
             const CFI = window.CFI || (window.EpubCFI && window.EpubCFI.fake ? window.EpubCFI : null);
             let baseCfi = section.cfi;
 
@@ -4606,11 +4612,7 @@ html, body {
           skippedNoCreateDocument
         });
 
-        postToRN('chaptersExtracted', { chapters });
-      } catch (err) {
-        console.error('[WebView] Error extracting chapters:', err);
-        postToRN('chaptersExtracted', { error: String(err) });
-      }
+        return chapters;
     }
 
     function extractSegmentsWithCfi(doc, baseCfi, CFI) {
