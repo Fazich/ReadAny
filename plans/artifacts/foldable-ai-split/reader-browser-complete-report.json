@@ -1,0 +1,5755 @@
+{
+  "started": "2026-10-27T15:45:47.795Z",
+  "readerSha256": "63abaefc5fb21aac7fcace4147c621dc86c1547fe1c4c78c445cf07f3778836b",
+  "scenarios": [
+    {
+      "name": "paginated-container-0-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "2",
+      "maxInline": "642.5271708683474px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 4,
+      "pages": 5,
+      "cfi": "epubcfi(/6/2!/4,/116[p57],/140[p69]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": -4981.59375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 1264.34375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 7510.28125,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 60.265625,
+        "y": 22,
+        "width": 18.421875,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "paginated-container-1-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "316.9818181818182px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 16,
+      "pages": 21,
+      "cfi": "epubcfi(/6/2!/4,/110[p54],/116[p57]/1:44)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": -4770.40625,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 1504.328125,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 7779.0625,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 55.578125,
+        "y": 691.46875,
+        "width": 18.90625,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "paginated-container-2-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "396.1818181818182px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 12,
+      "pages": 16,
+      "cfi": "epubcfi(/6/2!/4,/110[p54]/1:59,/118[p58]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": -4525,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 1523,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 7571,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 56,
+        "y": 416.125,
+        "width": 18,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 400,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "paginated-container-3-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "554.5818181818181px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 10,
+      "pages": 13,
+      "cfi": "epubcfi(/6/2!/4,/112[p55]/1:55,/122[p60]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": -5352.203125,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 1620.875,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 8593.953125,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 56.84375,
+        "y": 223.5625,
+        "width": 18.578125,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 560,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "paginated-container-4-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "2",
+      "maxInline": "642.5271708683474px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 4,
+      "pages": 5,
+      "cfi": "epubcfi(/6/2!/4,/116[p57],/140[p69]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": -4981.59375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 1264.34375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 7510.28125,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 60.265625,
+        "y": 22,
+        "width": 18.421875,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "paginated-container-5-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "316.9818181818182px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 16,
+      "pages": 21,
+      "cfi": "epubcfi(/6/2!/4,/110[p54],/116[p57]/1:44)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": -4770.40625,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 1504.328125,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 7779.0625,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 55.578125,
+        "y": 691.46875,
+        "width": 18.90625,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "paginated-container-6-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "554.5818181818181px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 10,
+      "pages": 13,
+      "cfi": "epubcfi(/6/2!/4,/112[p55]/1:55,/122[p60]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": -5352.203125,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 1620.875,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 8593.953125,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 56.84375,
+        "y": 223.5625,
+        "width": 18.578125,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 560,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "paginated-container-7-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "396.1818181818182px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 12,
+      "pages": 16,
+      "cfi": "epubcfi(/6/2!/4,/110[p54]/1:59,/118[p58]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": -4525,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 1523,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 7571,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 56,
+        "y": 416.125,
+        "width": 18,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 400,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "paginated-container-8-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "2",
+      "maxInline": "642.5271708683474px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 4,
+      "pages": 5,
+      "cfi": "epubcfi(/6/2!/4,/116[p57],/140[p69]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": -4981.59375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 1264.34375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 7510.28125,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 60.265625,
+        "y": 22,
+        "width": 18.421875,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "forced-single-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "684px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 8,
+      "pages": 10,
+      "cfi": "epubcfi(/6/2!/4,/116[p57],/128[p63]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6658,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "656px",
+          "columnGap": "9.59384px",
+          "frameBounds": {
+            "x": -5019.90625,
+            "y": 0,
+            "width": 6658.125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6658,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "656px",
+          "columnGap": "9.59384px",
+          "frameBounds": {
+            "x": 1638.21875,
+            "y": 0,
+            "width": 6658.125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6658,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "656px",
+          "columnGap": "9.59384px",
+          "frameBounds": {
+            "x": 8296.34375,
+            "y": 0,
+            "width": 6658.125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 347.390625,
+        "y": 22,
+        "width": 18.25,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "single-container-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "316.9818181818182px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 16,
+      "pages": 21,
+      "cfi": "epubcfi(/6/2!/4,/110[p54],/116[p57]/1:44)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": -4770.40625,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 1504.328125,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 7779.0625,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 55.578125,
+        "y": 691.46875,
+        "width": 18.90625,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "single-container-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "396.1818181818182px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 12,
+      "pages": 16,
+      "cfi": "epubcfi(/6/2!/4,/110[p54]/1:59,/118[p58]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": -4525,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 1523,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 7571,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 56,
+        "y": 416.125,
+        "width": 18,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 400,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "single-container-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "554.5818181818181px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 10,
+      "pages": 13,
+      "cfi": "epubcfi(/6/2!/4,/112[p55]/1:55,/122[p60]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": -5352.203125,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 1620.875,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 8593.953125,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 56.84375,
+        "y": 223.5625,
+        "width": 18.578125,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 560,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "single-container-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "684px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 8,
+      "pages": 10,
+      "cfi": "epubcfi(/6/2!/4,/116[p57],/128[p63]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6658,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "656px",
+          "columnGap": "9.59384px",
+          "frameBounds": {
+            "x": -5019.90625,
+            "y": 0,
+            "width": 6658.125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6658,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "656px",
+          "columnGap": "9.59384px",
+          "frameBounds": {
+            "x": 1638.21875,
+            "y": 0,
+            "width": 6658.125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6658,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "656px",
+          "columnGap": "9.59384px",
+          "frameBounds": {
+            "x": 8296.34375,
+            "y": 0,
+            "width": 6658.125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 347.390625,
+        "y": 22,
+        "width": 18.25,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "large-font-double-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "2",
+      "maxInline": "649.1270935960591px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 14,
+      "pages": 18,
+      "cfi": "epubcfi(/6/2!/4,/114[p56]/1:71,/122[p60]/1:71)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 21616,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "553px",
+          "columnGap": "31.9997px",
+          "frameBounds": {
+            "x": -17270.59375,
+            "y": 0,
+            "width": 21615.78125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 21616,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "553px",
+          "columnGap": "31.9997px",
+          "frameBounds": {
+            "x": 4345.1875,
+            "y": 0,
+            "width": 21615.78125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 21616,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "553px",
+          "columnGap": "31.9997px",
+          "frameBounds": {
+            "x": 25960.96875,
+            "y": 0,
+            "width": 21615.78125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 102.453125,
+        "y": 164.78125,
+        "width": 32.65625,
+        "height": 37,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "large-font-container-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "554.7232323232323px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 33,
+      "pages": 42,
+      "cfi": "epubcfi(/6/2!/4,/114[p56],/116[p57]/1:73)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 21940,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "490px",
+          "columnGap": "31.9994px",
+          "frameBounds": {
+            "x": -17220.203125,
+            "y": 0,
+            "width": 21940.40625,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 21940,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "490px",
+          "columnGap": "31.9994px",
+          "frameBounds": {
+            "x": 4720.203125,
+            "y": 0,
+            "width": 21940.40625,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 21940,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "490px",
+          "columnGap": "31.9994px",
+          "frameBounds": {
+            "x": 26660.609375,
+            "y": 0,
+            "width": 21940.40625,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 99.1875,
+        "y": 436.734375,
+        "width": 32.875,
+        "height": 37,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 560,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "large-font-container-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "396.32323232323233px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 45,
+      "pages": 56,
+      "cfi": "epubcfi(/6/2!/4,/116[p57],/118[p58]/1:29)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 20384,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "332px",
+          "columnGap": "32px",
+          "frameBounds": {
+            "x": -16362,
+            "y": 0,
+            "width": 20384,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 20384,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "332px",
+          "columnGap": "32px",
+          "frameBounds": {
+            "x": 4022,
+            "y": 0,
+            "width": 20384,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 20384,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "332px",
+          "columnGap": "32px",
+          "frameBounds": {
+            "x": 24406,
+            "y": 0,
+            "width": 20384,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 98,
+        "y": 40,
+        "width": 33.71875,
+        "height": 37,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 400,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "large-font-container-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "317.12323232323234px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 64,
+      "pages": 80,
+      "cfi": "epubcfi(/6/2!/4,/114[p56]/1:33,/116[p57]/1:20)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 22784,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "252px",
+          "columnGap": "31.9996px",
+          "frameBounds": {
+            "x": -18209.40625,
+            "y": 0,
+            "width": 22783.75,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 22784,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "252px",
+          "columnGap": "31.9996px",
+          "frameBounds": {
+            "x": 4574.34375,
+            "y": 0,
+            "width": 22783.75,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 22784,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "252px",
+          "columnGap": "31.9996px",
+          "frameBounds": {
+            "x": 27358.09375,
+            "y": 0,
+            "width": 22783.75,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 98.578125,
+        "y": 599.90625,
+        "width": 39.21875,
+        "height": 37,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "large-font-container-960",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 960,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "950.7232323232323px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 18,
+      "pages": 24,
+      "cfi": "epubcfi(/6/2!/4,/110[p54]/1:53,/116[p57]/1:53)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 22041,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "886px",
+          "columnGap": "31.9997px",
+          "frameBounds": {
+            "x": -16510.203125,
+            "y": 0,
+            "width": 22041.375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 22041,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "886px",
+          "columnGap": "31.9997px",
+          "frameBounds": {
+            "x": 5531.171875,
+            "y": 0,
+            "width": 22041.375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 22041,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "886px",
+          "columnGap": "31.9997px",
+          "frameBounds": {
+            "x": 27572.546875,
+            "y": 0,
+            "width": 22041.375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 101.09375,
+        "y": 631.90625,
+        "width": 32.9375,
+        "height": 37,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 960,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "large-font-container-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "2",
+      "maxInline": "649.1270935960591px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 14,
+      "pages": 18,
+      "cfi": "epubcfi(/6/2!/4,/114[p56]/1:71,/122[p60]/1:71)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 21616,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "553px",
+          "columnGap": "31.9997px",
+          "frameBounds": {
+            "x": -17270.59375,
+            "y": 0,
+            "width": 21615.78125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 21616,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "553px",
+          "columnGap": "31.9997px",
+          "frameBounds": {
+            "x": 4345.1875,
+            "y": 0,
+            "width": 21615.78125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 21616,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "32px",
+          "rootFontSize": "32px",
+          "columnWidth": "553px",
+          "columnGap": "31.9997px",
+          "frameBounds": {
+            "x": 25960.96875,
+            "y": 0,
+            "width": 21615.78125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 102.453125,
+        "y": 164.78125,
+        "width": 32.65625,
+        "height": 37,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "viewport-1280x800",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "2",
+      "maxInline": "642.5271708683474px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 4,
+      "pages": 5,
+      "cfi": "epubcfi(/6/2!/4,/116[p57],/140[p69]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": -4981.59375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 1264.34375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 7510.28125,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 60.265625,
+        "y": 22,
+        "width": 18.421875,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "viewport-320x800",
+      "viewport": {
+        "width": 320,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "316.9818181818182px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 16,
+      "pages": 21,
+      "cfi": "epubcfi(/6/2!/4,/110[p54],/116[p57]/1:44)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": -4770.40625,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 1504.328125,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 7779.0625,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 55.578125,
+        "y": 691.46875,
+        "width": 18.90625,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "viewport-400x800",
+      "viewport": {
+        "width": 400,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "396.1818181818182px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 12,
+      "pages": 16,
+      "cfi": "epubcfi(/6/2!/4,/110[p54]/1:59,/118[p58]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": -4525,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 1523,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 7571,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 56,
+        "y": 416.125,
+        "width": 18,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 400,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "viewport-560x800",
+      "viewport": {
+        "width": 560,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "554.5818181818181px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 10,
+      "pages": 13,
+      "cfi": "epubcfi(/6/2!/4,/112[p55]/1:55,/122[p60]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": -5352.203125,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 1620.875,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 8593.953125,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 56.84375,
+        "y": 223.5625,
+        "width": 18.578125,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 560,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "viewport-840x390",
+      "viewport": {
+        "width": 840,
+        "height": 390
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 840,
+        "height": 390
+      },
+      "fixed": false,
+      "maxColumns": "2",
+      "maxInline": "424.59661016949156px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 14,
+      "pages": 18,
+      "cfi": "epubcfi(/6/2!/4,/114[p56]/1:62,/122[p60]/1:62)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 14238,
+          "height": 390,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "370px",
+          "columnGap": "17.9999px",
+          "frameBounds": {
+            "x": -11376.796875,
+            "y": 0,
+            "width": 14237.890625,
+            "height": 390
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 14238,
+          "height": 390,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "370px",
+          "columnGap": "17.9999px",
+          "frameBounds": {
+            "x": 2861.09375,
+            "y": 0,
+            "width": 14237.890625,
+            "height": 390
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 14238,
+          "height": 390,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "370px",
+          "columnGap": "17.9999px",
+          "frameBounds": {
+            "x": 17098.984375,
+            "y": 0,
+            "width": 14237.890625,
+            "height": 390
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 58.9375,
+        "y": 92.1875,
+        "width": 18.609375,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 840,
+          "height": 390
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "viewport-1280x800",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "2",
+      "maxInline": "642.5271708683474px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 4,
+      "pages": 5,
+      "cfi": "epubcfi(/6/2!/4,/116[p57],/140[p69]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": -4981.59375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 1264.34375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 7510.28125,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 60.265625,
+        "y": 22,
+        "width": 18.421875,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "search-container-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "2",
+      "maxInline": "642.5271708683474px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 0,
+      "pages": 5,
+      "cfi": "epubcfi(/6/2!/4,/2,/30[p14]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 15.40625,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 6261.34375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 12507.28125,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "海",
+        "context": "第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中",
+        "x": 141.96875,
+        "y": 189.375,
+        "width": 18.125,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "search-container-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "316.9818181818182px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 0,
+      "pages": 21,
+      "cfi": "epubcfi(/6/2!/4,/2,/8[p3]/1:95)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 10.59375,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 6285.328125,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 12560.0625,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "海",
+        "context": "第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中",
+        "x": 137.28125,
+        "y": 311.75,
+        "width": 18.140625,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "search-container-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "396.1818181818182px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 0,
+      "pages": 16,
+      "cfi": "epubcfi(/6/2!/4,/2,/10[p4]/1:95)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 11,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 6059,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 12107,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "海",
+        "context": "第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中",
+        "x": 139.640625,
+        "y": 250.5625,
+        "width": 18.546875,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 400,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "search-container-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "554.5818181818181px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 0,
+      "pages": 13,
+      "cfi": "epubcfi(/6/2!/4,/2,/12[p5]/1:95)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 11.796875,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 6984.875,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 13957.953125,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "海",
+        "context": "第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中",
+        "x": 138.8125,
+        "y": 219.96875,
+        "width": 18.234375,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 560,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "search-container-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "2",
+      "maxInline": "642.5271708683474px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 0,
+      "pages": 5,
+      "cfi": "epubcfi(/6/2!/4,/2,/30[p14]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 15.40625,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 6261.34375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 12507.28125,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "海",
+        "context": "第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中",
+        "x": 141.96875,
+        "y": 189.375,
+        "width": 18.125,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "scroll-container-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "9999px",
+      "flow": "scrolled",
+      "spread": null,
+      "zoom": null,
+      "page": 6,
+      "pages": 6,
+      "cfi": "epubcfi(/6/2!/4,/132[p65]/1:68,/140[p69]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 1280,
+          "height": 4910,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": -4566,
+            "width": 1280,
+            "height": 4909.53125
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 1280,
+          "height": 4910,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 343.53125,
+            "width": 1280,
+            "height": 4909.53125
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "慢",
+        "context": "页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。",
+        "x": 16.359375,
+        "y": 27.1875,
+        "width": 18,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "scroll-container-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "9999px",
+      "flow": "scrolled",
+      "spread": null,
+      "zoom": null,
+      "page": 16,
+      "pages": 17,
+      "cfi": "epubcfi(/6/2!/4,/132[p65]/1:33,/140[p69]/1:50)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 320,
+          "height": 13353,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": -12419,
+            "width": 320,
+            "height": 13353.40625
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 320,
+          "height": 13353,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 934.40625,
+            "width": 320,
+            "height": 13353.40625
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "慢",
+        "context": "页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。",
+        "x": 22.4375,
+        "y": 97.96875,
+        "width": 18.375,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "scroll-container-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "9999px",
+      "flow": "scrolled",
+      "spread": null,
+      "zoom": null,
+      "page": 13,
+      "pages": 14,
+      "cfi": "epubcfi(/6/2!/4,/132[p65]/1:41,/140[p69]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 400,
+          "height": 11242,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": -10455,
+            "width": 400,
+            "height": 11242.4375
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 400,
+          "height": 11242,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 787.4375,
+            "width": 400,
+            "height": 11242.4375
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "慢",
+        "context": "页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。",
+        "x": 122.5,
+        "y": 73.375,
+        "width": 19.59375,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 400,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "scroll-container-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "9999px",
+      "flow": "scrolled",
+      "spread": null,
+      "zoom": null,
+      "page": 11,
+      "pages": 11,
+      "cfi": "epubcfi(/6/2!/4,/132[p65]/1:29,/140[p69]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 560,
+          "height": 9131,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": -8492,
+            "width": 560,
+            "height": 9131.46875
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 560,
+          "height": 9131,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 639.46875,
+            "width": 560,
+            "height": 9131.46875
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "慢",
+        "context": "页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。",
+        "x": 170.90625,
+        "y": 47.78125,
+        "width": 18.21875,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 560,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "scroll-container-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "9999px",
+      "flow": "scrolled",
+      "spread": null,
+      "zoom": null,
+      "page": 6,
+      "pages": 6,
+      "cfi": "epubcfi(/6/2!/4,/132[p65]/1:68,/140[p69]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 1280,
+          "height": 4910,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": -4566,
+            "width": 1280,
+            "height": 4909.53125
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 1280,
+          "height": 4910,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 343.53125,
+            "width": 1280,
+            "height": 4909.53125
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "慢",
+        "context": "页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。",
+        "x": 16.359375,
+        "y": 27.1875,
+        "width": 18,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "scroll-next",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "9999px",
+      "flow": "scrolled",
+      "spread": null,
+      "zoom": null,
+      "page": 0,
+      "pages": 6,
+      "cfi": "epubcfi(/6/4!/4,/12[p5]/1:67,/34[p16]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 1280,
+          "height": 4910,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": -5272,
+            "width": 1280,
+            "height": 4909.53125
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 1280,
+          "height": 4910,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": -362.46875,
+            "width": 1280,
+            "height": 4909.53125
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 1280,
+          "height": 4910,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 4547.0625,
+            "width": 1280,
+            "height": 4909.53125
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "vertical-source-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "2",
+      "maxInline": "642.5271708683474px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 4,
+      "pages": 5,
+      "cfi": "epubcfi(/6/2!/4,/116[p57],/140[p69]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": -4981.59375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 1264.34375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 7510.28125,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 60.265625,
+        "y": 22,
+        "width": 18.421875,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "vertical-source-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "316.9818181818182px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 16,
+      "pages": 21,
+      "cfi": "epubcfi(/6/2!/4,/110[p54],/116[p57]/1:44)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": -4770.40625,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 1504.328125,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6275,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "280px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 7779.0625,
+            "y": 0,
+            "width": 6274.734375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 55.578125,
+        "y": 691.46875,
+        "width": 18.90625,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "vertical-source-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "396.1818181818182px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 12,
+      "pages": 16,
+      "cfi": "epubcfi(/6/2!/4,/110[p54]/1:59,/118[p58]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": -4525,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 1523,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6048,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "360px",
+          "columnGap": "18px",
+          "frameBounds": {
+            "x": 7571,
+            "y": 0,
+            "width": 6048,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 56,
+        "y": 416.125,
+        "width": 18,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 400,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "vertical-source-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "1",
+      "maxInline": "554.5818181818181px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 10,
+      "pages": 13,
+      "cfi": "epubcfi(/6/2!/4,/112[p55]/1:55,/122[p60]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": -5352.203125,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 1620.875,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6973,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "518px",
+          "columnGap": "17.9997px",
+          "frameBounds": {
+            "x": 8593.953125,
+            "y": 0,
+            "width": 6973.078125,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 56.84375,
+        "y": 223.5625,
+        "width": 18.578125,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 560,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "vertical-source-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": false,
+      "maxColumns": "2",
+      "maxInline": "642.5271708683474px",
+      "flow": null,
+      "spread": null,
+      "zoom": null,
+      "page": 4,
+      "pages": 5,
+      "cfi": "epubcfi(/6/2!/4,/116[p57],/140[p69]/1:96)",
+      "frames": [
+        {
+          "index": 0,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": -4981.59375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第1章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 1,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 1264.34375,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "index": 2,
+          "width": 6246,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "588px",
+          "columnGap": "17.9998px",
+          "frameBounds": {
+            "x": 7510.28125,
+            "y": 0,
+            "width": 6245.9375,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": [],
+      "originalAnchor": {
+        "text": "第",
+        "context": "第57段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸",
+        "x": 60.265625,
+        "y": 22,
+        "width": 18.421875,
+        "height": 22,
+        "renderer": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        },
+        "visible": true
+      }
+    },
+    {
+      "name": "epub-fixed-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 40,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "matrix(1, 0, 0, 1, 0, 0)",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 640,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "matrix(1, 0, 0, 1, 0, 0)",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "epub-fixed-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 186.671875,
+            "width": 320.0000305175781,
+            "height": 426.66668701171875
+          },
+          "frameTransform": "matrix(0.533333, 0, 0, 0.533333, 0, 0)",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "epub-fixed-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 133.328125,
+            "width": 400,
+            "height": 533.3333740234375
+          },
+          "frameTransform": "matrix(0.666667, 0, 0, 0.666667, 0, 0)",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "epub-fixed-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 26.671875,
+            "width": 560,
+            "height": 746.6666870117188
+          },
+          "frameTransform": "matrix(0.933333, 0, 0, 0.933333, 0, 0)",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "frameTransform": "none",
+          "text": "第3章 · 海边的清晨第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "epub-fixed-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 40,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "matrix(1, 0, 0, 1, 0, 0)",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        },
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 640,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "matrix(1, 0, 0, 1, 0, 0)",
+          "text": "第3章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "epub-fixed-single-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1280.0001220703125,
+            "height": 1706.666748046875
+          },
+          "frameTransform": "matrix(2.13333, 0, 0, 2.13333, 0, 0)",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "epub-fixed-single-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 186.671875,
+            "width": 320.0000305175781,
+            "height": 426.66668701171875
+          },
+          "frameTransform": "matrix(0.533333, 0, 0, 0.533333, 0, 0)",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "epub-fixed-single-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 133.328125,
+            "width": 400,
+            "height": 533.3333740234375
+          },
+          "frameTransform": "matrix(0.666667, 0, 0, 0.666667, 0, 0)",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "epub-fixed-single-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 26.671875,
+            "width": 560,
+            "height": 746.6666870117188
+          },
+          "frameTransform": "matrix(0.933333, 0, 0, 0.933333, 0, 0)",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "epub-fixed-single-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": "18px",
+          "rootFontSize": "18px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1280.0001220703125,
+            "height": 1706.666748046875
+          },
+          "frameTransform": "matrix(2.13333, 0, 0, 2.13333, 0, 0)",
+          "text": "第2章 · 海边的清晨\n\n第1段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读完故事，有人沿着段落慢慢寻找线索。屏幕的尺寸会变化，书中的位置应当留在原处。\n\n第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-fixed-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/8)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 40,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 4\n\n\nPage 4 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 600,
+            "height": 800,
+            "cssWidth": "600px",
+            "cssHeight": "800px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 4",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 54,
+              "y": 60.796875,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        },
+        {
+          "width": 0,
+          "height": 0,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "frameTransform": "none",
+          "text": "",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-fixed-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/8)",
+      "frames": [
+        {
+          "width": 320,
+          "height": 427,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 186.671875,
+            "width": 320,
+            "height": 426.65625
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 4\n\n\nPage 4 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 320,
+            "height": 426,
+            "cssWidth": "320px",
+            "cssHeight": "426px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 4",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 28.796875,
+              "y": 32.4375,
+              "width": 199.1600799560547,
+              "height": 16
+            }
+          }
+        },
+        {
+          "width": 0,
+          "height": 0,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "frameTransform": "none",
+          "text": "",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-fixed-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/8)",
+      "frames": [
+        {
+          "width": 400,
+          "height": 533,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 133.328125,
+            "width": 400,
+            "height": 533.328125
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 4\n\n\nPage 4 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 400,
+            "height": 533,
+            "cssWidth": "400px",
+            "cssHeight": "533px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 4",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 36,
+              "y": 40.5,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        },
+        {
+          "width": 0,
+          "height": 0,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "frameTransform": "none",
+          "text": "",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-fixed-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/8)",
+      "frames": [
+        {
+          "width": 560,
+          "height": 747,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 26.671875,
+            "width": 560,
+            "height": 746.65625
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 4\n\n\nPage 4 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 560,
+            "height": 746,
+            "cssWidth": "560px",
+            "cssHeight": "746px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 4",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 50.390625,
+              "y": 56.765625,
+              "width": 199.1599884033203,
+              "height": 16
+            }
+          }
+        },
+        {
+          "width": 0,
+          "height": 0,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "frameTransform": "none",
+          "text": "",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-fixed-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/8)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 40,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 4\n\n\nPage 4 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 600,
+            "height": 800,
+            "cssWidth": "600px",
+            "cssHeight": "800px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 4",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 54,
+              "y": 60.796875,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        },
+        {
+          "width": 0,
+          "height": 0,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "frameTransform": "none",
+          "text": "",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-reflow-settings-ignored",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/8)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 40,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 4\n\n\nPage 4 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 600,
+            "height": 800,
+            "cssWidth": "600px",
+            "cssHeight": "800px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 4",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 54,
+              "y": 60.796875,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        },
+        {
+          "width": 0,
+          "height": 0,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "frameTransform": "none",
+          "text": "",
+          "canvas": null,
+          "textLayer": null
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-fixed-single-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/8)",
+      "frames": [
+        {
+          "width": 1280,
+          "height": 1707,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 1706.65625
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 4\n\n\nPage 4 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 1280,
+            "height": 1706,
+            "cssWidth": "1280px",
+            "cssHeight": "1706px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 4",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 115.1875,
+              "y": 129.71875,
+              "width": 199.159912109375,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-fixed-single-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/8)",
+      "frames": [
+        {
+          "width": 320,
+          "height": 427,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 186.671875,
+            "width": 320,
+            "height": 426.65625
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 4\n\n\nPage 4 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 320,
+            "height": 426,
+            "cssWidth": "320px",
+            "cssHeight": "426px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 4",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 28.796875,
+              "y": 32.4375,
+              "width": 199.1600799560547,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-fixed-single-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/8)",
+      "frames": [
+        {
+          "width": 400,
+          "height": 533,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 133.328125,
+            "width": 400,
+            "height": 533.328125
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 4\n\n\nPage 4 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 400,
+            "height": 533,
+            "cssWidth": "400px",
+            "cssHeight": "533px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 4",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 36,
+              "y": 40.5,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-fixed-single-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/8)",
+      "frames": [
+        {
+          "width": 560,
+          "height": 747,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 26.671875,
+            "width": 560,
+            "height": 746.65625
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 4\n\n\nPage 4 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 560,
+            "height": 746,
+            "cssWidth": "560px",
+            "cssHeight": "746px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 4",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 50.390625,
+              "y": 56.765625,
+              "width": 199.1599884033203,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-fixed-single-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/8)",
+      "frames": [
+        {
+          "width": 1280,
+          "height": 1707,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 1706.65625
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 4\n\n\nPage 4 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 4 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 1280,
+            "height": 1706,
+            "cssWidth": "1280px",
+            "cssHeight": "1706px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 4",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 115.1875,
+              "y": 129.71875,
+              "width": 199.159912109375,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    }
+  ],
+  "groups": [
+    {
+      "name": "paginated-container",
+      "passed": true
+    },
+    {
+      "name": "paginated-viewport",
+      "passed": true
+    },
+    {
+      "name": "navigation-and-search",
+      "passed": true
+    },
+    {
+      "name": "scroll-container",
+      "passed": true
+    },
+    {
+      "name": "vertical-source",
+      "passed": true
+    },
+    {
+      "name": "epub-fixed",
+      "passed": true
+    },
+    {
+      "name": "pdf-fixed",
+      "passed": true
+    }
+  ],
+  "errors": [
+    "Cannot read properties of null (reading 'Range')",
+    "Cannot read properties of null (reading 'Range')"
+  ],
+  "consoleErrors": [],
+  "externalRequests": [],
+  "commands": [
+    {
+      "type": "setThemeColors"
+    },
+    {
+      "type": "openBook",
+      "settings": {
+        "fontSize": 18,
+        "lineHeight": 1.7,
+        "pageMargin": 16,
+        "paginatedLayout": "double",
+        "viewMode": "paginated"
+      },
+      "fileName": "horizontal.epub"
+    },
+    {
+      "type": "goToFraction"
+    },
+    {
+      "type": "applySettings",
+      "settings": {
+        "paginatedLayout": "single"
+      }
+    },
+    {
+      "type": "applySettings",
+      "settings": {
+        "fontSize": 32,
+        "paginatedLayout": "double"
+      }
+    },
+    {
+      "type": "setThemeColors"
+    },
+    {
+      "type": "openBook",
+      "settings": {
+        "fontSize": 18,
+        "lineHeight": 1.7,
+        "pageMargin": 16,
+        "paginatedLayout": "double",
+        "viewMode": "paginated"
+      },
+      "fileName": "horizontal.epub"
+    },
+    {
+      "type": "goToFraction"
+    },
+    {
+      "type": "setThemeColors"
+    },
+    {
+      "type": "openBook",
+      "settings": {
+        "fontSize": 18,
+        "lineHeight": 1.7,
+        "pageMargin": 16,
+        "paginatedLayout": "double",
+        "viewMode": "paginated"
+      },
+      "fileName": "horizontal.epub"
+    },
+    {
+      "type": "goNext"
+    },
+    {
+      "type": "goPrev"
+    },
+    {
+      "type": "goToHref"
+    },
+    {
+      "type": "goToCFI"
+    },
+    {
+      "type": "search"
+    },
+    {
+      "type": "navigateSearch"
+    },
+    {
+      "type": "setThemeColors"
+    },
+    {
+      "type": "openBook",
+      "settings": {
+        "fontSize": 18,
+        "lineHeight": 1.7,
+        "pageMargin": 16,
+        "paginatedLayout": "double",
+        "viewMode": "scroll"
+      },
+      "fileName": "horizontal.epub"
+    },
+    {
+      "type": "goToFraction"
+    },
+    {
+      "type": "goNext"
+    },
+    {
+      "type": "setThemeColors"
+    },
+    {
+      "type": "openBook",
+      "settings": {
+        "fontSize": 18,
+        "lineHeight": 1.7,
+        "pageMargin": 16,
+        "paginatedLayout": "double",
+        "viewMode": "paginated"
+      },
+      "fileName": "vertical.epub"
+    },
+    {
+      "type": "goToFraction"
+    },
+    {
+      "type": "setThemeColors"
+    },
+    {
+      "type": "openBook",
+      "settings": {
+        "fontSize": 18,
+        "lineHeight": 1.7,
+        "pageMargin": 16,
+        "paginatedLayout": "double",
+        "viewMode": "paginated"
+      },
+      "fileName": "fixed.epub"
+    },
+    {
+      "type": "goNext"
+    },
+    {
+      "type": "applySettings",
+      "settings": {
+        "paginatedLayout": "single"
+      }
+    },
+    {
+      "type": "setThemeColors"
+    },
+    {
+      "type": "openBook",
+      "settings": {
+        "fontSize": 18,
+        "lineHeight": 1.7,
+        "pageMargin": 16,
+        "paginatedLayout": "double",
+        "viewMode": "paginated"
+      },
+      "fileName": "synthetic-ai-split.pdf"
+    },
+    {
+      "type": "goNext"
+    },
+    {
+      "type": "applySettings",
+      "settings": {
+        "fontSize": 48,
+        "lineHeight": 3,
+        "paragraphSpacing": 30,
+        "viewMode": "scroll"
+      }
+    },
+    {
+      "type": "applySettings",
+      "settings": {
+        "paginatedLayout": "single"
+      }
+    }
+  ],
+  "search": {
+    "count": 210,
+    "target": {
+      "cfi": "epubcfi(/6/2!/4/6[p2],/1:5,/1:7)",
+      "chapter": "第1章 阅读时光",
+      "excerpt": "第2段。在海边的小城，阅读从一个普通的清晨开始。窗外的树影轻轻摇动，桌上的书打开到昨日停下的一页。有人喜欢一口气读…"
+    }
+  },
+  "passed": false,
+  "finished": "2026-10-27T15:47:29.107Z"
+}

@@ -2,7 +2,7 @@ import { useColors } from "@/styles/theme";
 import type { ReactNode } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
-export type ReaderAuxiliaryPanel = "toc" | "notebook" | "search";
+export type ReaderAuxiliaryPanel = "toc" | "notebook" | "search" | "ai";
 
 interface ReaderAuxiliaryPaneProps {
   panel: ReaderAuxiliaryPanel | null;
@@ -16,6 +16,7 @@ interface ReaderAuxiliaryPaneProps {
   searchContent: ReactNode;
   tocContent: ReactNode;
   notebookContent: ReactNode;
+  aiContent: ReactNode;
 }
 
 export function ReaderAuxiliaryPane({
@@ -30,6 +31,7 @@ export function ReaderAuxiliaryPane({
   searchContent,
   tocContent,
   notebookContent,
+  aiContent,
 }: ReaderAuxiliaryPaneProps) {
   const colors = useColors();
   return (
@@ -41,6 +43,9 @@ export function ReaderAuxiliaryPane({
         />
       )}
       <View
+        pointerEvents={panel ? "auto" : "none"}
+        accessibilityElementsHidden={!panel}
+        importantForAccessibility={panel ? "auto" : "no-hide-descendants"}
         style={[
           {
             backgroundColor: colors.card,
@@ -48,6 +53,7 @@ export function ReaderAuxiliaryPane({
             borderLeftColor: colors.border,
             paddingTop: docked || panel === "search" ? topInset : 0,
             display: panel !== null ? "flex" : "none",
+            overflow: "hidden",
           },
           docked
             ? { width }
@@ -56,9 +62,11 @@ export function ReaderAuxiliaryPane({
                 left: insets.left,
                 right: insets.right,
                 zIndex: 110,
-                ...(panel === "search"
-                  ? { top: 0, height: searchPanelHeight }
-                  : { bottom: insets.bottom, height: windowHeight * 0.7 }),
+                ...(panel === "ai"
+                  ? { top: 0, bottom: insets.bottom, paddingTop: topInset }
+                  : panel === "search"
+                    ? { top: 0, height: searchPanelHeight }
+                    : { bottom: insets.bottom, height: windowHeight * 0.7 }),
               },
         ]}
       >
@@ -70,6 +78,14 @@ export function ReaderAuxiliaryPane({
         </View>
         <View style={{ flex: 1, minHeight: 0, display: panel === "notebook" ? "flex" : "none" }}>
           {notebookContent}
+        </View>
+        <View
+          style={{ flex: 1, minHeight: 0, display: panel === "ai" ? "flex" : "none" }}
+          pointerEvents={panel === "ai" ? "auto" : "none"}
+          accessibilityElementsHidden={panel !== "ai"}
+          importantForAccessibility={panel === "ai" ? "auto" : "no-hide-descendants"}
+        >
+          {aiContent}
         </View>
       </View>
     </>

@@ -14,10 +14,9 @@ import type { AttachedQuote } from "@readany/core/types";
  * ChatInput — touch-optimized chat input matching app-mobile MobileChatInput.
  * Rounded container with textarea on top, action bar (deep thinking + send) below.
  */
-import { useCallback, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Keyboard,
   Platform,
   StyleSheet,
   Text,
@@ -40,21 +39,32 @@ interface ChatInputProps {
   onRemoveQuote?: (id: string) => void;
   placeholder?: string;
   keyboardBottomOffset?: number;
+  active?: boolean;
+  onInputFocusChange?: (focused: boolean) => void;
+}
+
+export interface ChatInputHandle {
+  blur: () => void;
 }
 
 const SINGLE_LINE_INPUT_HEIGHT = 46;
 const MAX_INPUT_HEIGHT = 112;
 const INPUT_PADDING_VERTICAL = 16;
 
-export function ChatInput({
-  onSend,
-  onStop,
-  isStreaming,
-  quotes = [],
-  onRemoveQuote,
-  placeholder,
-  keyboardBottomOffset = 0,
-}: ChatInputProps) {
+export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function ChatInput(
+  {
+    onSend,
+    onStop,
+    isStreaming,
+    quotes = [],
+    onRemoveQuote,
+    placeholder,
+    keyboardBottomOffset = 0,
+    active = true,
+    onInputFocusChange,
+  },
+  ref,
+) {
   const [text, setText] = useState("");
   const [deepThinking, setDeepThinking] = useState(false);
   const [spoilerFree, setSpoilerFree] = useState(false);
@@ -63,6 +73,14 @@ export function ChatInput({
   const colors = useColors();
   const s = makeStyles(colors);
   const inputRef = useRef<TextInput>(null);
+  useImperativeHandle(ref, () => ({ blur: () => inputRef.current?.blur() }), []);
+  useEffect(() => {
+    if (!active) {
+      // 隐藏对话时只收起自己的输入框，保留草稿与其他区域的键盘。
+      inputRef.current?.blur();
+      onInputFocusChange?.(false);
+    }
+  }, [active, onInputFocusChange]);
   const keyboardInsets = useKeyboardInsets();
   const effectiveKeyboardBottomOffset = keyboardBottomOffset ?? keyboardInsets.safeAreaBottom;
   const visibleKeyboardPadding =
@@ -75,13 +93,13 @@ export function ChatInput({
 
   const handleSend = useCallback(() => {
     const trimmed = text.trim();
-    if (!trimmed && quotes.length === 0) return;
+    if (!active || (!trimmed && quotes.length === 0)) return;
     onSend(trimmed, deepThinking, spoilerFree, quotes.length > 0 ? quotes : undefined);
     setInputHeight(SINGLE_LINE_INPUT_HEIGHT);
     setText("");
     setDeepThinking(false);
     setSpoilerFree(false);
-  }, [text, deepThinking, spoilerFree, quotes, onSend]);
+  }, [active, text, deepThinking, spoilerFree, quotes, onSend]);
 
   const handleTextChange = useCallback((nextText: string) => {
     setText(nextText);
@@ -107,7 +125,10 @@ export function ChatInput({
   const canSend = text.trim().length > 0 || quotes.length > 0;
 
   return (
-    <View style={[s.wrapper, { paddingBottom: bottomPadding }]}>
+    <View
+      style={[s.wrapper, { paddingBottom: bottomPadding }]}
+      pointerEvents={active ? "auto" : "none"}
+    >
       <View style={s.container}>
         {/* Attached quotes chips */}
         {quotes.length > 0 && (
@@ -144,7 +165,9 @@ export function ChatInput({
           onContentSizeChange={handleContentSizeChange}
           returnKeyType="default"
           blurOnSubmit={false}
-          editable={!isStreaming}
+          editable={active && !isStreaming}
+          onFocus={() => onInputFocusChange?.(true)}
+          onBlur={() => onInputFocusChange?.(false)}
         />
 
         {/* Action bar: deep thinking toggle + spoiler-free toggle + send */}
@@ -177,7 +200,7 @@ export function ChatInput({
             {keyboardInsets.isVisible && (
               <TouchableOpacity
                 style={s.sendBtn}
-                onPress={Keyboard.dismiss}
+                onPress={() => inputRef.current?.blur()}
                 activeOpacity={0.7}
                 accessibilityLabel={t("chat.dismissKeyboard", "收起键盘")}
               >
@@ -193,7 +216,7 @@ export function ChatInput({
               <TouchableOpacity
                 style={[s.sendBtn, canSend && s.sendBtnActive]}
                 onPress={handleSend}
-                disabled={!canSend}
+                disabled={!active || !canSend}
                 activeOpacity={0.7}
               >
                 <SendIcon
@@ -217,7 +240,7 @@ export function ChatInput({
       )}
     </View>
   );
-}
+});
 
 const makeStyles = (colors: ThemeColors) =>
   StyleSheet.create({

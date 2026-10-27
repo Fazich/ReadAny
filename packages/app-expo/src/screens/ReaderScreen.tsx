@@ -1,3 +1,4 @@
+import { BookChatContent, type BookChatSelectionRequest } from "@/components/chat/BookChatContent";
 import { MarkdownRenderer } from "@/components/chat/MarkdownRenderer";
 import { BookmarkRibbon } from "@/components/reader/BookmarkRibbon";
 import { ChapterTranslationSheet } from "@/components/reader/ChapterTranslationSheet";
@@ -17,8 +18,10 @@ import {
   XIcon,
 } from "@/components/ui/Icon";
 import { SyncButton } from "@/components/ui/SyncButton";
+import { useKeyboardInsets } from "@/hooks/use-keyboard-insets";
 import { useReaderBridge } from "@/hooks/use-reader-bridge";
 import type { RelocateEvent, SelectionEvent, VisibleTTSSegment } from "@/hooks/use-reader-bridge";
+import { openMobileBook } from "@/lib/library/open-mobile-book";
 import { startFileServer, stopFileServer } from "@/lib/reader/local-file-server";
 import type { RootStackParamList } from "@/navigation/RootNavigator";
 import {
@@ -42,6 +45,7 @@ import { createSelectionNoteMutation } from "@readany/core/reader";
 import { getPlatformService } from "@readany/core/services";
 import { getCSSFontFace, useFontStore } from "@readany/core/stores";
 import type { HighlightColor, ReadSettings, TOCItem } from "@readany/core/types";
+import type { CitationPart } from "@readany/core/types/message";
 import { eventBus } from "@readany/core/utils/event-bus";
 import { throttle } from "@readany/core/utils/throttle";
 import { Asset } from "expo-asset";
@@ -72,9 +76,16 @@ import { WebView } from "react-native-webview";
 
 // ── Extracted modules ──
 import { NotesView } from "./NotesView";
+import { ReaderAIResizeHandle } from "./reader/ReaderAIResizeHandle";
 import { ReaderAuxiliaryPane, type ReaderAuxiliaryPanel } from "./reader/ReaderAuxiliaryPane";
 import { ReaderNoteViewModal } from "./reader/ReaderNoteViewModal";
 import { ReaderSearchPanel } from "./reader/ReaderSearchPanel";
+import {
+  clampReaderAIPanelWidth,
+  getReaderAIPanelRatio,
+  getReaderAISplitLayout,
+  getReaderAIWindowHeight,
+} from "./reader/reader-ai-layout";
 
 const REFLOWABLE_CHARACTERS_PER_LOCATION = 1500;
 const MAX_TRACKED_LOCATION_DELTA = 20;
@@ -222,6 +233,12 @@ export function ReaderScreen({ route, navigation }: Props) {
   const showTOC = auxiliaryPanel === "toc";
   const showNotebook = auxiliaryPanel === "notebook";
   const showSearch = auxiliaryPanel === "search";
+  const showAI = auxiliaryPanel === "ai";
+  const [aiBookId, setAIBookId] = useState<string | null>(null);
+  const [aiSelectionRequest, setAISelectionRequest] = useState<BookChatSelectionRequest>();
+  const aiSelectionSequence = useRef(0);
+  const [aiInputFocused, setAIInputFocused] = useState(false);
+  const keyboardInsets = useKeyboardInsets();
   const [tocActiveTab, setTocActiveTab] = useState<"toc" | "bookmarks">("toc");
   const [showSettings, setShowSettings] = useState(false);
   const [showTranslation, setShowTranslation] = useState(false);
@@ -391,6 +408,51 @@ export function ReaderScreen({ route, navigation }: Props) {
   const dockedTools = safeReaderWidth >= 680;
   const auxiliaryOpen = auxiliaryPanel !== null;
   const auxiliaryWidth = Math.min(320, Math.max(280, safeReaderWidth * 0.32));
+  const readerAiPanelRatio = useSettingsStore((s) => s.readerAiPanelRatio);
+  const setReaderAiPanelRatio = useSettingsStore((s) => s.setReaderAiPanelRatio);
+  const aiSplit = getReaderAISplitLayout({
+    availableWidth: safeReaderWidth,
+    windowWidth,
+    windowHeight: getReaderAIWindowHeight(
+      windowHeight,
+      keyboardInsets.rawHeight,
+      Platform.OS === "android",
+    ),
+    panelRatio: readerAiPanelRatio,
+  });
+  const aiLayoutKey = `${windowWidth}:${windowHeight}:${showAI}`;
+  const [aiDrag, setAIDrag] = useState<{ layoutKey: string; width: number } | null>(null);
+  const aiWidth = aiSplit
+    ? clampReaderAIPanelWidth(
+        aiDrag?.layoutKey === aiLayoutKey ? aiDrag.width : aiSplit.aiWidth,
+        safeReaderWidth,
+      )
+    : safeReaderWidth;
+  const aiFullscreen = showAI && !aiSplit;
+
+  const openAI = useCallback(
+    (text?: string, chapterTitle?: string) => {
+      setAIBookId(bookId);
+      if (text) {
+        setAISelectionRequest({
+          id: `selection-${++aiSelectionSequence.current}`,
+          text,
+          chapterTitle,
+        });
+      }
+      setAuxiliaryPanel("ai");
+      setSelection(null);
+    },
+    [bookId],
+  );
+
+  useEffect(() => {
+    if (!aiBookId || aiBookId === bookId) return;
+    setAIBookId(null);
+    setAISelectionRequest(undefined);
+    setAIInputFocused(false);
+    setAuxiliaryPanel(null);
+  }, [bookId, aiBookId]);
 
   // ── Bookmark ───────────────────────────────────────────────────────────────
   const bookmark = useReaderBookmark({
@@ -446,6 +508,26 @@ export function ReaderScreen({ route, navigation }: Props) {
     setAuxiliaryPanel(null);
   }, [auxiliaryPanel, search.closeSearch]);
 
+  const handleAICitation = useCallback(
+    (citation: CitationPart) => {
+      if (citation.bookId === bookId) {
+        if (!citation.cfi) return;
+        goToCFISafely(citation.cfi);
+        bridgeRef.current?.flashHighlight(citation.cfi, "orange", 1800);
+        if (!aiSplit) closeAuxiliaryPanel();
+      } else if (citation.bookId) {
+        void openMobileBook({
+          bookId: citation.bookId,
+          navigation,
+          t,
+          cfi: citation.cfi,
+          highlight: true,
+        });
+      }
+    },
+    [bookId, goToCFISafely, aiSplit, closeAuxiliaryPanel, navigation, t],
+  );
+
   const closeSearchWithPrompt = useCallback(() => {
     const original = search.searchStartCfi;
     const count = search.searchResultCount;
@@ -462,7 +544,14 @@ export function ReaderScreen({ route, navigation }: Props) {
       duration: 180,
       useNativeDriver: true,
     }).start();
-  }, [search.searchStartCfi, search.searchResultCount, t, goToCFISafely, closeAuxiliaryPanel, toolbarAnim]);
+  }, [
+    search.searchStartCfi,
+    search.searchResultCount,
+    t,
+    goToCFISafely,
+    closeAuxiliaryPanel,
+    toolbarAnim,
+  ]);
 
   useEffect(() => {
     progressRef.current = progress;
@@ -910,13 +999,13 @@ export function ReaderScreen({ route, navigation }: Props) {
   }, [noteTooltip]);
 
   useEffect(() => {
-    if (!auxiliaryOpen) return;
+    if (!auxiliaryOpen || showAI || !isFocused) return;
     const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
       closeAuxiliaryPanel();
       return true;
     });
     return () => subscription.remove();
-  }, [auxiliaryOpen, closeAuxiliaryPanel]);
+  }, [auxiliaryOpen, showAI, isFocused, closeAuxiliaryPanel]);
 
   // ── Volume button paging ─────────────────────────────────────────────────
   const isPureReadingContext = useMemo(
@@ -931,6 +1020,9 @@ export function ReaderScreen({ route, navigation }: Props) {
       !showTOC &&
       !showSettings &&
       !showNotebook &&
+      !aiFullscreen &&
+      !aiInputFocused &&
+      !keyboardInsets.isVisible &&
       !showTTS &&
       !showTranslation &&
       !showChapterTranslation &&
@@ -952,6 +1044,9 @@ export function ReaderScreen({ route, navigation }: Props) {
       showTOC,
       showSettings,
       showNotebook,
+      aiFullscreen,
+      aiInputFocused,
+      keyboardInsets.isVisible,
       showTTS,
       showTranslation,
       showChapterTranslation,
@@ -1526,6 +1621,9 @@ export function ReaderScreen({ route, navigation }: Props) {
     >
       <View
         style={{ flex: 1, minWidth: 0 }}
+        pointerEvents={aiFullscreen ? "none" : "auto"}
+        accessibilityElementsHidden={aiFullscreen}
+        importantForAccessibility={aiFullscreen ? "no-hide-descendants" : "auto"}
         onLayout={(event) => {
           const { width, height } = event.nativeEvent.layout;
           setReaderSize((previous) =>
@@ -1688,16 +1786,7 @@ export function ReaderScreen({ route, navigation }: Props) {
               tts.startSelectionTTS(text, cfi);
               setSelection(null);
             }}
-            onAIChat={() => {
-              const selectedText = selectionPopoverSelection.text;
-              const chapter = currentChapter;
-              setSelection(null);
-              navigation.navigate("BookChat", {
-                bookId,
-                selectedText,
-                chapterTitle: chapter,
-              });
-            }}
+            onAIChat={() => openAI(selectionPopoverSelection.text, currentChapter)}
             onNote={(text, cfi) => {
               const mutation = createSelectionNoteMutation({
                 bookId,
@@ -1849,10 +1938,7 @@ export function ReaderScreen({ route, navigation }: Props) {
             >
               <HeadphonesIcon size={20} color="#fff" />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={s.floatingToolBtn}
-              onPress={() => navigation.navigate("BookChat", { bookId })}
-            >
+            <TouchableOpacity style={s.floatingToolBtn} onPress={() => openAI()}>
               <BotIcon size={20} color="#fff" />
             </TouchableOpacity>
           </Animated.View>
@@ -1976,15 +2062,44 @@ export function ReaderScreen({ route, navigation }: Props) {
         )}
       </View>
 
+      {showAI && aiSplit && (
+        <ReaderAIResizeHandle
+          width={aiWidth}
+          minWidth={aiSplit.minAiWidth}
+          maxWidth={aiSplit.maxAiWidth}
+          layoutKey={aiLayoutKey}
+          onChange={(width) => setAIDrag({ layoutKey: aiLayoutKey, width })}
+          onCommit={(width) => {
+            setReaderAiPanelRatio(getReaderAIPanelRatio(width, safeReaderWidth));
+            setAIDrag(null);
+          }}
+          onCancel={() => setAIDrag(null)}
+        />
+      )}
       <ReaderAuxiliaryPane
         panel={auxiliaryPanel}
-        docked={dockedTools}
-        width={auxiliaryWidth}
+        docked={showAI ? !!aiSplit : dockedTools}
+        width={showAI ? aiWidth : auxiliaryWidth}
         windowHeight={windowHeight}
         searchPanelHeight={searchPanelHeight}
         topInset={layoutTopInset}
         insets={insets}
         onClose={closeAuxiliaryPanel}
+        aiContent={
+          aiBookId === bookId ? (
+            <BookChatContent
+              key={bookId}
+              bookId={bookId}
+              embedded
+              visible={showAI && isFocused}
+              selectionRequest={aiSelectionRequest}
+              onClose={closeAuxiliaryPanel}
+              onNavigateToSettings={() => navigation.navigate("AISettings")}
+              onCitationClick={handleAICitation}
+              onInputFocusChange={setAIInputFocused}
+            />
+          ) : null
+        }
         searchContent={<ReaderSearchPanel search={search} onClose={closeSearchWithPrompt} />}
         tocContent={
           <ReaderTOCPanel

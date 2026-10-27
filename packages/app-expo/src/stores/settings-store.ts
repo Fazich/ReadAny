@@ -1,15 +1,19 @@
 /**
  * Settings store — global reading settings, AI config, translation config
  */
+import { logAIEndpointDebug, summarizeDebugText } from "@readany/core/ai/request-debug";
 import type { AIConfig, AIEndpoint, ReadSettings } from "@readany/core/types";
 import type { TranslationConfig, TranslationTargetLang } from "@readany/core/types/translation";
-import { logAIEndpointDebug, summarizeDebugText } from "@readany/core/ai/request-debug";
 import {
   buildProviderModelsUrl,
   providerRequiresApiKey,
   providerSupportsExactRequestUrl,
 } from "@readany/core/utils/api";
 import { create } from "zustand";
+import {
+  DEFAULT_READER_AI_PANEL_RATIO,
+  normalizeReaderAIPanelRatio,
+} from "../screens/reader/reader-ai-layout";
 import { deleteSecure, loadSecure, saveSecure, withPersist } from "./persist";
 
 export interface SettingsState {
@@ -17,6 +21,7 @@ export interface SettingsState {
   translationConfig: TranslationConfig;
   aiConfig: AIConfig;
   settingsUpdatedAt: number;
+  readerAiPanelRatio: number;
   hasCompletedOnboarding: boolean;
   showOnboardingGuide: boolean;
   _hasHydrated: boolean;
@@ -24,6 +29,7 @@ export interface SettingsState {
 
   completeOnboarding: () => void;
   setShowOnboardingGuide: (show: boolean) => void;
+  setReaderAiPanelRatio: (ratio: number) => void;
   updateReadSettings: (updates: Partial<ReadSettings>) => void;
   updateTranslationConfig: (updates: Partial<TranslationConfig>) => void;
   updateAIConfig: (
@@ -103,6 +109,9 @@ function migrateSettingsState(state: SettingsState): SettingsState {
         useBookFonts: true,
       },
     };
+  }
+  if (normalizeReaderAIPanelRatio(next.readerAiPanelRatio) !== next.readerAiPanelRatio) {
+    next = { ...next, readerAiPanelRatio: DEFAULT_READER_AI_PANEL_RATIO };
   }
   return next;
 }
@@ -445,6 +454,7 @@ export const useSettingsStore = create<SettingsState>()(
       translationConfig: defaultTranslationConfig,
       aiConfig: defaultAIConfig,
       settingsUpdatedAt: 0,
+      readerAiPanelRatio: DEFAULT_READER_AI_PANEL_RATIO,
       hasCompletedOnboarding: false,
       showOnboardingGuide: true,
       _hasHydrated: false,
@@ -454,6 +464,8 @@ export const useSettingsStore = create<SettingsState>()(
 
       completeOnboarding: () => set({ hasCompletedOnboarding: true }),
       setShowOnboardingGuide: (show: boolean) => set({ showOnboardingGuide: show }),
+      setReaderAiPanelRatio: (ratio: number) =>
+        set({ readerAiPanelRatio: normalizeReaderAIPanelRatio(ratio) }),
 
       updateReadSettings: (updates) =>
         set((state) => ({
@@ -639,6 +651,7 @@ export const useSettingsStore = create<SettingsState>()(
           readSettings: defaultReadSettings,
           translationConfig: defaultTranslationConfig,
           aiConfig: defaultAIConfig,
+          readerAiPanelRatio: DEFAULT_READER_AI_PANEL_RATIO,
           _apiKeysLoaded: false,
         });
       },

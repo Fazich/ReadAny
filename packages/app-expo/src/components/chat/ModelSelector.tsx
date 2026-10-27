@@ -6,7 +6,7 @@ import type { ThemeColors } from "@/styles/theme";
  * ModelSelector — compact pill trigger with popover dropdown.
  * Matches app-mobile MobileModelSelector style.
  */
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Modal,
@@ -20,10 +20,14 @@ import {
 
 interface ModelSelectorProps {
   onNavigateToSettings?: () => void;
+  active?: boolean;
 }
 
-export function ModelSelector({ onNavigateToSettings }: ModelSelectorProps) {
+export function ModelSelector({ onNavigateToSettings, active = true }: ModelSelectorProps) {
   const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    if (!active) setVisible(false);
+  }, [active]);
   const { t } = useTranslation();
   const colors = useColors();
   const s = useMemo(() => makeStyles(colors), [colors]);
@@ -49,7 +53,12 @@ export function ModelSelector({ onNavigateToSettings }: ModelSelectorProps) {
 
   if (aiConfig.endpoints.length === 0) {
     return (
-      <TouchableOpacity style={s.trigger} onPress={onNavigateToSettings} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={s.trigger}
+        onPress={onNavigateToSettings}
+        activeOpacity={0.7}
+        disabled={!active}
+      >
         <Text style={[s.triggerText, { color: colors.amber }]}>
           {t("chat.configureAI", "配置 AI")}
         </Text>
@@ -61,7 +70,8 @@ export function ModelSelector({ onNavigateToSettings }: ModelSelectorProps) {
     <>
       <TouchableOpacity
         style={s.trigger}
-        onPress={() => canSwitch && setVisible(true)}
+        onPress={() => active && canSwitch && setVisible(true)}
+        disabled={!active || !canSwitch}
         activeOpacity={canSwitch ? 0.7 : 1}
       >
         <Text style={s.triggerText} numberOfLines={1}>
@@ -71,7 +81,7 @@ export function ModelSelector({ onNavigateToSettings }: ModelSelectorProps) {
       </TouchableOpacity>
 
       <Modal
-        visible={visible}
+        visible={active && visible}
         transparent
         animationType="fade"
         onRequestClose={() => setVisible(false)}
@@ -122,6 +132,8 @@ const makeStyles = (colors: ThemeColors) =>
       gap: 3,
       paddingHorizontal: 8,
       paddingVertical: 3,
+      minHeight: 44,
+      minWidth: 44,
       borderRadius: radius.full,
       borderWidth: 1,
       borderColor: colors.border,

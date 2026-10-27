@@ -1,0 +1,936 @@
+{
+  "started": "2026-10-27T15:52:38.298Z",
+  "readerSha256": "63abaefc5fb21aac7fcace4147c621dc86c1547fe1c4c78c445cf07f3778836b",
+  "scenarios": [
+    {
+      "name": "pdf-middle-spread-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 40,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 2\n\n\nPage 2 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 600,
+            "height": 800,
+            "cssWidth": "600px",
+            "cssHeight": "800px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 2",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 54,
+              "y": 60.796875,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        },
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 640,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 3\n\n\nPage 3 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 3 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 3 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 600,
+            "height": 800,
+            "cssWidth": "600px",
+            "cssHeight": "800px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 3",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 54,
+              "y": 60.796875,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-middle-spread-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 320,
+          "height": 427,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 186.671875,
+            "width": 320,
+            "height": 426.65625
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 2\n\n\nPage 2 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 320,
+            "height": 426,
+            "cssWidth": "320px",
+            "cssHeight": "426px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 2",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 28.796875,
+              "y": 32.4375,
+              "width": 199.1600799560547,
+              "height": 16
+            }
+          }
+        },
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "frameTransform": "none",
+          "text": "\n\nSYNTHETIC PDF - PAGE 3Page 3 / Line 01: Fixed coordinates stay unchanged.Page 3 / Line 02: Fixed coordinates stay unchanged.Page 3 / Line 03: Fixed coordinate",
+          "canvas": {
+            "width": 320,
+            "height": 426,
+            "cssWidth": "320px",
+            "cssHeight": "426px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 3",
+            "fontSize": "16px",
+            "transform": "none",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-middle-spread-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 400,
+          "height": 533,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 133.328125,
+            "width": 400,
+            "height": 533.328125
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 2\n\n\nPage 2 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 400,
+            "height": 533,
+            "cssWidth": "400px",
+            "cssHeight": "533px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 2",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 36,
+              "y": 40.5,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        },
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "frameTransform": "none",
+          "text": "\n\nSYNTHETIC PDF - PAGE 3Page 3 / Line 01: Fixed coordinates stay unchanged.Page 3 / Line 02: Fixed coordinates stay unchanged.Page 3 / Line 03: Fixed coordinate",
+          "canvas": {
+            "width": 400,
+            "height": 533,
+            "cssWidth": "400px",
+            "cssHeight": "533px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 3",
+            "fontSize": "16px",
+            "transform": "none",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-middle-spread-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 560,
+          "height": 747,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 26.671875,
+            "width": 560,
+            "height": 746.65625
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 2\n\n\nPage 2 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 560,
+            "height": 746,
+            "cssWidth": "560px",
+            "cssHeight": "746px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 2",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 50.390625,
+              "y": 56.765625,
+              "width": 199.1599884033203,
+              "height": 16
+            }
+          }
+        },
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "frameTransform": "none",
+          "text": "\n\nSYNTHETIC PDF - PAGE 3Page 3 / Line 01: Fixed coordinates stay unchanged.Page 3 / Line 02: Fixed coordinates stay unchanged.Page 3 / Line 03: Fixed coordinate",
+          "canvas": {
+            "width": 560,
+            "height": 746,
+            "cssWidth": "560px",
+            "cssHeight": "746px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 3",
+            "fontSize": "16px",
+            "transform": "none",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-middle-spread-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 40,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 2\n\n\nPage 2 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 600,
+            "height": 800,
+            "cssWidth": "600px",
+            "cssHeight": "800px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 2",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 54,
+              "y": 60.796875,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        },
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 640,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 3\n\n\nPage 3 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 3 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 3 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 600,
+            "height": 800,
+            "cssWidth": "600px",
+            "cssHeight": "800px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 3",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 54,
+              "y": 60.796875,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-middle-reflow-settings-ignored",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "auto",
+      "zoom": "fit-page",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 40,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 2\n\n\nPage 2 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 600,
+            "height": 800,
+            "cssWidth": "600px",
+            "cssHeight": "800px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 2",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 54,
+              "y": 60.796875,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        },
+        {
+          "width": 600,
+          "height": 800,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 640,
+            "y": 0,
+            "width": 600,
+            "height": 800
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 3\n\n\nPage 3 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 3 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 3 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 600,
+            "height": 800,
+            "cssWidth": "600px",
+            "cssHeight": "800px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 3",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 54,
+              "y": 60.796875,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-middle-spread-single-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 1280,
+          "height": 1707,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 1706.65625
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 2\n\n\nPage 2 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 1280,
+            "height": 1706,
+            "cssWidth": "1280px",
+            "cssHeight": "1706px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 2",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 115.1875,
+              "y": 129.71875,
+              "width": 199.159912109375,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-middle-spread-single-320",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 320,
+          "height": 427,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 186.671875,
+            "width": 320,
+            "height": 426.65625
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 2\n\n\nPage 2 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 320,
+            "height": 426,
+            "cssWidth": "320px",
+            "cssHeight": "426px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 2",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 28.796875,
+              "y": 32.4375,
+              "width": 199.1600799560547,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-middle-spread-single-400",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 400,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 400,
+          "height": 533,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 133.328125,
+            "width": 400,
+            "height": 533.328125
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 2\n\n\nPage 2 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 400,
+            "height": 533,
+            "cssWidth": "400px",
+            "cssHeight": "533px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 2",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 36,
+              "y": 40.5,
+              "width": 199.15985107421875,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-middle-spread-single-560",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 560,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 560,
+          "height": 747,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 26.671875,
+            "width": 560,
+            "height": 746.65625
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 2\n\n\nPage 2 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 560,
+            "height": 746,
+            "cssWidth": "560px",
+            "cssHeight": "746px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 2",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 50.390625,
+              "y": 56.765625,
+              "width": 199.1599884033203,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    },
+    {
+      "name": "pdf-middle-spread-single-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "readerBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 800
+      },
+      "fixed": true,
+      "maxColumns": null,
+      "maxInline": null,
+      "flow": null,
+      "spread": "none",
+      "zoom": "fit-width",
+      "cfi": "epubcfi(/6/4)",
+      "frames": [
+        {
+          "width": 1280,
+          "height": 1707,
+          "writingMode": "horizontal-tb",
+          "fontSize": null,
+          "rootFontSize": "16px",
+          "columnWidth": "auto",
+          "columnGap": "normal",
+          "frameBounds": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 1706.65625
+          },
+          "frameTransform": "none",
+          "text": "SYNTHETIC PDF - PAGE 2\n\n\nPage 2 / Line 01: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 02: Fixed coordinates stay unchanged.\n\n\nPage 2 / Line 03: Fixed coo",
+          "canvas": {
+            "width": 1280,
+            "height": 1706,
+            "cssWidth": "1280px",
+            "cssHeight": "1706px"
+          },
+          "textLayer": {
+            "text": "SYNTHETIC PDF - PAGE 2",
+            "fontSize": "16px",
+            "transform": "matrix(1.00602, 0, 0, 1, 0, 0)",
+            "rect": {
+              "x": 115.1875,
+              "y": 129.71875,
+              "width": 199.159912109375,
+              "height": 16
+            }
+          }
+        }
+      ],
+      "loadedCount": 1,
+      "sameView": true,
+      "sameRenderer": true,
+      "failures": []
+    }
+  ],
+  "groups": [
+    {
+      "name": "pdf-fixed",
+      "passed": true
+    }
+  ],
+  "errors": [
+    {
+      "stage": "applySettings:{\"fontSize\":48,\"lineHeight\":3,\"paragraphSpacing\":30,\"viewMode\":\"scroll\"}",
+      "message": "Cannot read properties of null (reading 'Range')",
+      "stack": "TypeError: Cannot read properties of null (reading 'Range')\n    at D_ (http://127.0.0.1:52446/reader.html:5570:1460)"
+    },
+    {
+      "stage": "applySettings:{\"fontSize\":48,\"lineHeight\":3,\"paragraphSpacing\":30,\"viewMode\":\"scroll\"}",
+      "message": "Cannot read properties of null (reading 'Range')",
+      "stack": "TypeError: Cannot read properties of null (reading 'Range')\n    at D_ (http://127.0.0.1:52446/reader.html:5570:1460)"
+    },
+    {
+      "stage": "applySettings:{\"paginatedLayout\":\"single\"}",
+      "message": "Cannot read properties of null (reading 'Range')",
+      "stack": "TypeError: Cannot read properties of null (reading 'Range')\n    at D_ (http://127.0.0.1:52446/reader.html:5570:1460)"
+    },
+    {
+      "stage": "applySettings:{\"paginatedLayout\":\"single\"}",
+      "message": "Cannot read properties of null (reading 'Range')",
+      "stack": "TypeError: Cannot read properties of null (reading 'Range')\n    at D_ (http://127.0.0.1:52446/reader.html:5570:1460)"
+    }
+  ],
+  "consoleErrors": [],
+  "externalRequests": [],
+  "commands": [
+    {
+      "type": "setThemeColors"
+    },
+    {
+      "type": "openBook",
+      "settings": {
+        "fontSize": 18,
+        "lineHeight": 1.7,
+        "pageMargin": 16,
+        "paginatedLayout": "double",
+        "viewMode": "paginated"
+      },
+      "fileName": "synthetic-ai-split.pdf"
+    },
+    {
+      "type": "goToCFI"
+    },
+    {
+      "type": "applySettings",
+      "settings": {
+        "fontSize": 48,
+        "lineHeight": 3,
+        "paragraphSpacing": 30,
+        "viewMode": "scroll"
+      }
+    },
+    {
+      "type": "applySettings",
+      "settings": {
+        "paginatedLayout": "single"
+      }
+    }
+  ],
+  "passed": false,
+  "finished": "2026-10-27T15:52:58.844Z"
+}
