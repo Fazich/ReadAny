@@ -1,5 +1,4 @@
 import type { ITTSPlayer, TTSConfig } from "@readany/core/tts";
-import { ExpoSpeechTTSPlayer } from "./expo-speech-player";
 import { rnTTSPlayerFactories } from "./rn-tts-factories";
 
 let activePreview: ITTSPlayer | null = null;
@@ -20,7 +19,7 @@ function createPreviewPlayer(engine: TTSConfig["engine"]): ITTSPlayer {
     case "openai-compatible":
       return rnTTSPlayerFactories.createXiaomiTTS();
     default:
-      return new ExpoSpeechTTSPlayer();
+      return rnTTSPlayerFactories.createSystemTTS();
   }
 }
 

@@ -19,9 +19,9 @@ const { players, MockPlayer, speak } = vi.hoisted(() => {
   return { players, MockPlayer, speak };
 });
 
-vi.mock("./expo-speech-player", () => ({ ExpoSpeechTTSPlayer: MockPlayer }));
 vi.mock("./rn-tts-factories", () => ({
   rnTTSPlayerFactories: {
+    createSystemTTS: () => new MockPlayer("system"),
     createEdgeTTS: () => new MockPlayer("edge"),
     createDashScopeTTS: () => new MockPlayer("dashscope"),
     createXiaomiTTS: () => new MockPlayer("cloud"),

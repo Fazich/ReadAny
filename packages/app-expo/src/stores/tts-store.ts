@@ -1,3 +1,4 @@
+import type { TTSPlayerFactories } from "@readany/core/stores";
 import {
   DEFAULT_TTS_CONFIG,
   type ITTSPlayer,
@@ -9,44 +10,16 @@ import {
   shouldRespeakForSynthChange,
   splitNarrationText,
 } from "@readany/core/tts";
-import { Platform } from "react-native";
 import TrackPlayer from "react-native-track-player";
 import { create } from "zustand";
-import { ExpoSpeechTTSPlayer } from "../lib/platform/expo-speech-player";
-import { canUseSystemTtsSynthesis } from "../lib/platform/system-tts-synthesis";
-import { TrackPlayerDashScopeTTSPlayer } from "../lib/platform/track-player-dashscope-player";
-import { TrackPlayerEdgeTTSPlayer } from "../lib/platform/track-player-edge-player";
-import { TrackPlayerCloudTTSPlayer } from "../lib/platform/track-player-cloud-tts-player";
-import { TrackPlayerSystemTTSPlayer } from "../lib/platform/track-player-system-player";
+import { rnTTSPlayerFactories } from "../lib/platform/rn-tts-factories";
 import { withPersist } from "./persist";
 
 export type TTSPlayState = "stopped" | "playing" | "paused" | "loading";
 
-export interface TTSPlayerFactories {
-  createSystemTTS: () => ITTSPlayer;
-  createEdgeTTS: () => ITTSPlayer;
-  createDashScopeTTS: () => ITTSPlayer;
-  createXiaomiTTS: () => ITTSPlayer;
-  createOpenAICompatibleTTS: () => ITTSPlayer;
-}
+export type { TTSPlayerFactories } from "@readany/core/stores";
 
-const defaultFactories: TTSPlayerFactories = {
-  createSystemTTS: () => {
-    if (Platform.OS === "android" || Platform.OS === "ios") {
-      if (!canUseSystemTtsSynthesis()) {
-        console.warn("[TTS] System TTS synthesis module unavailable; native rebuild required");
-      }
-      return new TrackPlayerSystemTTSPlayer();
-    }
-    return new ExpoSpeechTTSPlayer();
-  },
-  createEdgeTTS: () => new TrackPlayerEdgeTTSPlayer(),
-  createDashScopeTTS: () => new TrackPlayerDashScopeTTSPlayer(),
-  createXiaomiTTS: () => new TrackPlayerCloudTTSPlayer(),
-  createOpenAICompatibleTTS: () => new TrackPlayerCloudTTSPlayer(),
-};
-
-let _factories: TTSPlayerFactories = defaultFactories;
+let _factories: TTSPlayerFactories = rnTTSPlayerFactories;
 let _systemTTS: ITTSPlayer | null = null;
 let _edgeTTS: ITTSPlayer | null = null;
 let _dashscopeTTS: ITTSPlayer | null = null;
@@ -176,7 +149,8 @@ function syncProfileUpdatesFromLegacyFields(
   } else if (targetProvider === "openai-compatible") {
     if (updates.openaiTtsBaseUrl !== undefined) profileUpdates.baseUrl = updates.openaiTtsBaseUrl;
     if (updates.openaiTtsApiKey !== undefined) profileUpdates.apiKey = updates.openaiTtsApiKey;
-    if (updates.openaiTtsEndpoint !== undefined) profileUpdates.endpoint = updates.openaiTtsEndpoint;
+    if (updates.openaiTtsEndpoint !== undefined)
+      profileUpdates.endpoint = updates.openaiTtsEndpoint;
     if (updates.openaiTtsModel !== undefined) profileUpdates.model = updates.openaiTtsModel;
     if (updates.openaiTtsVoice !== undefined) profileUpdates.voice = updates.openaiTtsVoice;
     if (updates.openaiTtsFormat !== undefined) profileUpdates.format = updates.openaiTtsFormat;
@@ -676,7 +650,7 @@ export const useTTSStore = create<TTSState>()(
 );
 
 export function setTTSPlayerFactories(factories: Partial<TTSPlayerFactories>): void {
-  _factories = { ...defaultFactories, ...factories };
+  _factories = { ...rnTTSPlayerFactories, ...factories };
   detachAndStopAllPlayers();
   _systemTTS = null;
   _edgeTTS = null;

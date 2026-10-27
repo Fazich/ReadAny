@@ -22,6 +22,7 @@ export class TrackPlayerSystemTTSPlayer implements ITTSPlayer {
   onStateChange?: (state: "playing" | "paused" | "stopped") => void;
   onChunkChange?: (index: number, total: number) => void;
   onEnd?: () => void;
+  onError?: (error: Error) => void;
 
   private _stopped = false;
   private _paused = false;
@@ -50,43 +51,49 @@ export class TrackPlayerSystemTTSPlayer implements ITTSPlayer {
 
   async speak(text: string | string[], config: TTSConfig): Promise<void> {
     const gen = ++this._speakGen;
-    await this._cleanup();
-    if (gen !== this._speakGen) return;
+    try {
+      await this._cleanup(gen);
+      if (gen !== this._speakGen) return;
 
-    this._stopped = false;
-    this._paused = false;
-    this._chunks = Array.isArray(text)
-      ? text.map((chunk) => chunk.trim()).filter(Boolean)
-      : splitIntoChunks(text, CHUNK_MAX_CHARS);
-    this._currentIndex = 0;
-    this._tempFiles = [];
-    this._playStarted = false;
-    this._lastNotifiedIndex = -1;
-    this._currentArtwork = this._getArtwork?.() || DEFAULT_ARTWORK;
-    this._currentTitle = this._getTitle?.() || "";
-    this._queuedCount = 0;
-    this._synthesisComplete = false;
+      this._stopped = false;
+      this._paused = false;
+      this._chunks = Array.isArray(text)
+        ? text.map((chunk) => chunk.trim()).filter(Boolean)
+        : splitIntoChunks(text, CHUNK_MAX_CHARS).filter(Boolean);
+      this._currentIndex = 0;
+      this._tempFiles = [];
+      this._playStarted = false;
+      this._lastNotifiedIndex = -1;
+      this._currentArtwork = this._getArtwork?.() || DEFAULT_ARTWORK;
+      this._currentTitle = this._getTitle?.() || "";
+      this._queuedCount = 0;
+      this._synthesisComplete = false;
 
-    if (this._chunks.length === 0) {
-      this.onStateChange?.("stopped");
-      this.onEnd?.();
-      return;
-    }
+      if (this._chunks.length === 0) {
+        this.onStateChange?.("stopped");
+        this.onEnd?.();
+        return;
+      }
 
-    await TrackPlayer.reset();
-    this._subscribeToEvents(gen);
-    this.onStateChange?.("playing");
+      await TrackPlayer.reset();
+      if (gen !== this._speakGen || this._stopped) return;
+      this._subscribeToEvents(gen);
+      this.onStateChange?.("playing");
 
-    const initialBufferCount = Math.min(INITIAL_BUFFER_CHUNKS, this._chunks.length);
-    for (let i = 0; i < initialBufferCount; i++) {
-      const queued = await this._synthesizeAndQueueChunk(gen, config, i);
-      if (!queued || gen !== this._speakGen || this._stopped) return;
-    }
-    this._synthesisComplete = initialBufferCount >= this._chunks.length;
+      const initialBufferCount = Math.min(INITIAL_BUFFER_CHUNKS, this._chunks.length);
+      for (let i = 0; i < initialBufferCount; i++) {
+        const queued = await this._synthesizeAndQueueChunk(gen, config, i);
+        if (!queued || gen !== this._speakGen || this._stopped) return;
+      }
+      this._synthesisComplete = initialBufferCount >= this._chunks.length;
 
-    await this._startPlayback(gen);
-    if (!this._synthesisComplete) {
-      void this._synthesizeAndQueueRemainder(gen, config, initialBufferCount);
+      await this._startPlayback(gen);
+      if (gen !== this._speakGen || this._stopped) return;
+      if (!this._synthesisComplete) {
+        void this._synthesizeAndQueueRemainder(gen, config, initialBufferCount);
+      }
+    } catch (error) {
+      this._failPlayback(gen, error);
     }
   }
 
@@ -94,27 +101,34 @@ export class TrackPlayerSystemTTSPlayer implements ITTSPlayer {
     if (this._stopped || this._paused) return;
     this._paused = true;
     this._stopProgressPolling();
-    TrackPlayer.pause().catch((err) => console.warn("[TTS] TrackPlayer pause failed:", err));
+    const gen = this._speakGen;
+    TrackPlayer.pause().catch((error) => this._failPlayback(gen, error));
     this.onStateChange?.("paused");
   }
 
   resume(): void {
     if (this._stopped || !this._paused) return;
     this._paused = false;
-    TrackPlayer.play().catch((err) => console.warn("[TTS] TrackPlayer play failed:", err));
-    this._playStarted = true;
-    this._startProgressPolling(this._speakGen);
-    this.onStateChange?.("playing");
+    const gen = this._speakGen;
+    void TrackPlayer.play()
+      .then(() => {
+        if (gen !== this._speakGen || this._stopped || this._paused) return;
+        this._playStarted = true;
+        this._startProgressPolling(gen);
+        this.onStateChange?.("playing");
+      })
+      .catch((error) => this._failPlayback(gen, error));
   }
 
   stop(): void {
+    ++this._speakGen;
     this._stopped = true;
     this._paused = false;
     this._playStarted = false;
     this._stopProgressPolling();
+    this._cleanupEvents();
     TrackPlayer.stop().catch(() => {});
     TrackPlayer.reset().catch(() => {});
-    this._cleanupEvents();
     this._cleanupTempFiles();
     this.onStateChange?.("stopped");
   }
@@ -132,10 +146,7 @@ export class TrackPlayerSystemTTSPlayer implements ITTSPlayer {
       if (gen !== this._speakGen || this._stopped) return;
       this._synthesisComplete = true;
     } catch (error) {
-      if (gen !== this._speakGen || this._stopped) return;
-      console.warn("[TrackPlayerSystemTTSPlayer] synthesis failed:", error);
-      this._stopped = true;
-      this.onStateChange?.("stopped");
+      this._failPlayback(gen, error);
     }
   }
 
@@ -166,33 +177,36 @@ export class TrackPlayerSystemTTSPlayer implements ITTSPlayer {
       description: chunk.slice(0, 240),
       artwork: this._currentArtwork,
     });
+    if (gen !== this._speakGen || this._stopped) return false;
     this._queuedCount = Math.max(this._queuedCount, index + 1);
 
     if (this._playStarted && !this._paused && !this._stopped) {
-      const playbackState = await TrackPlayer.getPlaybackState().catch(() => null);
+      const playbackState = await TrackPlayer.getPlaybackState();
       if (gen !== this._speakGen || this._stopped) return false;
-      if (playbackState?.state === State.Ended || playbackState?.state === State.Stopped) {
-        await TrackPlayer.play().catch((err) =>
-          console.warn("[TTS] TrackPlayer resume after queue growth failed:", err),
-        );
+      if (
+        !this._paused &&
+        (playbackState.state === State.Ended || playbackState.state === State.Stopped)
+      ) {
+        await TrackPlayer.play();
       }
     }
-    return true;
+    return gen === this._speakGen && !this._stopped;
   }
 
   private async _startPlayback(gen: number): Promise<void> {
     if (gen !== this._speakGen || this._stopped || this._paused || this._playStarted) return;
     const queue = await TrackPlayer.getQueue();
+    if (gen !== this._speakGen || this._stopped || this._paused) return;
     if (queue.length === 0) {
-      this._stopped = true;
-      this.onStateChange?.("stopped");
-      this.onEnd?.();
+      this._failPlayback(gen, new Error("System TTS produced no audio"));
       return;
     }
     await TrackPlayer.play();
+    if (gen !== this._speakGen || this._stopped || this._paused) return;
     this._playStarted = true;
     this._startProgressPolling(gen);
     this._notifyChunkChange(0);
+    if (gen !== this._speakGen || this._stopped || this._paused) return;
     this.onStateChange?.("playing");
   }
 
@@ -212,7 +226,7 @@ export class TrackPlayerSystemTTSPlayer implements ITTSPlayer {
       if (gen !== this._speakGen || this._stopped) return;
       if (event.state === State.Playing) {
         if (this._paused) {
-          TrackPlayer.pause().catch((err) => console.warn("[TTS] TrackPlayer pause failed:", err));
+          TrackPlayer.pause().catch((error) => this._failPlayback(gen, error));
           this.onStateChange?.("paused");
           return;
         }
@@ -222,9 +236,7 @@ export class TrackPlayerSystemTTSPlayer implements ITTSPlayer {
       } else if (event.state === State.Ended || event.state === State.Stopped) {
         this._handlePlaybackEnded(gen);
       } else if (event.state === State.Error) {
-        console.warn("[TrackPlayerSystemTTSPlayer] playback error");
-        this._stopped = true;
-        this.onStateChange?.("stopped");
+        this._failPlayback(gen, new Error(event.error?.message || "System TTS playback failed"));
       }
     });
 
@@ -299,14 +311,23 @@ export class TrackPlayerSystemTTSPlayer implements ITTSPlayer {
     this.onEnd?.();
   }
 
-  private async _cleanup(): Promise<void> {
+  private _failPlayback(gen: number, error: unknown): void {
+    if (gen !== this._speakGen || this._stopped) return;
+    this.stop();
+    if (this._speakGen !== gen + 1) return;
+    this.onError?.(error instanceof Error ? error : new Error(String(error)));
+  }
+
+  private async _cleanup(gen: number): Promise<void> {
     this._stopped = true;
     this._paused = false;
     this._playStarted = false;
     this._stopProgressPolling();
     this._cleanupEvents();
     await TrackPlayer.stop().catch(() => {});
+    if (gen !== this._speakGen) return;
     await TrackPlayer.reset().catch(() => {});
+    if (gen !== this._speakGen) return;
     this._cleanupTempFiles();
   }
 

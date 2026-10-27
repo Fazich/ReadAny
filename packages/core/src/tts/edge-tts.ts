@@ -140,24 +140,196 @@ function buildVoiceList(): EdgeTTSVoice[] {
 
 export const EDGE_TTS_VOICES: EdgeTTSVoice[] = buildVoiceList();
 
-// ── Sec-MS-GEC Token Generation (BigInt for precision) ──
+// ── Sec-MS-GEC v2 ──
+// 与 edge-tts 7.3.1 的 drm.py 保持一致：
+// https://github.com/rany2/edge-tts/blob/7.3.1/src/edge_tts/drm.py
+// v2 使用定制的 SHA-256 初始块及 CS64，不能用标准 subtle.digest 替代。
+const SHA256_INITIAL = [
+  0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
+];
+const GEC_SHA256_STATE = [
+  0xfd9fbea2, 0x91243ce7, 0xbe499094, 0xcd2e1e0a, 0x6c006f49, 0x04bd35ab, 0xfeb0a7e4, 0x03effbd2,
+];
+const GEC_SHA256_SCHEDULE = [
+  0xeb24bf9e, 0x1558691f, 0xa0c09ee2, 0x0cfa32ba, 0xa622ee8c, 0xd1dd9491, 0xc0dd25a0, 0xf9e70ab6,
+  0xf0c31573, 0x7058ce4e, 0x7188e606, 0x00e5ab33, 0xd258b060, 0x72766564,
+];
+const SHA256_ROUND_CONSTANTS = [
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
+];
+const CS64_COEFFICIENTS = [
+  [0xe82e91b1, 0xb32700d0],
+  [0x44de24c6, 0x88dff51d],
+  [0x3beb65bc, 0x29514038],
+  [0xc89c5933, 0xb328cbdf],
+  [0x8d1ec211, 0xd405b4d5],
+  [0x314ef5d5, 0x26e55f3c],
+  [0xe92491b1, 0x607801c6],
+  [0xf0a5b9d5, 0x82b2c1fb],
+  [0x06064cf3, 0xfa51a3da],
+  [0xda79fa60, 0x207cc464],
+  [0xbed20560, 0x3c3c74f3],
+  [0x89f9c9f8, 0xd2d14b61],
+  [0x35fa38c6, 0xbb04a2c1],
+  [0xcb49e3c6, 0xc5626167],
+];
 
-async function sha256Hex(input: string): Promise<string> {
-  const data = new TextEncoder().encode(input);
-  const hash = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hash))
-    .map((b) => b.toString(16).padStart(2, "0"))
+function rotateRight(value: number, shift: number): number {
+  return (value >>> shift) | (value << (32 - shift));
+}
+
+function sigma0(value: number): number {
+  return (rotateRight(value, 7) ^ rotateRight(value, 18) ^ (value >>> 3)) >>> 0;
+}
+
+function sigma1(value: number): number {
+  return (rotateRight(value, 17) ^ rotateRight(value, 19) ^ (value >>> 10)) >>> 0;
+}
+
+function expandSha256Schedule(words: number[]): void {
+  for (let i = words.length; i < 64; i++) {
+    words.push((sigma1(words[i - 2]) + words[i - 7] + sigma0(words[i - 15]) + words[i - 16]) >>> 0);
+  }
+}
+
+function sha256Rounds(state: number[], words: number[], firstRound = 0): number[] {
+  let [a, b, c, d, e, f, g, h] = state;
+  for (let i = firstRound; i < 64; i++) {
+    const constant = firstRound === 14 && i === 14 ? 0xc9dc06a7 : SHA256_ROUND_CONSTANTS[i];
+    const t1 =
+      h +
+      (rotateRight(e, 6) ^ rotateRight(e, 11) ^ rotateRight(e, 25)) +
+      ((e & f) ^ (~e & g)) +
+      constant +
+      words[i];
+    const t2 =
+      (rotateRight(a, 2) ^ rotateRight(a, 13) ^ rotateRight(a, 22)) + ((a & b) ^ (a & c) ^ (b & c));
+    [a, b, c, d, e, f, g, h] = [(t1 + t2) >>> 0, a, b, c, (d + t1) >>> 0, e, f, g];
+  }
+  return [a, b, c, d, e, f, g, h];
+}
+
+function gecSha256(data: Uint8Array): Uint8Array {
+  // 初始块的前 57 字节由协议固定；从预计算的第 14 轮继续。
+  const words = new Array<number>(14).fill(0);
+  words.push((data[0] << 16) | (data[1] << 8) | data[2]);
+  words.push(((data[3] << 24) | (data[4] << 16) | (data[5] << 8) | data[6]) >>> 0);
+  for (let i = 16; i < 30; i++) {
+    let value = GEC_SHA256_SCHEDULE[i - 16];
+    if (i - 2 >= 14) {
+      value += i === 16 ? (sigma1(words[i - 2]) ^ 0x000b92c0) >>> 0 : sigma1(words[i - 2]);
+    }
+    if (i - 7 >= 14) value += words[i - 7];
+    if (i - 15 >= 14) {
+      value += i === 29 ? (sigma0(words[i - 15]) ^ 0x059c0b80) >>> 0 : sigma0(words[i - 15]);
+    }
+    words.push(value >>> 0);
+  }
+  words.push(
+    (sigma1(words[28]) +
+      words[23] +
+      sigma0(words[15]) +
+      words[14] +
+      0xc9dc06a7 -
+      SHA256_ROUND_CONSTANTS[14]) >>>
+      0,
+  );
+  expandSha256Schedule(words);
+  let state = sha256Rounds(GEC_SHA256_STATE, words, 14).map(
+    (value, i) => (value + SHA256_INITIAL[i]) >>> 0,
+  );
+
+  const length = 57 + data.length;
+  const padded = new Uint8Array(Math.ceil((length + 9) / 64) * 64 - 64);
+  padded.set(data.subarray(7));
+  padded[data.length - 7] = 0x80;
+  const view = new DataView(padded.buffer);
+  view.setUint32(padded.length - 4, length * 8, false);
+  for (let offset = 0; offset < padded.length; offset += 64) {
+    const block = Array.from({ length: 16 }, (_, i) => view.getUint32(offset + i * 4, false));
+    expandSha256Schedule(block);
+    state = sha256Rounds(state, block).map((value, i) => (value + state[i]) >>> 0);
+  }
+  const digest = new Uint8Array(32);
+  const digestView = new DataView(digest.buffer);
+  state.forEach((value, i) => digestView.setUint32(i * 4, value, false));
+  return digest;
+}
+
+function gecCs64(data: Uint8Array, digest: Uint8Array): Uint8Array {
+  const digestView = new DataView(digest.buffer, digest.byteOffset, digest.byteLength);
+  const keys = [digestView.getUint32(0, true) | 1, digestView.getUint32(4, true) | 1];
+  // Math.imul 保留 32 位乘法的低位，避免 JS 浮点乘法丢失整数精度。
+  const factors = keys.map((key) => Math.imul(key, 0x82893933));
+  const terms = CS64_COEFFICIENTS.map(([coefficient], i) => Math.imul(coefficient, factors[i % 2]));
+  const offsets = CS64_COEFFICIENTS.map(([, offset]) => offset);
+  const padded = new Uint8Array(Math.ceil((data.length + 1) / 8) * 8);
+  padded.set(data, 1);
+  const view = new DataView(padded.buffer);
+  const rol16 = (value: number) => (value << 16) | (value >>> 16);
+  for (let i = 0; i < padded.length / 4; i++) {
+    const word = view.getUint32(i * 4, true);
+    let term = Math.imul(word, keys[i % 2]);
+    let offset = Math.imul(rol16(word), i % 2 === 0 ? 0xef0569fb : 0xc31713db);
+    if (i === 0) {
+      term += Math.imul(0xf2f90b1a, factors[0]);
+      offset += 0x0b1a0000;
+    }
+    terms.push(term >>> 0);
+    offsets.push(offset >>> 0);
+  }
+  let swapAcc = 0;
+  let swapLast = 0;
+  let state = 0;
+  let acc = 0;
+  for (let i = 0; i < terms.length; i += 2) {
+    const x = terms[i];
+    const y = terms[i + 1];
+    let q = Math.imul(rol16((offsets[i] + x) >>> 0), 0x76f50f34);
+    swapAcc = (swapAcc + Math.imul(rol16(q), 0xc3efea97) + q) >>> 0;
+    q = Math.imul(rol16((offsets[i + 1] + y) >>> 0), 0x1881ce3c);
+    swapLast = (Math.imul(rol16(q), 0x35bd1ec9) + q) >>> 0;
+    swapAcc = (swapAcc + swapLast) >>> 0;
+
+    state = (Math.imul(state, keys[0]) + x) >>> 0;
+    for (const factor of [0xcf98b111, 0x87085b9f, 0x12ceb96d, 0x257e1d83]) {
+      state = Math.imul(rol16(state), factor);
+    }
+    acc = (acc + state) >>> 0;
+    state = (Math.imul(state, keys[1]) + y) >>> 0;
+    for (const factor of [0xa27416f5, 0xd38396ff, 0x7c932b89, 0xbfa49f69]) {
+      state = Math.imul(rol16(state), factor);
+    }
+    acc = (acc + state) >>> 0;
+  }
+  const result = new Uint8Array(8);
+  const resultView = new DataView(result.buffer);
+  resultView.setUint32(0, swapLast ^ state, true);
+  resultView.setUint32(4, swapAcc ^ acc, true);
+  return result;
+}
+
+function hexUpper(data: Uint8Array): string {
+  return Array.from(data, (byte) => byte.toString(16).padStart(2, "0"))
     .join("")
     .toUpperCase();
 }
 
-async function generateSecMsGec(): Promise<string> {
+function generateSecMsGec(): string {
   let ticks = BigInt(Math.floor(Date.now() / 1000));
   ticks += WIN_EPOCH_OFFSET;
   ticks -= ticks % 300n;
   ticks *= S_TO_NS / 100n;
-  const strToHash = `${ticks.toString()}${EDGE_API_TOKEN}`;
-  return sha256Hex(strToHash);
+  const data = new TextEncoder().encode(`${ticks}${EDGE_API_TOKEN}`);
+  const digest = gecSha256(data);
+  return `${hexUpper(gecCs64(data, digest))}-${hexUpper(digest)}`;
 }
 
 function generateMuid(): string {
@@ -287,13 +459,13 @@ async function fetchEdgeTTSAudioCore(
   const platform = getPlatformService();
 
   const connectId = randomHex(16);
-  const secMsGec = await generateSecMsGec();
+  const secMsGec = generateSecMsGec();
 
   const params = new URLSearchParams({
     ConnectionId: connectId,
     TrustedClientToken: EDGE_API_TOKEN,
     "Sec-MS-GEC": secMsGec,
-    "Sec-MS-GEC-Version": `1-${CHROMIUM_FULL_VERSION}`,
+    "Sec-MS-GEC-Version": `2-${CHROMIUM_FULL_VERSION}`,
   });
   const url = `${EDGE_SPEECH_URL}?${params.toString()}`;
 
@@ -376,9 +548,7 @@ async function fetchEdgeTTSAudioCore(
           const responseInfo = lastResponseBody
             ? ` server response: ${lastResponseBody.slice(0, 200)}`
             : "";
-          return new Error(
-            `Edge TTS returned no audio.${responseInfo} ssml="${textPreview}"`,
-          );
+          return new Error(`Edge TTS returned no audio.${responseInfo} ssml="${textPreview}"`);
         };
 
         ws.onMessage((data) => {

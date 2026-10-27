@@ -8,17 +8,19 @@ import expo.modules.kotlin.Promise
 import expo.modules.kotlin.exception.CodedException
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import expo.modules.kotlin.records.Field
+import expo.modules.kotlin.records.Record
 import java.io.File
 import java.util.Locale
 import java.util.UUID
 
 class SystemTtsSynthesisModule : Module() {
-  private data class SynthesisOptions(
-    val rate: Double? = null,
-    val pitch: Double? = null,
-    val language: String? = null,
-    val voice: String? = null,
-  )
+  class SynthesisOptions : Record {
+    @Field var rate: Double? = null
+    @Field var pitch: Double? = null
+    @Field var language: String? = null
+    @Field var voice: String? = null
+  }
 
   private data class PendingRequest(
     val text: String,
