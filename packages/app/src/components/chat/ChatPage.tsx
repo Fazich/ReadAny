@@ -9,8 +9,9 @@ import { useChatReaderStore } from "@/stores/chat-reader-store";
 import { useChatStore } from "@/stores/chat-store";
 import { useLibraryStore } from "@/stores/library-store";
 import { useSettingsStore } from "@/stores/settings-store";
+import { useChatSubmit } from "@readany/core/hooks/use-chat-submit";
 import { getPlatformService } from "@readany/core/services";
-import type { CitationPart } from "@readany/core/types";
+import type { AttachedQuote, CitationPart } from "@readany/core/types";
 import {
   convertToMessageV2,
   exportChatAsJSON,
@@ -228,7 +229,6 @@ export function ChatPage() {
   const threads = useChatStore((s) => s.threads);
   const initialized = useChatStore((s) => s.initialized);
   const loadAllThreads = useChatStore((s) => s.loadAllThreads);
-  const createThread = useChatStore((s) => s.createThread);
   const setGeneralActiveThread = useChatStore((s) => s.setGeneralActiveThread);
   const getActiveThreadId = useChatStore((s) => s.getActiveThreadId);
   const { bookTitle } = useChatReaderStore();
@@ -262,27 +262,25 @@ export function ChatPage() {
 
   const activeThreadId = getActiveThreadId();
   const activeThread = threads.find((t) => t.id === activeThreadId);
-
-  const handleSend = useCallback(
-    async (content: string, deepThinking = false, spoilerFree = false) => {
+  const [quotes, setQuotes] = useState<AttachedQuote[]>([]);
+  const { edit, handleSend } = useChatSubmit({
+    threadId: activeThreadId,
+    quotes,
+    setQuotes,
+    sendMessage,
+    stopStream,
+    resolveConfig: () => {
       const { aiConfig } = useSettingsStore.getState();
       const endpoint = aiConfig.endpoints.find((e) => e.id === aiConfig.activeEndpointId);
       const needsKey = endpoint ? providerRequiresApiKey(endpoint.provider) : true;
-      if (!endpoint || (needsKey && !endpoint.apiKey) || !aiConfig.activeModel) {
-        setConfigGuide("ai");
-        return;
-      }
-
-      // /chats page should only use general threads (no bookId)
-      if (!activeThreadId) {
-        await createThread(undefined, content.slice(0, 50));
-        setTimeout(() => sendMessage(content, undefined, deepThinking, spoilerFree), 50);
-      } else {
-        sendMessage(content, undefined, deepThinking, spoilerFree);
-      }
+      return !endpoint || (needsKey && !endpoint.apiKey) || !aiConfig.activeModel ? null : aiConfig;
     },
-    [activeThreadId, createThread, sendMessage],
-  );
+    onConfigRequired: () => setConfigGuide("ai"),
+    onError: (error) =>
+      toast.error(t("chat.sendFailed"), {
+        description: error instanceof Error ? error.message : String(error),
+      }),
+  });
 
   const handleNewThread = useCallback(() => {
     setGeneralActiveThread(null);
@@ -455,6 +453,7 @@ export function ChatPage() {
               isStreaming={isStreaming}
               currentStep={currentStep}
               onStop={stopStream}
+              onEditMessage={edit.startEdit}
               onCitationClick={handleCitationClick}
             />
           ) : (
@@ -464,7 +463,17 @@ export function ChatPage() {
 
         {/* Input always at bottom with consistent position */}
         <div className="shrink-0 px-4 pb-3 pt-2">
-          <ChatInput onSend={handleSend} onStop={stopStream} isStreaming={isStreaming} />
+          <ChatInput
+            onSend={handleSend}
+            onStop={stopStream}
+            isStreaming={isStreaming}
+            quotes={quotes}
+            onRemoveQuote={(id) =>
+              setQuotes((current) => current.filter((quote) => quote.id !== id))
+            }
+            editMessage={edit.editMessage}
+            onCancelEdit={edit.cancelEdit}
+          />
         </div>
       </div>
 

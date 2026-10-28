@@ -3,9 +3,10 @@
  * Supports attached context quotes that display as chips above the textarea.
  */
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import type { AttachedQuote } from "@readany/core/types";
+import type { AttachedQuote, MessageV2 } from "@readany/core/types";
+import { extractEditableMessage } from "@readany/core/utils";
 import { Brain, EyeOff, Quote, Send, Square, X } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 export type { AttachedQuote };
 
@@ -15,7 +16,10 @@ interface ChatInputProps {
     deepThinking?: boolean,
     spoilerFree?: boolean,
     quotes?: AttachedQuote[],
-  ) => void;
+    onAccepted?: () => void,
+  ) => void | Promise<void>;
+  editMessage?: MessageV2 | null;
+  onCancelEdit?: () => void;
   onStop?: () => void;
   isStreaming?: boolean;
   disabled?: boolean;
@@ -34,25 +38,92 @@ export function ChatInput({
   showDeepThinking = true,
   quotes = [],
   onRemoveQuote,
+  editMessage,
+  onCancelEdit,
 }: ChatInputProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState("");
   const [deepThinking, setDeepThinking] = useState(false);
   const [spoilerFree, setSpoilerFree] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
+  const draftSnapshot = useRef<{
+    value: string;
+    deepThinking: boolean;
+    spoilerFree: boolean;
+  } | null>(null);
+  const inputVersion = useRef<object>({});
+  // 只在编辑目标改变时保存或恢复快照，输入变化不能覆盖进入前的草稿。
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 编辑目标定义快照生命周期。
+  useEffect(() => {
+    inputVersion.current = {};
+    submittingRef.current = false;
+    setIsSubmitting(false);
+    if (editMessage) {
+      draftSnapshot.current ??= { value, deepThinking, spoilerFree };
+      setValue(extractEditableMessage(editMessage).content);
+      textareaRef.current?.focus();
+    } else if (draftSnapshot.current) {
+      const snapshot = draftSnapshot.current;
+      setValue(snapshot.value);
+      setDeepThinking(snapshot.deepThinking);
+      setSpoilerFree(snapshot.spoilerFree);
+      draftSnapshot.current = null;
+    }
+  }, [editMessage]);
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = value ? `${Math.min(el.scrollHeight, 160)}px` : "auto";
+  }, [value]);
+  useEffect(
+    () => () => {
+      inputVersion.current = {};
+    },
+    [],
+  );
 
   const resolvedPlaceholder = placeholder || t("chat.askPlaceholder");
 
   const handleSend = useCallback(
-    (useDeepThinking: boolean = deepThinking) => {
+    async (useDeepThinking: boolean = deepThinking) => {
       const trimmed = value.trim();
-      if (trimmed || quotes.length > 0) {
-        onSend(trimmed, useDeepThinking, spoilerFree, quotes.length > 0 ? quotes : undefined);
-        setValue("");
-        if (textareaRef.current) textareaRef.current.style.height = "auto";
+      if (
+        disabled ||
+        (isStreaming && !editMessage) ||
+        submittingRef.current ||
+        (!trimmed && quotes.length === 0)
+      )
+        return;
+      submittingRef.current = true;
+      setIsSubmitting(true);
+      const version = inputVersion.current;
+      try {
+        await onSend(
+          trimmed,
+          useDeepThinking,
+          spoilerFree,
+          quotes.length > 0 ? quotes : undefined,
+          () => {
+            if (inputVersion.current !== version) return;
+            draftSnapshot.current = null;
+            setValue("");
+            setDeepThinking(false);
+            setSpoilerFree(false);
+          },
+        );
+      } catch (error) {
+        console.error("[ChatInput] Failed to send message:", error);
+      } finally {
+        if (inputVersion.current === version) {
+          submittingRef.current = false;
+          setIsSubmitting(false);
+        }
       }
     },
-    [value, deepThinking, spoilerFree, onSend, quotes],
+    [value, deepThinking, spoilerFree, onSend, quotes, disabled, isStreaming, editMessage],
   );
 
   const handleKeyDown = useCallback(
@@ -84,6 +155,21 @@ export function ChatInput({
   return (
     <div className="mx-auto w-full max-w-3xl">
       <div className="relative rounded-2xl border bg-background shadow-around">
+        {editMessage && (
+          <div className="flex items-start justify-between gap-2 px-4 pt-3 text-xs text-muted-foreground">
+            <div>
+              <p className="font-medium text-foreground">{t("chat.editingMessage")}</p>
+              <p>{t("chat.editMessageWarning")}</p>
+            </div>
+            <button
+              type="button"
+              onClick={onCancelEdit}
+              className="shrink-0 rounded px-2 py-1 hover:bg-muted"
+            >
+              {t("chat.cancelEdit")}
+            </button>
+          </div>
+        )}
         {/* Attached quotes chips */}
         {quotes.length > 0 && (
           <div className="flex flex-wrap gap-1.5 px-3 pt-2.5">
@@ -132,7 +218,7 @@ export function ChatInput({
           }}
           onKeyDown={handleKeyDown}
           placeholder={quotes.length > 0 ? t("chat.askAboutQuote") : resolvedPlaceholder}
-          disabled={disabled}
+          disabled={disabled || isSubmitting}
           rows={1}
           className="w-full resize-none bg-transparent px-4 pb-1 pt-3 text-sm leading-relaxed placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           style={{ minHeight: 36, maxHeight: 160 }}
@@ -143,6 +229,7 @@ export function ChatInput({
               <button
                 type="button"
                 onClick={toggleDeepThinking}
+                disabled={isSubmitting}
                 className={`flex items-center gap-1 rounded-full border px-2 py-1 text-xs transition-colors ${
                   deepThinking
                     ? "border-primary/50 bg-primary/10 text-foreground"
@@ -157,6 +244,7 @@ export function ChatInput({
               <button
                 type="button"
                 onClick={toggleSpoilerFree}
+                disabled={isSubmitting}
                 className={`flex items-center gap-1 rounded-full border px-2 py-1 text-xs transition-colors ${
                   spoilerFree
                     ? "border-primary/50 bg-primary/10 text-foreground"
@@ -168,7 +256,7 @@ export function ChatInput({
               </button>
             )}
           </div>
-          {isStreaming ? (
+          {isStreaming && !editMessage ? (
             <button
               type="button"
               onClick={onStop}
@@ -179,15 +267,21 @@ export function ChatInput({
           ) : (
             <button
               type="button"
-              disabled={disabled || (!value.trim() && quotes.length === 0)}
+              disabled={disabled || isSubmitting || (!value.trim() && quotes.length === 0)}
+              aria-label={t(editMessage ? "chat.resend" : "chat.send")}
+              title={t(editMessage ? "chat.resend" : "chat.send")}
               onClick={() => handleSend()}
-              className={`flex size-7 items-center justify-center rounded-full transition-colors ${
+              className={`flex h-7 min-w-7 items-center justify-center rounded-full transition-colors ${
                 value.trim() || quotes.length > 0
                   ? "border border-primary/20 bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
                   : "border border-border bg-background text-muted-foreground hover:bg-muted"
               } disabled:cursor-not-allowed disabled:opacity-50`}
             >
-              <Send className="size-3.5" />
+              {editMessage ? (
+                <span className="whitespace-nowrap px-1 text-xs">{t("chat.resend")}</span>
+              ) : (
+                <Send className="size-3.5" />
+              )}
             </button>
           )}
         </div>

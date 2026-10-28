@@ -9,7 +9,8 @@ import {
 import { useKeyboardInsets } from "@/hooks/use-keyboard-insets";
 import { fontSize as fs, radius, useColors, withOpacity } from "@/styles/theme";
 import type { ThemeColors } from "@/styles/theme";
-import type { AttachedQuote } from "@readany/core/types";
+import type { AttachedQuote, MessageV2 } from "@readany/core/types";
+import { extractEditableMessage } from "@readany/core/utils";
 /**
  * ChatInput — touch-optimized chat input matching app-mobile MobileChatInput.
  * Rounded container with textarea on top, action bar (deep thinking + send) below.
@@ -34,6 +35,8 @@ interface ChatInputProps {
     quotes: AttachedQuote[] | undefined,
     onAccepted: () => void,
   ) => Promise<void>;
+  editMessage?: MessageV2 | null;
+  onCancelEdit?: () => void;
   onStop?: () => void;
   isStreaming?: boolean;
   quotes?: AttachedQuote[];
@@ -63,6 +66,8 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
     keyboardBottomOffset = 0,
     active = true,
     onInputFocusChange,
+    editMessage,
+    onCancelEdit,
   },
   ref,
 ) {
@@ -77,6 +82,39 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
   const s = makeStyles(colors);
   const inputRef = useRef<TextInput>(null);
   useImperativeHandle(ref, () => ({ blur: () => inputRef.current?.blur() }), []);
+  const draftSnapshot = useRef<{
+    text: string;
+    deepThinking: boolean;
+    spoilerFree: boolean;
+    inputHeight: number;
+  } | null>(null);
+  const inputVersion = useRef<object>({});
+  // 只在编辑目标改变时保存或恢复快照，输入变化不能覆盖进入前的草稿。
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 编辑目标定义快照生命周期。
+  useEffect(() => {
+    inputVersion.current = {};
+    submittingRef.current = false;
+    setIsSubmitting(false);
+    if (editMessage) {
+      draftSnapshot.current ??= { text, deepThinking, spoilerFree, inputHeight };
+      setText(extractEditableMessage(editMessage).content);
+      setInputHeight(SINGLE_LINE_INPUT_HEIGHT);
+      inputRef.current?.focus();
+    } else if (draftSnapshot.current) {
+      const snapshot = draftSnapshot.current;
+      setText(snapshot.text);
+      setDeepThinking(snapshot.deepThinking);
+      setSpoilerFree(snapshot.spoilerFree);
+      setInputHeight(snapshot.inputHeight);
+      draftSnapshot.current = null;
+    }
+  }, [editMessage]);
+  useEffect(
+    () => () => {
+      inputVersion.current = {};
+    },
+    [],
+  );
   useEffect(() => {
     if (!active) {
       // 隐藏对话时只收起自己的输入框，保留草稿与其他区域的键盘。
@@ -96,10 +134,16 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
 
   const handleSend = useCallback(async () => {
     const trimmed = text.trim();
-    if (!active || isStreaming || submittingRef.current || (!trimmed && quotes.length === 0))
+    if (
+      !active ||
+      (isStreaming && !editMessage) ||
+      submittingRef.current ||
+      (!trimmed && quotes.length === 0)
+    )
       return;
     submittingRef.current = true;
     setIsSubmitting(true);
+    const version = inputVersion.current;
     try {
       await onSend(
         trimmed,
@@ -107,6 +151,8 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
         spoilerFree,
         quotes.length > 0 ? quotes : undefined,
         () => {
+          if (version !== inputVersion.current) return;
+          draftSnapshot.current = null;
           setInputHeight(SINGLE_LINE_INPUT_HEIGHT);
           setText("");
           setDeepThinking(false);
@@ -116,10 +162,12 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
     } catch (error) {
       console.error("[ChatInput] Failed to send message:", error);
     } finally {
-      submittingRef.current = false;
-      setIsSubmitting(false);
+      if (inputVersion.current === version) {
+        submittingRef.current = false;
+        setIsSubmitting(false);
+      }
     }
-  }, [active, isStreaming, text, deepThinking, spoilerFree, quotes, onSend]);
+  }, [active, isStreaming, text, deepThinking, spoilerFree, quotes, onSend, editMessage]);
 
   const handleTextChange = useCallback((nextText: string) => {
     setText(nextText);
@@ -150,6 +198,26 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
       pointerEvents={active ? "auto" : "none"}
     >
       <View style={s.container}>
+        {editMessage && (
+          <View style={{ paddingHorizontal: 16, paddingTop: 12, flexDirection: "row", gap: 8 }}>
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: colors.foreground, fontSize: fs.xs }}>
+                {t("chat.editingMessage")}
+              </Text>
+              <Text style={{ color: colors.mutedForeground, fontSize: fs.xs }}>
+                {t("chat.editMessageWarning")}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={onCancelEdit}
+              accessibilityRole="button"
+              accessibilityLabel={t("chat.cancelEdit")}
+              style={{ padding: 4 }}
+            >
+              <Text style={{ color: colors.primary, fontSize: fs.xs }}>{t("chat.cancelEdit")}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         {/* Attached quotes chips */}
         {quotes.length > 0 && (
           <View style={s.quotesRow}>
@@ -185,7 +253,7 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
           onContentSizeChange={handleContentSizeChange}
           returnKeyType="default"
           blurOnSubmit={false}
-          editable={active && !isStreaming && !isSubmitting}
+          editable={active && (!isStreaming || !!editMessage) && !isSubmitting}
           onFocus={() => onInputFocusChange?.(true)}
           onBlur={() => onInputFocusChange?.(false)}
         />
@@ -230,21 +298,38 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
               </TouchableOpacity>
             )}
 
-            {isStreaming ? (
+            {isStreaming && !editMessage ? (
               <TouchableOpacity style={s.sendBtn} onPress={onStop} activeOpacity={0.7}>
                 <StopCircleIcon size={16} color={colors.destructive} />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
-                style={[s.sendBtn, canSend && s.sendBtnActive]}
+                style={[
+                  s.sendBtn,
+                  canSend && s.sendBtnActive,
+                  editMessage ? { width: "auto", paddingHorizontal: 8 } : undefined,
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel={t(editMessage ? "chat.resend" : "chat.send")}
                 onPress={handleSend}
                 disabled={!active || !canSend || isSubmitting}
                 activeOpacity={0.7}
               >
-                <SendIcon
-                  size={14}
-                  color={canSend ? colors.primaryForeground : colors.mutedForeground}
-                />
+                {editMessage ? (
+                  <Text
+                    style={{
+                      color: canSend ? colors.primaryForeground : colors.mutedForeground,
+                      fontSize: fs.xs,
+                    }}
+                  >
+                    {t("chat.resend")}
+                  </Text>
+                ) : (
+                  <SendIcon
+                    size={14}
+                    color={canSend ? colors.primaryForeground : colors.mutedForeground}
+                  />
+                )}
               </TouchableOpacity>
             )}
           </View>

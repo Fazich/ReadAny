@@ -92,7 +92,20 @@ export interface StreamingState {
   currentStep: "thinking" | "tool_calling" | "responding" | "idle";
 }
 
-const activeStreams = new Map<string, StreamingChat>();
+const activeStreams = new Map<
+  string,
+  {
+    stream: StreamingChat;
+    cancelled: boolean;
+    done: Promise<void>;
+  }
+>();
+
+export interface ChatEditTarget {
+  threadId: string;
+  messageId: string;
+  isCurrent?: () => boolean;
+}
 const STREAMING_PUBLISH_INTERVAL_MS = 160;
 
 async function resolveFreshBook(
@@ -186,15 +199,30 @@ export function useStreamingChat(options?: StreamingChatOptions) {
       spoilerFree = false,
       quotes?: AttachedQuote[],
       aiConfigOverride?: AIConfig,
-      onAccepted?: () => void,
+      onAccepted?: (threadId: string) => void,
+      editTarget?: ChatEditTarget,
     ) => {
       const bookId = overrideBookId ?? options?.bookId;
       const sessionKey = getChatStreamingKey(bookId);
       const activeSession = useChatStore.getState().streamingSessions[sessionKey];
-      if ((!content.trim() && (!quotes || quotes.length === 0)) || activeSession?.isStreaming) {
+      if (
+        (!content.trim() && (!quotes || quotes.length === 0)) ||
+        activeSession?.isStreaming ||
+        activeStreams.has(sessionKey)
+      ) {
         return;
       }
 
+      let settle!: () => void;
+      const request = {
+        stream: new StreamingChat(),
+        cancelled: false,
+        done: new Promise<void>((resolve) => {
+          settle = resolve;
+        }),
+      };
+      activeStreams.set(sessionKey, request);
+      const isCurrent = () => activeStreams.get(sessionKey) === request;
       const messageId = createMessageId();
       const initialMessage: MessageV2 = {
         id: messageId,
@@ -204,9 +232,20 @@ export function useStreamingChat(options?: StreamingChatOptions) {
         createdAt: Date.now(),
       };
       let clearPendingPublish: (() => void) | null = null;
+      let accepted = false;
 
       try {
-        const thread = await getOrCreateThread(bookId);
+        let thread = editTarget
+          ? useChatStore.getState().threads.find((item) => item.id === editTarget.threadId)
+          : await getOrCreateThread(bookId);
+        if (
+          !thread ||
+          (thread.bookId || undefined) !== bookId ||
+          (editTarget?.isCurrent && !editTarget.isCurrent())
+        ) {
+          throw new Error("Conversation changed before sending");
+        }
+        if (request.cancelled) return;
         initialMessage.threadId = thread.id;
 
         if (thread.messages.length === 0 && !thread.title) {
@@ -244,11 +283,26 @@ export function useStreamingChat(options?: StreamingChatOptions) {
             ...(p.type === "text" ? { text: (p as TextPart).text } : {}),
             ...(p.type === "quote" ? { text: (p as any).text, source: (p as any).source } : {}),
           })),
-          createdAt: Date.now(),
+          createdAt: Math.max(
+            Date.now(),
+            (thread.messages[thread.messages.length - 1]?.createdAt ?? 0) + 1,
+          ),
         };
 
-        // Add user message to store FIRST so it renders immediately
-        await addMessage(thread.id, userMessage as any);
+        if (request.cancelled || (editTarget?.isCurrent && !editTarget.isCurrent())) return;
+        if (editTarget) {
+          thread = await useChatStore
+            .getState()
+            .replaceMessageHistory(thread.id, editTarget.messageId, userMessage);
+        } else {
+          await addMessage(thread.id, userMessage as any);
+          thread = { ...thread, messages: [...thread.messages, userMessage] };
+        }
+
+        initialMessage.createdAt = Math.max(
+          Date.now(),
+          (thread.messages[thread.messages.length - 1]?.createdAt ?? 0) + 1,
+        );
 
         // Then set streaming state — user message is already visible
         startStreamingSession({
@@ -263,20 +317,21 @@ export function useStreamingChat(options?: StreamingChatOptions) {
           updatedAt: Date.now(),
         });
 
-        const stream = new StreamingChat();
-        activeStreams.set(sessionKey, stream);
-        onAccepted?.();
+        const stream = request.stream;
+        accepted = true;
+        onAccepted?.(thread.id);
 
+        if (request.cancelled) return;
         const enabledSkills = await loadEnabledSkills();
+        if (request.cancelled) return;
 
-        const updatedThread: Thread = {
-          ...thread,
-          messages: [...thread.messages, userMessage as any],
-        };
+        const updatedThread: Thread = thread;
         const threadForStream = await maybeCompressThreadMemory(
           updatedThread,
           aiConfigOverride || aiConfig,
+          stream.signal,
         );
+        if (request.cancelled) return;
         if (threadForStream.memoryMessageCount !== updatedThread.memoryMessageCount) {
           useChatStore.setState((storeState) => ({
             threads: storeState.threads.map((item) =>
@@ -309,6 +364,7 @@ export function useStreamingChat(options?: StreamingChatOptions) {
         };
 
         const publishCurrentMessage = (currentStep?: StreamingState["currentStep"]) => {
+          if (!isCurrent()) return;
           lastPublishedAt = Date.now();
           pendingCurrentStep = undefined;
           updateStreamingSession(sessionKey, {
@@ -345,11 +401,11 @@ export function useStreamingChat(options?: StreamingChatOptions) {
 
         const finishCurrentSession = () => {
           clearPendingPublish?.();
-          activeStreams.delete(sessionKey);
-          finishStreamingSession(sessionKey);
+          if (isCurrent()) finishStreamingSession(sessionKey);
         };
 
         const streamBook = await resolveFreshBook(bookId, options?.book);
+        if (request.cancelled) return;
         const streamIsVectorized = streamBook?.isVectorized ?? false;
 
         await stream.stream({
@@ -374,6 +430,7 @@ export function useStreamingChat(options?: StreamingChatOptions) {
             scheduleCurrentMessage("responding");
           },
           onComplete: async () => {
+            if (!isCurrent()) return;
             if (currentTextPart) {
               currentTextPart.status = "completed";
               currentTextPart.updatedAt = Date.now();
@@ -413,7 +470,7 @@ export function useStreamingChat(options?: StreamingChatOptions) {
                 .map((p) => toolCallPartToMessageToolCall(p as ToolCallPart)),
               reasoning: reasoning.length > 0 ? reasoning : undefined,
               partsOrder: partsOrder.length > 0 ? partsOrder : undefined,
-              createdAt: Date.now(),
+              createdAt: Math.max(Date.now(), initialMessage.createdAt),
             };
 
             // Persist to store FIRST, then clear streaming state
@@ -425,6 +482,7 @@ export function useStreamingChat(options?: StreamingChatOptions) {
             finishCurrentSession();
           },
           onError: async (err) => {
+            if (!isCurrent()) return;
             flushCurrentMessage();
             updateStreamingSession(sessionKey, {
               isStreaming: true,
@@ -462,7 +520,7 @@ export function useStreamingChat(options?: StreamingChatOptions) {
                 .filter((p) => p.type === "tool_call")
                 .map((p) => toolCallPartToMessageToolCall(p as ToolCallPart)),
               partsOrder: partsOrder.length > 0 ? partsOrder : undefined,
-              createdAt: Date.now(),
+              createdAt: Math.max(Date.now(), initialMessage.createdAt),
             };
 
             // Persist error message FIRST, then clear streaming state
@@ -471,6 +529,7 @@ export function useStreamingChat(options?: StreamingChatOptions) {
             finishCurrentSession();
           },
           onAbort: async () => {
+            if (!isCurrent()) return;
             for (const part of currentParts) {
               if (part.status === "running") {
                 if (part.type === "tool_call") {
@@ -513,7 +572,7 @@ export function useStreamingChat(options?: StreamingChatOptions) {
                 .map((p) => toolCallPartToMessageToolCall(p as ToolCallPart)),
               reasoning: reasoning.length > 0 ? reasoning : undefined,
               partsOrder: partsOrder.length > 0 ? partsOrder : undefined,
-              createdAt: Date.now(),
+              createdAt: Math.max(Date.now(), initialMessage.createdAt),
             };
 
             flushCurrentMessage("idle");
@@ -573,6 +632,7 @@ export function useStreamingChat(options?: StreamingChatOptions) {
       } catch (err) {
         clearPendingPublish?.();
         const errorMessage = err instanceof Error ? err.message : "Unknown error";
+        if (!accepted) throw err;
         updateStreamingSession(sessionKey, {
           isStreaming: false,
           currentMessage: null,
@@ -580,7 +640,14 @@ export function useStreamingChat(options?: StreamingChatOptions) {
           errorMessage,
           updatedAt: Date.now(),
         });
-        activeStreams.delete(sessionKey);
+      } finally {
+        clearPendingPublish?.();
+        if (isCurrent()) {
+          activeStreams.delete(sessionKey);
+          const session = useChatStore.getState().streamingSessions[sessionKey];
+          if (session?.isStreaming) finishStreamingSession(sessionKey);
+        }
+        settle();
       }
     },
     [
@@ -599,7 +666,11 @@ export function useStreamingChat(options?: StreamingChatOptions) {
   );
 
   const stopStream = useCallback(() => {
-    activeStreams.get(streamingKey)?.abort();
+    const request = activeStreams.get(streamingKey);
+    if (!request) return Promise.resolve();
+    request.cancelled = true;
+    request.stream.abort();
+    return request.done;
   }, [streamingKey]);
 
   return {

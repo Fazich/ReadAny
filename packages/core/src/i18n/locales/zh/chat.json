@@ -1,5 +1,12 @@
 {
   "chat": {
+    "editMessage": "编辑消息",
+    "editingMessage": "正在编辑消息",
+    "cancelEdit": "取消编辑",
+    "resend": "重新发送",
+    "editMessageWarning": "重新发送将清除此消息及其后的所有消息。",
+    "send": "发送",
+    "sendFailed": "消息发送失败",
     "history": "历史记录",
     "newChat": "新对话",
     "noConversations": "暂无对话",

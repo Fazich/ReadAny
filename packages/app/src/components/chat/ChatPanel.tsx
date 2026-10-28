@@ -5,6 +5,7 @@ import { ConfigGuideDialog, type ConfigGuideType } from "@/components/shared/Con
 import { useStreamingChat } from "@/hooks/use-streaming-chat";
 import { useChatStore } from "@/stores/chat-store";
 import { useSettingsStore } from "@/stores/settings-store";
+import { useChatSubmit } from "@readany/core/hooks/use-chat-submit";
 import { getPlatformService } from "@readany/core/services";
 import type { Book, CitationPart } from "@readany/core/types";
 import {
@@ -107,21 +108,25 @@ export function ChatPanel({ book, onNavigateToCitation }: ChatPanelProps) {
     return () => document.removeEventListener("mousedown", handler);
   }, [showExportMenu]);
 
-  const handleSend = useCallback(
-    (content: string, deepThinking = false, spoilerFree = false, quotes?: AttachedQuote[]) => {
+  const { edit, handleSend } = useChatSubmit({
+    threadId: activeThreadId,
+    bookId,
+    quotes: attachedQuotes,
+    setQuotes: setAttachedQuotes,
+    sendMessage,
+    stopStream,
+    resolveConfig: () => {
       const { aiConfig } = useSettingsStore.getState();
       const endpoint = aiConfig.endpoints.find((e) => e.id === aiConfig.activeEndpointId);
       const needsKey = endpoint ? providerRequiresApiKey(endpoint.provider) : true;
-      if (!endpoint || (needsKey && !endpoint.apiKey) || !aiConfig.activeModel) {
-        setConfigGuide("ai");
-        return;
-      }
-
-      sendMessage(content, bookId, deepThinking, spoilerFree, quotes);
-      setAttachedQuotes([]);
+      return !endpoint || (needsKey && !endpoint.apiKey) || !aiConfig.activeModel ? null : aiConfig;
     },
-    [sendMessage, bookId],
-  );
+    onConfigRequired: () => setConfigGuide("ai"),
+    onError: (error) =>
+      toast.error(t("chat.sendFailed"), {
+        description: error instanceof Error ? error.message : String(error),
+      }),
+  });
 
   const handleRemoveQuote = useCallback((id: string) => {
     setAttachedQuotes((prev) => prev.filter((q) => q.id !== id));
@@ -437,6 +442,7 @@ export function ChatPanel({ book, onNavigateToCitation }: ChatPanelProps) {
             isStreaming={isStreaming}
             currentStep={currentStep}
             onStop={stopStream}
+            onEditMessage={edit.startEdit}
             onCitationClick={onNavigateToCitation}
           />
         ) : (
@@ -473,6 +479,8 @@ export function ChatPanel({ book, onNavigateToCitation }: ChatPanelProps) {
           onStop={stopStream}
           isStreaming={isStreaming}
           placeholder={t("chat.askBookPlaceholder")}
+          editMessage={edit.editMessage}
+          onCancelEdit={edit.cancelEdit}
           quotes={attachedQuotes}
           onRemoveQuote={handleRemoveQuote}
         />

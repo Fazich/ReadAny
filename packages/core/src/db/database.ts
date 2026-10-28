@@ -89,6 +89,7 @@ export {
 export {
   getMessages,
   insertMessage,
+  replaceMessageHistory,
 } from "./message-queries";
 
 export {

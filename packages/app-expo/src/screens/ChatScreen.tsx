@@ -28,6 +28,7 @@ import { useContentLayout } from "@/hooks/use-responsive-layout";
 import { resolveActiveAIConfig } from "@/lib/ai/resolve-active-ai-config";
 import { useChatStore } from "@/stores/chat-store";
 import { useSettingsStore } from "@/stores/settings-store";
+import { useChatSubmit } from "@readany/core/hooks/use-chat-submit";
 import { getPlatformService } from "@readany/core/services";
 import type { AttachedQuote } from "@readany/core/types";
 import {
@@ -186,46 +187,29 @@ export function ChatScreen() {
     isStreaming,
   );
 
-  // Handlers
-  const handleSend = useCallback(
-    async (
-      text: string,
-      deepThinking: boolean,
-      spoilerFree: boolean,
-      quotes?: AttachedQuote[],
-      onAccepted?: () => void,
-    ) => {
-      // Validate AI config before sending
-      const state = useSettingsStore.getState();
-      const resolvedAIConfig = await resolveActiveAIConfig(state);
-
-      if (!resolvedAIConfig) {
-        Alert.alert(
-          t("chat.configRequired", "需要配置 AI"),
-          t("chat.configRequiredMessage", "请先在设置中配置 AI 端点和模型"),
-          [
-            { text: t("common.cancel", "取消"), style: "cancel" },
-            {
-              text: t("common.settings", "去设置"),
-              onPress: () => navigation.navigate("AISettings"),
-            },
-          ],
-        );
-        return;
-      }
-
-      await sendMessage(
-        text,
-        undefined,
-        deepThinking,
-        spoilerFree,
-        quotes,
-        resolvedAIConfig,
-        onAccepted,
-      );
-    },
-    [sendMessage, navigation, t],
-  );
+  const [attachedQuotes, setAttachedQuotes] = useState<AttachedQuote[]>([]);
+  const { edit, handleSend } = useChatSubmit({
+    threadId: generalActiveThreadId,
+    quotes: attachedQuotes,
+    setQuotes: setAttachedQuotes,
+    sendMessage,
+    stopStream,
+    resolveConfig: () => resolveActiveAIConfig(useSettingsStore.getState()),
+    onConfigRequired: () =>
+      Alert.alert(
+        t("chat.configRequired", "需要配置 AI"),
+        t("chat.configRequiredMessage", "请先在设置中配置 AI 端点和模型"),
+        [
+          { text: t("common.cancel", "取消"), style: "cancel" },
+          {
+            text: t("common.settings", "去设置"),
+            onPress: () => navigation.navigate("AISettings"),
+          },
+        ],
+      ),
+    onError: (error) =>
+      Alert.alert(t("chat.sendFailed"), error instanceof Error ? error.message : String(error)),
+  });
 
   const handleNewThread = useCallback(() => {
     setGeneralActiveThread(null);
@@ -489,6 +473,7 @@ export function ChatScreen() {
                   messages={allMessages}
                   isStreaming={isStreaming}
                   currentStep={currentStep}
+                  onEditMessage={edit.startEdit}
                 />
               ) : (
                 <AdaptiveEmptyState
@@ -513,6 +498,12 @@ export function ChatScreen() {
               onSend={handleSend}
               onStop={stopStream}
               isStreaming={isStreaming}
+              editMessage={edit.editMessage}
+              onCancelEdit={edit.cancelEdit}
+              quotes={attachedQuotes}
+              onRemoveQuote={(id) =>
+                setAttachedQuotes((current) => current.filter((quote) => quote.id !== id))
+              }
               keyboardBottomOffset={layout.useNavigationRail ? insets.bottom : tabBarHeight}
             />
           </KeyboardAvoidingView>

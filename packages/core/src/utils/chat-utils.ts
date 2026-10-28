@@ -1,7 +1,36 @@
 /**
  * Chat utility functions shared between ChatPage and ChatPanel
  */
+import type { AttachedQuote } from "../types";
 import type { MessageV2 } from "../types/message";
+
+/** 编辑时只取正文和完整引用，不把展示截断或引用标记写回正文。 */
+export function extractEditableMessage(message: {
+  content?: string;
+  parts?: MessageV2["parts"];
+  partsOrder?: { type: string; id?: string; text?: string; source?: string }[];
+}): { content: string; quotes: AttachedQuote[] } {
+  const parts = message.parts?.length ? message.parts : (message.partsOrder ?? []);
+  const textParts = parts.filter((part) => part.type === "text");
+  return {
+    content: parts.length
+      ? textParts
+          .map((part) => ("text" in part ? (part.text ?? message.content ?? "") : ""))
+          .join("")
+      : (message.content ?? ""),
+    quotes: parts.flatMap((part, index) =>
+      part.type === "quote" && "text" in part
+        ? [
+            {
+              id: part.id ?? `quote-${index}`,
+              text: part.text ?? "",
+              source: "source" in part ? part.source : undefined,
+            },
+          ]
+        : [],
+    ),
+  };
+}
 
 function parseToolResult(result: unknown): Record<string, unknown> | null {
   if (typeof result === "string") {
@@ -15,7 +44,10 @@ function parseToolResult(result: unknown): Record<string, unknown> | null {
   return result && typeof result === "object" ? (result as Record<string, unknown>) : null;
 }
 
-function findCitationIndexFromToolCalls(entry: any, toolCalls: any[] | undefined): number | undefined {
+function findCitationIndexFromToolCalls(
+  entry: any,
+  toolCalls: any[] | undefined,
+): number | undefined {
   if (!toolCalls) return undefined;
   for (const tc of toolCalls) {
     if (tc.name !== "addCitation") continue;
@@ -76,7 +108,7 @@ export function convertToMessageV2(messages: any[]): MessageV2[] {
             parts.push({
               id: entry.id,
               type: "text",
-              text: entry.text || m.content,
+              text: entry.text ?? m.content,
               status: "completed",
               createdAt: m.createdAt,
             });

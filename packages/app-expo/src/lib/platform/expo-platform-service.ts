@@ -219,6 +219,26 @@ export class ExpoPlatformService implements IPlatformService {
             return rows as T[];
           });
         },
+        async batch(statements, checks = []): Promise<void> {
+          await enqueue(() => withSqliteRetry(() => db.withExclusiveTransactionAsync(async (tx) => {
+            // 校验与写入共用独占连接；SQLite 在快照过期时拒绝升级写事务并回滚。
+            for (const { sql, params = [], expectedRows } of checks) {
+              const rows = await tx.getAllAsync<Record<string, unknown>>(
+                sql, ...(params as (string | number | null)[]),
+              );
+              if (rows.length !== expectedRows.length || rows.some((row, index) => {
+                const expected = expectedRows[index];
+                return Object.keys(row).length !== Object.keys(expected).length ||
+                  Object.keys(expected).some((key) => row[key] !== expected[key]);
+              })) {
+                throw new Error("Database changed while editing; retry the operation");
+              }
+            }
+            for (const { sql, params = [] } of statements) {
+              await tx.runAsync(sql, ...(params as (string | number | null)[]));
+            }
+          })));
+        },
         async close(): Promise<void> {
           await enqueue(closeImpl);
         },

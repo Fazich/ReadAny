@@ -1,5 +1,12 @@
 {
   "chat": {
+    "editMessage": "メッセージを編集",
+    "editingMessage": "メッセージを編集中",
+    "cancelEdit": "編集をキャンセル",
+    "resend": "再送信",
+    "editMessageWarning": "再送信すると、このメッセージとそれ以降のすべてのメッセージが削除されます。",
+    "send": "送信",
+    "sendFailed": "メッセージを送信できませんでした",
     "history": "履歴",
     "newChat": "新しいチャット",
     "noConversations": "会話はまだありません",

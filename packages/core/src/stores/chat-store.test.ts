@@ -4,6 +4,7 @@ const dbMocks = vi.hoisted(() => ({
   deleteThread: vi.fn(),
   getThreads: vi.fn(),
   insertMessage: vi.fn(),
+  replaceMessageHistory: vi.fn(),
   insertThread: vi.fn(),
   updateThreadTitle: vi.fn(),
 }));
@@ -32,6 +33,43 @@ describe("useChatStore streaming sessions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     resetChatStore();
+  });
+
+  it("历史替换提交失败不更改内存，成功才一起替换历史和摘要", async () => {
+    const message = {
+      id: "old",
+      threadId: "thread",
+      role: "user" as const,
+      content: "old",
+      createdAt: 1,
+    };
+    const thread = {
+      id: "thread",
+      title: "test",
+      createdAt: 1,
+      updatedAt: 1,
+      messages: [message],
+      memorySummary: "old memory",
+      memoryUpdatedAt: 1,
+      memoryMessageCount: 1,
+    };
+    useChatStore.setState({ threads: [thread] });
+    dbMocks.replaceMessageHistory.mockRejectedValueOnce(new Error("write failed"));
+    const replacement = { ...message, id: "new", content: "edited" };
+    await expect(
+      useChatStore.getState().replaceMessageHistory("thread", "old", replacement),
+    ).rejects.toThrow("write failed");
+    expect(useChatStore.getState().threads[0]).toEqual(thread);
+    dbMocks.replaceMessageHistory.mockResolvedValueOnce({ messages: [replacement], updatedAt: 2 });
+    await useChatStore.getState().replaceMessageHistory("thread", "old", replacement);
+    expect(useChatStore.getState().threads[0]).toEqual({
+      ...thread,
+      messages: [replacement],
+      updatedAt: 2,
+      memorySummary: undefined,
+      memoryUpdatedAt: undefined,
+      memoryMessageCount: 0,
+    });
   });
 
   it("stores and updates a book-scoped streaming message", () => {

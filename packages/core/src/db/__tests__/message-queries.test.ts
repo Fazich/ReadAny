@@ -3,12 +3,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockExecute = vi.fn();
 const mockSelect = vi.fn();
-const mockDb = { execute: mockExecute, select: mockSelect, close: vi.fn() };
+const mockDb = { execute: mockExecute, select: mockSelect, batch: vi.fn(), close: vi.fn() };
 
 const coreMocks = vi.hoisted(() => ({
   getDB: vi.fn(),
   getDeviceId: vi.fn(),
   nextSyncVersion: vi.fn(),
+  nextUpdatedAt: vi.fn().mockResolvedValue(2000),
   parseJSON: vi.fn((str: string | null | undefined, fallback: unknown) => {
     if (!str) return fallback;
     try { return JSON.parse(str); } catch { return fallback; }
@@ -20,6 +21,7 @@ vi.mock("../db-core", () => coreMocks);
 const {
   getMessages,
   insertMessage,
+  replaceMessageHistory,
 } = await import("../message-queries");
 
 describe("message-queries", () => {
@@ -28,10 +30,37 @@ describe("message-queries", () => {
     coreMocks.getDB.mockResolvedValue(mockDb);
     coreMocks.getDeviceId.mockResolvedValue("device-1");
     coreMocks.nextSyncVersion.mockResolvedValue(1);
+    mockDb.batch.mockReset();
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+  });
+
+  const replacement: Message = {
+    id: "new", threadId: "t", role: "user", content: "edited", createdAt: 2,
+  };
+
+  it.each([
+    ["目标不存在", [], [{ updated_at: 1 }], replacement],
+    ["目标不是用户消息", [{ id: "old", role: "assistant" }], [{ updated_at: 1 }], replacement],
+    ["会话不存在", [{ id: "old", role: "user" }], [], replacement],
+    ["新消息会话不符", [{ id: "old", role: "user" }], [{ updated_at: 1 }], { ...replacement, threadId: "other" }],
+    ["新消息不是用户消息", [{ id: "old", role: "user" }], [{ updated_at: 1 }], { ...replacement, role: "assistant" }],
+  ])("拒绝编辑：%s", async (_name, rows, threads, edited) => {
+    mockSelect.mockResolvedValueOnce(rows).mockResolvedValueOnce(threads);
+    await expect(replaceMessageHistory("t", "old", edited as Message)).rejects.toThrow(
+      "no longer available",
+    );
+    expect(mockDb.batch).not.toHaveBeenCalled();
+  });
+
+  it("事务失败向调用方传播", async () => {
+    mockSelect.mockResolvedValueOnce([
+      { id: "old", thread_id: "t", role: "user", content: "old", created_at: 1 },
+    ]).mockResolvedValueOnce([{ updated_at: 1 }]);
+    mockDb.batch.mockRejectedValueOnce(new Error("disk full"));
+    await expect(replaceMessageHistory("t", "old", replacement)).rejects.toThrow("disk full");
   });
 
   describe("getMessages", () => {
@@ -71,7 +100,7 @@ describe("message-queries", () => {
       expect(messages[1].citations).toEqual([{ source: "book-1" }]);
       expect(messages[1].reasoning).toEqual({ steps: ["think"] });
       expect(mockSelect).toHaveBeenCalledWith(
-        "SELECT * FROM messages WHERE thread_id = ? ORDER BY created_at ASC",
+        "SELECT * FROM messages WHERE thread_id = ? ORDER BY created_at ASC, rowid ASC",
         ["thread-1"],
       );
     });

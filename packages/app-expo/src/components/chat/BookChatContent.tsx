@@ -26,6 +26,7 @@ import { resolveActiveAIConfig } from "@/lib/ai/resolve-active-ai-config";
 import { useLibraryStore } from "@/stores";
 import { useChatStore } from "@/stores/chat-store";
 import { useSettingsStore } from "@/stores/settings-store";
+import { useChatSubmit } from "@readany/core/hooks/use-chat-submit";
 import { getPlatformService } from "@readany/core/services";
 import type { AttachedQuote } from "@readany/core/types";
 import type { CitationPart, MessageV2 } from "@readany/core/types/message";
@@ -310,47 +311,26 @@ export function BookChatContent({
     [activeCurrentMessage, isStreaming, messagesV2],
   );
 
-  const handleSend = useCallback(
-    async (
-      text: string,
-      deepThinking: boolean,
-      spoilerFree: boolean,
-      sentQuotes?: AttachedQuote[],
-      onAccepted?: () => void,
-    ) => {
-      const state = useSettingsStore.getState();
-      const resolvedAIConfig = await resolveActiveAIConfig(state);
-
-      if (!resolvedAIConfig) {
-        Alert.alert(
-          t("chat.configRequired", "需要配置 AI"),
-          t("chat.configRequiredMessage", "请先在设置中配置 AI 端点和模型"),
-          [
-            { text: t("common.cancel", "取消"), style: "cancel" },
-            {
-              text: t("common.settings", "去设置"),
-              onPress: onNavigateToSettings,
-            },
-          ],
-        );
-        return;
-      }
-      const sentQuoteIds = new Set(sentQuotes?.map((quote) => quote.id));
-      await sendMessage(
-        text,
-        bookId,
-        deepThinking,
-        spoilerFree,
-        sentQuotes,
-        resolvedAIConfig,
-        () => {
-          setQuotes((current) => current.filter((quote) => !sentQuoteIds.has(quote.id)));
-          onAccepted?.();
-        },
-      );
-    },
-    [bookId, onNavigateToSettings, sendMessage, t],
-  );
+  const { edit, handleSend } = useChatSubmit({
+    threadId: activeThreadId,
+    bookId,
+    quotes,
+    setQuotes,
+    sendMessage,
+    stopStream,
+    resolveConfig: () => resolveActiveAIConfig(useSettingsStore.getState()),
+    onConfigRequired: () =>
+      Alert.alert(
+        t("chat.configRequired", "需要配置 AI"),
+        t("chat.configRequiredMessage", "请先在设置中配置 AI 端点和模型"),
+        [
+          { text: t("common.cancel", "取消"), style: "cancel" },
+          { text: t("common.settings", "去设置"), onPress: onNavigateToSettings },
+        ],
+      ),
+    onError: (error) =>
+      Alert.alert(t("chat.sendFailed"), error instanceof Error ? error.message : String(error)),
+  });
 
   const handleNewThread = useCallback(async () => {
     if (activeThread && activeThread.messages.length === 0) return;
@@ -636,6 +616,7 @@ export function BookChatContent({
                   isStreaming={isStreaming}
                   currentStep={currentStep}
                   onCitationClick={onCitationClick}
+                  onEditMessage={edit.startEdit}
                 />
               ) : (
                 <AdaptiveEmptyState
@@ -688,6 +669,8 @@ export function BookChatContent({
               onStop={stopStream}
               isStreaming={isStreaming}
               placeholder={t("chat.askAboutBook", "询问关于这本书的问题...")}
+              editMessage={edit.editMessage}
+              onCancelEdit={edit.cancelEdit}
               quotes={quotes}
               onRemoveQuote={handleRemoveQuote}
               keyboardBottomOffset={embedded ? 0 : insets.bottom}

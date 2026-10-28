@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import { URL } from "node:url";
+import type { MessageV2 } from "@readany/core/types/message";
+import { extractEditableMessage } from "@readany/core/utils/chat-utils";
 import { transformSync } from "esbuild";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { BookChatContentProps } from "./BookChatContent";
@@ -14,6 +16,7 @@ interface NativeProps extends Record<string, unknown> {
   onInputFocusChange: (focused: boolean) => void;
   onRemoveQuote: (id: string) => void;
   onCitationClick: (citation: unknown) => void;
+  onEditMessage: (message: MessageV2) => void;
   onSend: (
     text: string,
     deepThinking: boolean,
@@ -101,16 +104,28 @@ function createHost(file: string, exportName: string, modules: Record<string, un
     jsx: "automatic",
   }).code;
   const module = { exports: {} as Record<string, unknown> };
-  new Function("require", "module", "exports", source)(
-    (name: string) => {
-      if (name === "react") return hooks;
-      if (name === "react/jsx-runtime") return { jsx, jsxs: jsx, Fragment: "Fragment" };
-      if (!(name in modules)) throw new Error(`Unexpected test import: ${name}`);
-      return modules[name];
-    },
-    module,
-    module.exports,
-  );
+  const requireModule = (name: string): unknown => {
+    if (name === "react") return hooks;
+    if (name === "react/jsx-runtime") return { jsx, jsxs: jsx, Fragment: "Fragment" };
+    if (name === "@readany/core/hooks/use-chat-submit" || name === "./use-message-edit") {
+      const hookModule = { exports: {} };
+      const hookName = name.endsWith("use-chat-submit") ? "use-chat-submit" : "use-message-edit";
+      const hookSource = transformSync(
+        readFileSync(new URL(`../../../../core/src/hooks/${hookName}.ts`, import.meta.url), "utf8"),
+        { loader: "ts", format: "cjs" },
+      ).code;
+      new Function("require", "module", "exports", hookSource)(
+        requireModule,
+        hookModule,
+        hookModule.exports,
+      );
+      return hookModule.exports;
+    }
+    if (name === "../utils/chat-utils") return { extractEditableMessage };
+    if (!(name in modules)) throw new Error(`Unexpected test import: ${name}`);
+    return modules[name];
+  };
+  new Function("require", "module", "exports", source)(requireModule, module, module.exports);
   const component = module.exports[exportName] as (
     props: object,
     ref?: { current: unknown },
@@ -174,8 +189,9 @@ function setup() {
       _spoilerFree?: boolean,
       _quotes?: { id: string; text: string; source?: string }[],
       _config?: unknown,
-      onAccepted?: () => void,
-    ) => onAccepted?.(),
+      onAccepted?: (threadId?: string) => void,
+      _editTarget?: { threadId: string; messageId: string; isCurrent: () => boolean },
+    ) => onAccepted?.(activeThreadId ?? undefined),
   );
   const stopStream = vi.fn();
   const loadThreads = vi.fn();
@@ -203,6 +219,7 @@ function setup() {
       getState: () => state,
     },
   );
+  let activeThreadId: string | null = "thread-1";
   const thread = {
     id: "thread-1",
     messages: [{ content: "message" }],
@@ -215,8 +232,8 @@ function setup() {
     setBookActiveThread,
     createThread,
     removeThread,
-    getActiveThreadId: () => thread.id,
-    getThreadsForContext: () => [thread],
+    getActiveThreadId: () => activeThreadId,
+    getThreadsForContext: () => (activeThreadId ? [thread] : []),
   };
   const animation = (value: { setValue(n: number): void }, options: { toValue: number }) => ({
     start(callback?: (result: { finished: boolean }) => void) {
@@ -315,6 +332,7 @@ function setup() {
     "@/stores/settings-store": { useSettingsStore },
     "@readany/core/services": { getPlatformService: () => ({ shareOrDownloadFile: vi.fn() }) },
     "@readany/core/utils": {
+      extractEditableMessage,
       convertToMessageV2: (messages: unknown) => messages,
       mergeMessagesWithStreaming: (messages: unknown) => messages,
       groupThreadsByTime: (threads: unknown) => ({
@@ -388,6 +406,9 @@ function setup() {
     focusChange,
     citationClick,
     resolveActiveAIConfig,
+    setThread(value: string | null) {
+      activeThreadId = value;
+    },
     setStreaming(value: boolean) {
       streaming = value;
     },
@@ -432,7 +453,7 @@ function setupChatInput() {
   const render = () => {
     const props = find(book.render(), "ChatInput").props;
     return input.render(props, props.ref, (tree) => {
-      find(tree, "TextInput").props.ref.current = { blur: book.blur };
+      find(tree, "TextInput").props.ref.current = { blur: book.blur, focus: vi.fn() };
     });
   };
   const draft = () => {
@@ -458,7 +479,155 @@ function setupChatInput() {
 
 afterEach(() => vi.restoreAllMocks());
 
+const editableMessage: MessageV2 = {
+  id: "user-old",
+  threadId: "thread-1",
+  role: "user",
+  createdAt: 1,
+  parts: [
+    {
+      id: "quote-old",
+      type: "quote",
+      text: "完整历史引用".repeat(100),
+      source: "第二章",
+      status: "completed",
+      createdAt: 1,
+    },
+    { id: "text-old", type: "text", text: "历史正文", status: "completed", createdAt: 1 },
+  ],
+};
+
+function startEditing(host: ReturnType<typeof setupChatInput>) {
+  find(host.book.render(), "MessageList").props.onEditMessage(editableMessage);
+  return host.render();
+}
+
+describe("历史消息编辑重发", () => {
+  it("点击立即停止并回填完整引用；取消恢复普通草稿、引用和选项", () => {
+    const host = setupChatInput();
+    host.draft();
+    const tree = startEditing(host);
+    expect(host.book.stopStream).toHaveBeenCalledOnce();
+    expect(find(tree, "TextInput").props.value).toBe("历史正文");
+    expect(find(host.book.render(), "ChatInput").props.quotes).toEqual([
+      { id: "quote-old", text: "完整历史引用".repeat(100), source: "第二章" },
+    ]);
+    button(tree, "chat.cancelEdit").props.onPress();
+    const restored = host.render();
+    expect(find(restored, "TextInput").props.value).toBe("  未发送草稿  ");
+    expect(find(restored, "BrainIcon").props.color).toBe("primary");
+    expect(find(restored, "EyeOffIcon").props.color).toBe("primary");
+    expect(find(host.book.render(), "ChatInput").props.quotes.map((quote) => quote.id)).toEqual([
+      "selection-a",
+    ]);
+    host.unmount();
+  });
+
+  it("重发等待停止完成，持久化失败保留编辑，接受后才消费", async () => {
+    const host = setupChatInput();
+    host.draft();
+    const stopped = deferred<void>();
+    host.book.stopStream.mockReturnValue(stopped.promise);
+    const tree = startEditing(host);
+    const resend = button(tree, "chat.resend").props.onPress();
+    await Promise.resolve();
+    expect(host.book.sendMessage).not.toHaveBeenCalled();
+    host.book.sendMessage.mockRejectedValueOnce(new Error("save failed"));
+    stopped.resolve();
+    await resend;
+    expect(find(host.render(), "TextInput").props.value).toBe("历史正文");
+    expect(find(host.book.render(), "ChatInput").props.editMessage).toEqual(editableMessage);
+    const target = (host.book.sendMessage.mock.lastCall as unknown[])[7];
+    expect(target).toEqual(
+      expect.objectContaining({ threadId: "thread-1", messageId: "user-old" }),
+    );
+    await button(host.render(), "chat.resend").props.onPress();
+    expect(find(host.render(), "TextInput").props.value).toBe("");
+    expect(find(host.book.render(), "ChatInput").props.editMessage).toBeNull();
+    expect(find(host.book.render(), "ChatInput").props.quotes).toEqual([]);
+    host.unmount();
+  });
+
+  it.each(["取消", "切换目标"])(
+    "%s后旧接受回调及 finally 不影响新草稿和提交门禁",
+    async (action) => {
+      const host = setupChatInput();
+      host.draft();
+      const first = deferred<void>();
+      const second = deferred<void>();
+      let oldAccepted: ((threadId?: string) => void) | undefined;
+      host.book.sendMessage.mockImplementationOnce(async (...args) => {
+        oldAccepted = args[6];
+        await first.promise;
+      });
+      const oldSending = button(startEditing(host), "chat.resend").props.onPress();
+      for (let i = 0; i < 5; i++) await Promise.resolve();
+      expect(oldAccepted).toBeTypeOf("function");
+      if (action === "取消") button(host.render(), "chat.cancelEdit").props.onPress();
+      else
+        find(host.book.render(), "MessageList").props.onEditMessage({
+          ...editableMessage,
+          id: "another-user",
+        });
+      find(host.render(), "TextInput").props.onChangeText("新的草稿");
+      host.book.sendMessage.mockImplementationOnce(async () => {
+        await second.promise;
+      });
+      const newTree = host.render();
+      const newSending = (
+        action === "取消" ? iconButton(newTree, "SendIcon") : button(newTree, "chat.resend")
+      ).props.onPress();
+      for (let i = 0; i < 5; i++) await Promise.resolve();
+      oldAccepted?.("thread-1");
+      first.resolve();
+      await oldSending;
+      expect(find(host.render(), "TextInput").props.value).toBe("新的草稿");
+      expect(find(host.render(), "TextInput").props.editable).toBe(false);
+      second.resolve();
+      await newSending;
+      expect(find(host.render(), "TextInput").props.value).toBe("新的草稿");
+      expect(find(host.render(), "TextInput").props.editable).toBe(true);
+      host.unmount();
+    },
+  );
+
+  it.each(["取消", "切会话", "切书籍"])("配置解析期间%s阻止旧编辑提交", async (action) => {
+    const host = setupChatInput();
+    host.draft();
+    const tree = startEditing(host);
+    const config = deferred<Awaited<ReturnType<typeof host.book.resolveActiveAIConfig>>>();
+    host.book.resolveActiveAIConfig.mockReturnValueOnce(config.promise);
+    const sending = button(tree, "chat.resend").props.onPress();
+    if (action === "取消") button(host.render(), "chat.cancelEdit").props.onPress();
+    if (action === "切会话") host.book.setThread("thread-2");
+    if (action === "切书籍") host.book.props.bookId = "book-2";
+    host.render();
+    config.resolve({ endpoints: [], activeEndpointId: "x", activeModel: "m" } as Awaited<
+      ReturnType<typeof host.book.resolveActiveAIConfig>
+    >);
+    await sending;
+    expect(host.book.sendMessage).not.toHaveBeenCalled();
+    expect(find(host.render(), "TextInput").props.value).toBe("  未发送草稿  ");
+    host.unmount();
+  });
+});
+
 describe("发送确认与草稿消费", () => {
+  it.each(["本次新建", "切换其他会话"])("接受时核对实际线程 ID：%s", async (outcome) => {
+    const host = setupChatInput();
+    host.book.setThread(null);
+    host.draft();
+    host.book.sendMessage.mockImplementationOnce(async (...args) => {
+      host.book.setThread(outcome === "本次新建" ? "created-thread" : "another-thread");
+      host.book.render();
+      args[6]?.("created-thread");
+    });
+    await iconButton(host.render(), "SendIcon").props.onPress();
+    expect(find(host.render(), "TextInput").props.value).toBe(
+      outcome === "本次新建" ? "" : "  未发送草稿  ",
+    );
+    host.unmount();
+  });
   it.each(["配置缺失", "配置校验异常", "接受前异常", "已有流拒绝"])(
     "%s 保留正文、选项、高度和引用，解除门禁后可以再次发送",
     async (outcome) => {

@@ -1,4 +1,4 @@
-import { CheckIcon, ChevronDownIcon, CopyIcon } from "@/components/ui/Icon";
+import { CheckIcon, ChevronDownIcon, CopyIcon, EditIcon } from "@/components/ui/Icon";
 import { fontSize as fs, radius, useColors, withOpacity } from "@/styles/theme";
 import type { ThemeColors } from "@/styles/theme";
 import type { CitationPart, MessageV2, QuotePart, TextPart } from "@readany/core/types/message";
@@ -31,6 +31,7 @@ interface MessageListProps {
   isStreaming?: boolean;
   currentStep?: "thinking" | "tool_calling" | "responding" | "idle";
   onCitationClick?: (citation: CitationPart) => void;
+  onEditMessage?: (message: MessageV2) => void;
 }
 
 const BOTTOM_THRESHOLD = 80;
@@ -54,6 +55,7 @@ export function MessageList({
   isStreaming,
   currentStep,
   onCitationClick,
+  onEditMessage,
 }: MessageListProps) {
   const { t } = useTranslation();
   const colors = useColors();
@@ -147,10 +149,19 @@ export function MessageList({
           currentStep={currentStep}
           onCitationClick={onCitationClick}
           onLongPress={handleBubbleLongPress}
+          onEditMessage={onEditMessage}
         />
       );
     },
-    [colors, messages.length, isStreaming, currentStep, onCitationClick, handleBubbleLongPress],
+    [
+      colors,
+      messages.length,
+      isStreaming,
+      currentStep,
+      onCitationClick,
+      handleBubbleLongPress,
+      onEditMessage,
+    ],
   );
 
   // Show indicator when streaming but no assistant content yet
@@ -253,6 +264,7 @@ interface MessageBubbleProps {
   currentStep?: "thinking" | "tool_calling" | "responding" | "idle";
   onCitationClick?: (citation: CitationPart) => void;
   onLongPress?: (text: string) => void;
+  onEditMessage?: (message: MessageV2) => void;
 }
 
 function extractPlainText(message: MessageV2): string {
@@ -279,7 +291,9 @@ function MessageBubble({
   currentStep,
   onCitationClick,
   onLongPress,
+  onEditMessage,
 }: MessageBubbleProps) {
+  const { t } = useTranslation();
   const s = makeStyles(colors);
 
   // Extract citations from message parts
@@ -315,6 +329,25 @@ function MessageBubble({
             </Text>
           ))}
         </Pressable>
+        {onEditMessage && (
+          <TouchableOpacity
+            onPress={() => onEditMessage(message)}
+            accessibilityRole="button"
+            accessibilityLabel={t("chat.editMessage")}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 4,
+              padding: 8,
+              alignSelf: "flex-end",
+            }}
+          >
+            <EditIcon size={13} color={colors.mutedForeground} />
+            <Text style={{ color: colors.mutedForeground, fontSize: fs.xs }}>
+              {t("chat.editMessage")}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     );
   }
@@ -510,8 +543,8 @@ const makeStyles = (colors: ThemeColors) =>
     container: { flex: 1 },
     listContent: { paddingHorizontal: 16, paddingVertical: 12, gap: 12 },
     userRow: {
-      flexDirection: "row",
-      justifyContent: "flex-end",
+      flexDirection: "column",
+      alignItems: "flex-end",
       marginTop: 16,
     },
     userBubble: {

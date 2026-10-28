@@ -3,6 +3,7 @@ import {
   deleteThread as dbDeleteThread,
   getThreads as dbGetThreads,
   insertMessage as dbInsertMessage,
+  replaceMessageHistory as dbReplaceMessageHistory,
   insertThread as dbInsertThread,
   updateThreadTitle as dbUpdateThreadTitle,
 } from "../db/database";
@@ -58,6 +59,7 @@ export interface ChatState {
   getThreadsForContext: (bookId?: string) => Thread[];
   addMessage: (threadId: string, message: Message) => Promise<void>;
   updateMessage: (threadId: string, messageId: string, content: string) => void;
+  replaceMessageHistory: (threadId: string, messageId: string, replacement: Message) => Promise<Thread>;
   updateThreadTitle: (threadId: string, title: string) => Promise<void>;
   setStreaming: (streaming: boolean) => void;
   startStreamingSession: (session: ChatStreamingSession) => void;
@@ -221,6 +223,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       await dbInsertMessage(message);
     } catch (err) {
       console.error("[chat-store] Failed to insert message:", err);
+      if (message.role === "user") throw err;
     }
 
     set((state) => ({
@@ -228,6 +231,15 @@ export const useChatStore = create<ChatState>((set, get) => ({
         t.id === threadId ? { ...t, messages: [...t.messages, message], updatedAt: Date.now() } : t,
       ),
     }));
+  },
+
+  replaceMessageHistory: async (threadId, messageId, replacement) => {
+    const thread = get().threads.find((item) => item.id === threadId);
+    if (!thread) throw new Error("Conversation no longer exists");
+    const saved = await dbReplaceMessageHistory(threadId, messageId, replacement);
+    const updated = { ...thread, ...saved, memorySummary: undefined, memoryUpdatedAt: undefined, memoryMessageCount: 0 };
+    set((state) => ({ threads: state.threads.map((item) => item.id === threadId ? updated : item) }));
+    return updated;
   },
 
   updateMessage: (threadId, messageId, content) =>

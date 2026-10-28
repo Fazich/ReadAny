@@ -1,5 +1,12 @@
 {
   "chat": {
+    "editMessage": "Edit message",
+    "editingMessage": "Editing message",
+    "cancelEdit": "Cancel edit",
+    "resend": "Resend",
+    "editMessageWarning": "Resending will remove this message and all following messages.",
+    "send": "Send",
+    "sendFailed": "Failed to send message",
     "history": "History",
     "newChat": "New Chat",
     "noConversations": "No conversations yet",

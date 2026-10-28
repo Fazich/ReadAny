@@ -1,6 +1,8 @@
 /**
  * @readany/core hooks — barrel export
  */
+export { useMessageEdit } from "./use-message-edit";
+export { useChatSubmit } from "./use-chat-submit";
 export { useDebounce } from "./use-debounce";
 export { useDrag } from "./use-drag";
 export { useThrottledValue, useThrottledCallback, useStreamingText } from "./use-throttled-value";

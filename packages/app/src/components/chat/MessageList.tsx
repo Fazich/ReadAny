@@ -3,7 +3,7 @@
  * Uses Part-based rendering for real-time updates
  */
 import type { CitationPart, MessageV2, QuotePart } from "@readany/core/types/message";
-import { ArrowDown, Check, Copy, Quote } from "lucide-react";
+import { ArrowDown, Check, Copy, Pencil, Quote } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PartRenderer } from "./PartRenderer";
@@ -15,6 +15,7 @@ interface MessageListProps {
   isStreaming?: boolean;
   currentStep?: "thinking" | "tool_calling" | "responding" | "idle";
   onStop?: () => void;
+  onEditMessage?: (message: MessageV2) => void;
 }
 
 /** Threshold (px) to consider the user "at the bottom" */
@@ -39,6 +40,7 @@ export function MessageList({
   onCitationClick,
   isStreaming,
   currentStep,
+  onEditMessage,
 }: MessageListProps) {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -123,6 +125,7 @@ export function MessageList({
           <MessageBubble
             key={msg.id}
             message={msg}
+            onEditMessage={onEditMessage}
             onCitationClick={onCitationClick}
             isStreaming={idx === messages.length - 1 && isLastMsgStreaming}
             currentStep={currentStep}
@@ -150,6 +153,7 @@ export function MessageList({
 
 interface MessageBubbleProps {
   message: MessageV2;
+  onEditMessage?: (message: MessageV2) => void;
   onCitationClick?: (citation: CitationPart) => void;
   isStreaming?: boolean;
   currentStep?: "thinking" | "tool_calling" | "responding" | "idle";
@@ -200,7 +204,14 @@ function CopyMessageButton({ message }: { message: MessageV2 }) {
   );
 }
 
-function MessageBubble({ message, onCitationClick, isStreaming, currentStep }: MessageBubbleProps) {
+function MessageBubble({
+  message,
+  onCitationClick,
+  isStreaming,
+  currentStep,
+  onEditMessage,
+}: MessageBubbleProps) {
+  const { t } = useTranslation();
   if (message.role === "user") {
     const quoteParts = message.parts.filter((p) => p.type === "quote") as QuotePart[];
     const textParts = message.parts.filter((p) => p.type === "text");
@@ -227,6 +238,18 @@ function MessageBubble({ message, onCitationClick, isStreaming, currentStep }: M
             </div>
           )}
         </div>
+        {onEditMessage && (
+          <button
+            type="button"
+            onClick={() => onEditMessage(message)}
+            aria-label={t("chat.editMessage")}
+            title={t("chat.editMessage")}
+            className="mt-1 flex items-center gap-1 self-end rounded p-1 text-xs text-muted-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <Pencil className="size-3" />
+            <span>{t("chat.editMessage")}</span>
+          </button>
+        )}
       </div>
     );
   }

@@ -8,15 +8,18 @@ const boundaries = vi.hoisted(() => ({
     deleteThread: vi.fn(),
     getThreads: vi.fn(),
     insertMessage: vi.fn(),
+    replaceMessageHistory: vi.fn(),
     insertThread: vi.fn(),
     updateThreadTitle: vi.fn(),
     getBook: vi.fn(),
     getSkills: vi.fn(),
   },
   stream: vi.fn(),
+  compress: vi.fn(),
 }));
 vi.mock("../db/database", () => boundaries.db);
 vi.mock("../ai/agents/reading-agent", () => ({ streamReadingAgent: boundaries.stream }));
+vi.mock("../ai/chat-memory", () => ({ maybeCompressThreadMemory: boundaries.compress }));
 
 import { getChatStreamingKey, useChatStore } from "../stores/chat-store";
 import { useStreamingChat } from "./use-streaming-chat";
@@ -54,6 +57,7 @@ describe("发送接受确认", () => {
     vi.resetAllMocks();
     useChatStore.setState(useChatStore.getInitialState(), true);
     boundaries.db.getSkills.mockResolvedValue([]);
+    boundaries.compress.mockImplementation(async (thread) => thread);
     boundaries.stream.mockImplementation(async function* () {
       yield { type: "token", content: "answer" };
     });
@@ -89,6 +93,7 @@ describe("发送接受确认", () => {
     write.resolve();
     await requested.promise;
     expect(accepted).toHaveBeenCalledOnce();
+    expect(accepted).toHaveBeenCalledWith(useChatStore.getState().threads[0].id);
     expect(finished).toBe(false);
     network.resolve();
     await sending;
@@ -118,6 +123,50 @@ describe("发送接受确认", () => {
     expect(boundaries.stream).not.toHaveBeenCalled();
   });
 
+  it("慢时钟下修订问题及后续消息的时间仍保持对话顺序", async () => {
+    vi.spyOn(Date, "now").mockReturnValue(1000);
+    useChatStore.setState({
+      generalActiveThreadId: "thread",
+      threads: [
+        {
+          id: "thread",
+          title: "test",
+          createdAt: 1,
+          updatedAt: 1,
+          messages: [
+            {
+              id: "before",
+              threadId: "thread",
+              role: "assistant",
+              content: "before",
+              createdAt: 5000,
+            },
+            { id: "old", threadId: "thread", role: "user", content: "old", createdAt: 6000 },
+          ],
+        },
+      ],
+    });
+    boundaries.db.replaceMessageHistory.mockImplementationOnce(
+      async (_threadId, _messageId, replacement) => ({
+        messages: [
+          useChatStore.getState().threads[0].messages[0],
+          { ...replacement, createdAt: 5001 },
+        ],
+        updatedAt: 6001,
+      }),
+    );
+    const chat = mount();
+    await chat.sendMessage("edited", undefined, false, false, undefined, config, undefined, {
+      threadId: "thread",
+      messageId: "old",
+    });
+    let messages = useChatStore.getState().threads[0].messages;
+    expect(messages.map((message) => message.createdAt)).toEqual([5000, 5001, 5002]);
+    await chat.sendMessage("follow up", undefined, false, false, undefined, config);
+    messages = useChatStore.getState().threads[0].messages;
+    expect(messages.map((message) => message.createdAt)).toEqual([5000, 5001, 5002, 5003, 5004]);
+  });
+
   it("只有引用也能被接受", async () => {
     const accepted = vi.fn();
     await mount().sendMessage(
@@ -144,7 +193,9 @@ describe("发送接受确认", () => {
       }
     });
     try {
-      await chat.sendMessage("question", undefined, false, false, undefined, config, accepted);
+      await expect(
+        chat.sendMessage("question", undefined, false, false, undefined, config, accepted),
+      ).rejects.toThrow("state update failed");
     } finally {
       unsubscribe();
     }
@@ -152,13 +203,126 @@ describe("发送接受确认", () => {
     expect(boundaries.stream).not.toHaveBeenCalled();
   });
 
-  it("数据库写入失败但内存已接受时仍确认", async () => {
+  it("用户消息保存失败时不确认、不更新历史并向输入框报告错误", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     boundaries.db.insertMessage.mockRejectedValueOnce(new Error("database unavailable"));
     const accepted = vi.fn();
-    await mount().sendMessage("question", undefined, false, false, undefined, config, accepted);
+    await expect(
+      mount().sendMessage("question", undefined, false, false, undefined, config, accepted),
+    ).rejects.toThrow("database unavailable");
+    expect(accepted).not.toHaveBeenCalled();
+    expect(useChatStore.getState().threads[0].messages).toEqual([]);
+    expect(boundaries.stream).not.toHaveBeenCalled();
+  });
+
+  it("准备阶段停止后等待准备收尾，且不会启动模型", async () => {
+    const preparing = deferred();
+    boundaries.db.getSkills.mockReturnValueOnce(preparing.promise.then(() => []));
+    const chat = mount();
+    const accepted = vi.fn();
+    const sending = chat.sendMessage("old", undefined, false, false, undefined, config, accepted);
+    await vi.waitFor(() => expect(accepted).toHaveBeenCalledOnce());
+    let stopped = false;
+    const stopping = chat.stopStream().then(() => {
+      stopped = true;
+    });
+    await Promise.resolve();
+    expect(stopped).toBe(false);
+    preparing.resolve();
+    await Promise.all([sending, stopping]);
+    expect(boundaries.stream).not.toHaveBeenCalled();
+    expect(useChatStore.getState().isStreaming).toBe(false);
+  });
+
+  it("停止等待旧回答落库，重发只使用替换后的历史并清空旧摘要", async () => {
+    const requested = deferred();
+    const release = deferred();
+    const persisted = deferred();
+    boundaries.stream.mockImplementationOnce(async function* () {
+      requested.resolve();
+      yield { type: "token", content: "old answer" };
+      await release.promise;
+      yield { type: "token", content: "late old answer" };
+    });
+    const chat = mount();
+    const sending = chat.sendMessage("old question", undefined, false, false, undefined, config);
+    await requested.promise;
+    boundaries.db.insertMessage.mockImplementationOnce(() => persisted.promise);
+    let stopped = false;
+    const stopping = chat.stopStream().then(() => {
+      stopped = true;
+    });
+    await vi.waitFor(() => expect(boundaries.db.insertMessage).toHaveBeenCalledTimes(2));
+    expect(stopped).toBe(false);
+    persisted.resolve();
+    await Promise.all([sending, stopping]);
+    const thread = useChatStore.getState().threads[0];
+    expect(thread.messages).toHaveLength(2);
+    useChatStore.setState({
+      threads: [{ ...thread, memorySummary: "stale memory", memoryMessageCount: 2 }],
+    });
+    boundaries.db.replaceMessageHistory.mockImplementationOnce(
+      async (_threadId, _messageId, replacement) => ({ messages: [replacement], updatedAt: 99 }),
+    );
+    const accepted = vi.fn();
+    await chat.sendMessage(
+      "corrected question",
+      undefined,
+      false,
+      false,
+      undefined,
+      config,
+      accepted,
+      { threadId: thread.id, messageId: thread.messages[0].id },
+    );
     expect(accepted).toHaveBeenCalledOnce();
-    expect(useChatStore.getState().threads[0].messages[0].content).toBe("question");
+    const compressedThread =
+      boundaries.compress.mock.calls[boundaries.compress.mock.calls.length - 1][0];
+    expect(
+      compressedThread.messages.map((message: { content: string }) => message.content),
+    ).toEqual(["corrected question"]);
+    expect(compressedThread.memorySummary).toBeUndefined();
+    expect(compressedThread.memoryMessageCount).toBe(0);
+    release.resolve();
+    await Promise.resolve();
+    expect(useChatStore.getState().threads[0].messages.map((message) => message.content)).toEqual([
+      "corrected question",
+      "answer",
+    ]);
+    expect(useChatStore.getState().isStreaming).toBe(false);
+  });
+
+  it("修订事务失败保留完整历史，不确认也不调用模型", async () => {
+    await mount().sendMessage("original", undefined, false, false, undefined, config);
+    const thread = useChatStore.getState().threads[0];
+    boundaries.stream.mockClear();
+    boundaries.db.replaceMessageHistory.mockRejectedValueOnce(new Error("disk full"));
+    const accepted = vi.fn();
+    await expect(
+      mount().sendMessage("edited", undefined, false, false, undefined, config, accepted, {
+        threadId: thread.id,
+        messageId: thread.messages[0].id,
+      }),
+    ).rejects.toThrow("disk full");
+    expect(useChatStore.getState().threads[0]).toEqual(thread);
+    expect(accepted).not.toHaveBeenCalled();
+    expect(boundaries.stream).not.toHaveBeenCalled();
+  });
+
+  it("切换会话后旧编辑提交不能替换历史", async () => {
+    await mount().sendMessage("original", undefined, false, false, undefined, config);
+    const thread = useChatStore.getState().threads[0];
+    const accepted = vi.fn();
+    await expect(
+      mount().sendMessage("edited", undefined, false, false, undefined, config, accepted, {
+        threadId: thread.id,
+        messageId: thread.messages[0].id,
+        isCurrent: () => false,
+      }),
+    ).rejects.toThrow("Conversation changed before sending");
+    expect(boundaries.db.replaceMessageHistory).not.toHaveBeenCalled();
+    expect(useChatStore.getState().threads[0]).toEqual(thread);
+    expect(accepted).not.toHaveBeenCalled();
   });
 
   it.each(["error", "stop"])("接受后 %s 不重复确认，用户消息仍在", async (outcome) => {

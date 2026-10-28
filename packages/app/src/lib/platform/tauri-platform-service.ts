@@ -73,6 +73,10 @@ function wrapTauriDatabase(tauriDb: any, normalizedPath: string): IDatabase {
       withRecovery((db) => db.execute(sql, params ?? [])),
     select: <T>(sql: string, params?: unknown[]): Promise<T[]> =>
       withRecovery((db) => db.select(sql, params ?? [])),
+    batch: async (statements, checks = []) => {
+      const { invoke } = await import("@tauri-apps/api/core");
+      await invoke("database_batch", { path: normalizedPath, statements, checks });
+    },
     close: () => currentDb.close(),
   };
 }

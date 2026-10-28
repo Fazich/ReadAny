@@ -1,5 +1,12 @@
 {
   "chat": {
+    "editMessage": "編輯訊息",
+    "editingMessage": "正在編輯訊息",
+    "cancelEdit": "取消編輯",
+    "resend": "重新傳送",
+    "editMessageWarning": "重新傳送將清除此訊息及其後的所有訊息。",
+    "send": "傳送",
+    "sendFailed": "訊息傳送失敗",
     "history": "歷史紀錄",
     "newChat": "新對話",
     "noConversations": "暫無對話",

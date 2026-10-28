@@ -1,5 +1,12 @@
 {
   "chat": {
+    "editMessage": "Editar mensaje",
+    "editingMessage": "Editando mensaje",
+    "cancelEdit": "Cancelar edición",
+    "resend": "Reenviar",
+    "editMessageWarning": "Al reenviar se eliminarán este mensaje y todos los siguientes.",
+    "send": "Enviar",
+    "sendFailed": "No se pudo enviar el mensaje",
     "history": "Historial",
     "newChat": "Nuevo chat",
     "noConversations": "Aún no hay conversaciones",

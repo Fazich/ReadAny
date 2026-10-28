@@ -108,6 +108,7 @@ pub fn run() {
             db: Mutex::new(None),
         })
         .invoke_handler(tauri::generate_handler![
+            db::database_batch,
             sync::commands::sync_vacuum_into,
             transfer::webdav_upload_file,
             transfer::webdav_download_file,

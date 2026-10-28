@@ -45,6 +45,15 @@ export interface UpdateInfo {
 export interface IDatabase {
   execute(sql: string, params?: unknown[]): Promise<void>;
   select<T>(sql: string, params?: unknown[]): Promise<T[]>;
+  /**
+   * 在同一连接的写事务内先校验快照，再执行全部写入；校验失败或任一写入失败均回滚。
+   * checks 查询必须有稳定排序，结果的行顺序及全部字段须与 expectedRows 完全一致。
+   * 校验与写入须共享事务快照；使用延迟事务时，快照过期必须使写入失败并回滚。
+   */
+  batch(
+    statements: { sql: string; params?: unknown[] }[],
+    checks?: { sql: string; params?: unknown[]; expectedRows: Record<string, unknown>[] }[],
+  ): Promise<void>;
   close(): Promise<void>;
 }
 

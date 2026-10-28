@@ -1,4 +1,5 @@
 import { mkdirSync } from "node:fs";
+import { isDeepStrictEqual } from "node:util";
 import { access, mkdir, readFile as fsReadFile, writeFile } from "node:fs/promises";
 import { constants } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -78,6 +79,16 @@ function wrapBetterSqliteDatabase(
     async select<T>(sql: string, params: unknown[] = []): Promise<T[]> {
       const statement = db.prepare(sql);
       return statement.all(...params) as T[];
+    },
+    async batch(statements, checks = []): Promise<void> {
+      db.transaction(() => {
+        for (const { sql, params = [], expectedRows } of checks) {
+          if (!isDeepStrictEqual(db.prepare(sql).all(...params), expectedRows)) {
+            throw new Error("Database changed while editing; retry the operation");
+          }
+        }
+        for (const { sql, params = [] } of statements) db.prepare(sql).run(...params);
+      }).immediate();
     },
     async close(): Promise<void> {
       db.close();

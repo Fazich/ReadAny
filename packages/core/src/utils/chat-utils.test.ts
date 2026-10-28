@@ -1,5 +1,60 @@
 import { describe, expect, it } from "vitest";
-import { convertToMessageV2 } from "./chat-utils";
+import { convertToMessageV2, extractEditableMessage } from "./chat-utils";
+
+describe("extractEditableMessage", () => {
+  it("按 parts 顺序拼接正文并保留全部引用，不使用 AI 提示正文", () => {
+    const quote = "完整引用".repeat(200);
+    expect(
+      extractEditableMessage({
+        content: "关于以下文本：截断后的 AI 提示",
+        parts: [
+          {
+            id: "q",
+            type: "quote",
+            text: quote,
+            source: "第一章",
+            status: "completed",
+            createdAt: 1,
+          },
+          { id: "a", type: "text", text: "第一段\n", status: "completed", createdAt: 1 },
+          { id: "b", type: "text", text: "第二段", status: "completed", createdAt: 1 },
+        ],
+      }),
+    ).toEqual({ content: "第一段\n第二段", quotes: [{ id: "q", text: quote, source: "第一章" }] });
+  });
+
+  it("从 partsOrder 还原引用，纯引用消息正文保持为空", () => {
+    expect(
+      extractEditableMessage({
+        content: "请分析引用的自动提示",
+        partsOrder: [{ type: "quote", id: "q", text: "完整引用", source: "来源" }],
+      }),
+    ).toEqual({ content: "", quotes: [{ id: "q", text: "完整引用", source: "来源" }] });
+    expect(
+      extractEditableMessage({
+        partsOrder: [
+          { type: "text", text: "a" },
+          { type: "text", text: "" },
+          { type: "text", text: "b" },
+        ],
+      }).content,
+    ).toBe("ab");
+  });
+
+  it("兼容仅含 content 的旧消息，优先使用 parts", () => {
+    expect(extractEditableMessage({ content: "旧消息\n正文" })).toEqual({
+      content: "旧消息\n正文",
+      quotes: [],
+    });
+    expect(
+      extractEditableMessage({
+        content: "fallback",
+        parts: [{ id: "a", type: "text", text: "", status: "completed", createdAt: 1 }],
+        partsOrder: [{ type: "text", text: "old" }],
+      }).content,
+    ).toBe("");
+  });
+});
 
 describe("convertToMessageV2", () => {
   it("preserves failed tool calls when reconstructing ordered parts", () => {

@@ -35,7 +35,7 @@ export interface StreamingOptions {
       result?: unknown;
       error?: string;
     }>,
-  ) => void;
+  ) => void | Promise<void>;
   onAbort?: (
     fullText: string,
     toolCalls?: Array<{
@@ -44,8 +44,8 @@ export interface StreamingOptions {
       result?: unknown;
       error?: string;
     }>,
-  ) => void;
-  onError: (error: Error) => void;
+  ) => void | Promise<void>;
+  onError: (error: Error) => void | Promise<void>;
   onToolCall?: (toolName: string, args: Record<string, unknown>) => void;
   onToolResult?: (toolName: string, result: unknown) => void;
   onReasoning?: (
@@ -64,11 +64,14 @@ export interface StreamingOptions {
 }
 
 export class StreamingChat {
-  private abortController: AbortController | null = null;
+  private abortController = new AbortController();
+
+  get signal(): AbortSignal {
+    return this.abortController.signal;
+  }
 
   async stream(options: StreamingOptions): Promise<void> {
-    this.abortController = new AbortController();
-    const signal = this.abortController.signal;
+    const signal = this.signal;
 
     const { messages } = processMessages(
       options.thread,
@@ -150,7 +153,7 @@ export class StreamingChat {
         const event = eventResult.value as any;
 
         if (signal.aborted) {
-          options.onAbort?.(fullText, toolCalls.length > 0 ? toolCalls : undefined);
+          await options.onAbort?.(fullText, toolCalls.length > 0 ? toolCalls : undefined);
           return;
         }
 
@@ -186,7 +189,7 @@ export class StreamingChat {
             break;
 
           case "error":
-            options.onError(new Error(event.error));
+            await options.onError(new Error(event.error));
             return;
         }
 
@@ -195,18 +198,18 @@ export class StreamingChat {
 
       // If loop exited due to abort, call onAbort
       if (signal.aborted) {
-        options.onAbort?.(fullText, toolCalls.length > 0 ? toolCalls : undefined);
+        await options.onAbort?.(fullText, toolCalls.length > 0 ? toolCalls : undefined);
       } else {
         const incompleteToolCalls = toolCalls.filter((toolCall) => toolCall.result === undefined);
         if (incompleteToolCalls.length > 0) {
-          options.onError(
+          await options.onError(
             new Error(
               "The response stream ended before its tool call completed. Please try again.",
             ),
           );
           return;
         }
-        options.onComplete(fullText, toolCalls.length > 0 ? toolCalls : undefined);
+        await options.onComplete(fullText, toolCalls.length > 0 ? toolCalls : undefined);
       }
     } catch (error) {
       if (signal.aborted) {
@@ -216,7 +219,7 @@ export class StreamingChat {
       if (error instanceof Error) {
         console.error("[StreamingChat] Stack:", error.stack);
       }
-      options.onError(error as Error);
+      await options.onError(error as Error);
     }
   }
 
