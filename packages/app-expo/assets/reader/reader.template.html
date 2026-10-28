@@ -2651,6 +2651,39 @@ html, body {
       return childStyle.writingMode === 'vertical-rl' || childStyle.writingMode === 'vertical-lr';
     }
 
+    function normalizeBodyWrapperWidths(doc) {
+      if (currentBookIsPdf || view?.isFixedLayout || isVerticalDoc(doc)) return;
+      let parent = doc.body;
+      while (parent) {
+        const children = Array.from(parent.children).filter(
+          (element) => !element.matches('style, link, script, [cfi-inert]'),
+        );
+        if (children.length !== 1 || Array.from(parent.childNodes).some(
+          (node) => node.nodeType === 3 && node.nodeValue.trim(),
+        )) return;
+        const wrapper = children[0];
+        if (!wrapper.matches('div, main, article, section')) return;
+        const paragraphs = Array.from(wrapper.querySelectorAll('p')).filter((p) => {
+          if (!p.textContent.trim() || p.closest('figure, figcaption, caption, [cfi-inert]')) return false;
+          for (let element = p; element; element = element.parentElement) {
+            const style = doc.defaultView.getComputedStyle(element);
+            if (style.display === 'none' || ['hidden', 'collapse'].includes(style.visibility)) return false;
+            if (element === wrapper) break;
+          }
+          return true;
+        });
+        // shortcut: 图文仅一段时保留限宽，需支持此类正文时再扩充语义识别。
+        if (!paragraphs.length || (paragraphs.length === 1 &&
+            wrapper.querySelector('img, picture, svg, image, canvas'))) return;
+        const style = doc.defaultView.getComputedStyle(wrapper);
+        if (style.display !== 'block' || style.float !== 'none' ||
+            !['static', 'relative'].includes(style.position) || /^vertical-/.test(style.writingMode)) return;
+        // 整章限宽会把剩余空间留在右侧；100% 仍能约束书内的固定宽度。
+        wrapper.style.setProperty('max-width', '100%', 'important');
+        parent = wrapper;
+      }
+    }
+
     function getColorLuminance(color) {
       const match = color && color.match(/rgba?\(\s*([\d.]+)[, ]+\s*([\d.]+)[, ]+\s*([\d.]+)/i);
       if (!match) return 1;
@@ -2693,6 +2726,7 @@ html, body {
       }
       syncCustomFontStylesForDoc(doc, currentCustomFontFaceCSS);
       const verticalDoc = isVerticalDoc(doc);
+      normalizeBodyWrapperWidths(doc);
       globalThis.ReadAnyJustifiedText?.apply(
         doc,
         currentJustifyBodyText,
