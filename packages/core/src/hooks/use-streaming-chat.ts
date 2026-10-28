@@ -186,6 +186,7 @@ export function useStreamingChat(options?: StreamingChatOptions) {
       spoilerFree = false,
       quotes?: AttachedQuote[],
       aiConfigOverride?: AIConfig,
+      onAccepted?: () => void,
     ) => {
       const bookId = overrideBookId ?? options?.bookId;
       const sessionKey = getChatStreamingKey(bookId);
@@ -264,6 +265,7 @@ export function useStreamingChat(options?: StreamingChatOptions) {
 
         const stream = new StreamingChat();
         activeStreams.set(sessionKey, stream);
+        onAccepted?.();
 
         const enabledSkills = await loadEnabledSkills();
 

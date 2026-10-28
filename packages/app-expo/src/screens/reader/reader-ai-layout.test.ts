@@ -3,7 +3,7 @@ import { createRequire } from "node:module";
 import { URL } from "node:url";
 import { transformSync } from "esbuild";
 import { describe, expect, it, vi } from "vitest";
-import * as layoutApi from "./reader-ai-layout";
+import * as layoutApi from "../../lib/reader/reader-ai-layout";
 import {
   DEFAULT_READER_AI_PANEL_RATIO,
   READER_AI_DIVIDER_WIDTH,
@@ -14,9 +14,8 @@ import {
   getReaderAIPanelWidth,
   getReaderAIPanelWidthAfterDrag,
   getReaderAISplitLayout,
-  getReaderAIWindowHeight,
   normalizeReaderAIPanelRatio,
-} from "./reader-ai-layout";
+} from "../../lib/reader/reader-ai-layout";
 
 // 仅替换外部原生环境；布局、组件回调与 store 均执行真实源码。
 function loadSource(path: string, dependencies: Record<string, unknown>) {
@@ -45,7 +44,7 @@ function loadResizeHandle() {
   const jsx = (type: unknown, props: Record<string, unknown>): TestElement => ({ type, props });
   const module = loadSource("./ReaderAIResizeHandle.tsx", {
     "@/styles/theme": { useColors: () => ({ border: "border", mutedForeground: "muted" }) },
-    "./reader-ai-layout": layoutApi,
+    "@/lib/reader/reader-ai-layout": layoutApi,
     react: {
       useRef: (current: unknown) => {
         const index = cursor++;
@@ -117,7 +116,7 @@ function loadSettingsStore() {
       providerSupportsExactRequestUrl: () => false,
     },
     zustand: { create },
-    "../screens/reader/reader-ai-layout": layoutApi,
+    "../lib/reader/reader-ai-layout": layoutApi,
     "./persist": {
       deleteSecure: async () => {},
       loadSecure: async () => "",
@@ -157,21 +156,11 @@ describe("reader AI split layout", () => {
     expect(getReaderAISplitLayout({ ...input, availableWidth: 679 })).toBeNull();
   });
 
-  it("uses the non-keyboard window orientation and preserves landscape split while typing", () => {
-    expect(getReaderAIWindowHeight(300, 300, true)).toBe(600);
-    expect(getReaderAIWindowHeight(600, 300, false)).toBe(600);
+  it("按实际窗口方向切换分栏", () => {
     expect(
-      getReaderAISplitLayout({
-        ...input,
-        windowHeight: getReaderAIWindowHeight(300, 300, true),
-      }),
-    ).toEqual(getReaderAISplitLayout(input));
-    expect(
-      getReaderAISplitLayout({
-        ...input,
-        windowHeight: getReaderAIWindowHeight(500, 500, true),
-      }),
-    ).toBeNull();
+      getReaderAISplitLayout({ ...input, windowWidth: 1000, windowHeight: 800 }),
+    ).not.toBeNull();
+    expect(getReaderAISplitLayout({ ...input, windowWidth: 800, windowHeight: 1000 })).toBeNull();
     expect(getReaderAISplitLayout({ ...input, windowHeight: 900 })).toBeNull();
   });
 
@@ -185,9 +174,6 @@ describe("reader AI split layout", () => {
       expect(getReaderAISplitLayout({ ...input, windowWidth: value })).toBeNull();
       expect(getReaderAISplitLayout({ ...input, windowHeight: value })).toBeNull();
     }
-    expect(getReaderAIWindowHeight(600, Number.NaN, true)).toBe(600);
-    expect(getReaderAIWindowHeight(600, -10, true)).toBe(600);
-    expect(getReaderAIWindowHeight(Number.NaN, 0, true)).toBe(0);
     expect(clampReaderAIPanelWidth(Number.NaN, 1000)).toBeCloseTo(390.4);
     expect(clampReaderAIPanelWidth(320, Number.NaN)).toBe(0);
     expect(getReaderAIPanelRatio(Number.NaN, 1000)).toBe(0.4);

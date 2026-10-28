@@ -209,7 +209,7 @@ function setup() {
   const { ReaderAuxiliaryPane } = loadModule("./ReaderAuxiliaryPane.tsx", shared) as {
     ReaderAuxiliaryPane: Component;
   };
-  const layout = loadModule("./reader-ai-layout.ts", {});
+  const layout = loadModule("../../lib/reader/reader-ai-layout.ts", {});
   const modules: Record<string, unknown> = {
     ...shared,
     "@/components/chat/BookChatContent": { BookChatContent: "BookChatContent" },
@@ -298,7 +298,7 @@ function setup() {
     "react-native-safe-area-context": { SafeAreaView: "SafeAreaView" },
     "react-native-webview": { WebView: "WebView" },
     "./reader/ReaderAuxiliaryPane": { ReaderAuxiliaryPane },
-    "./reader/reader-ai-layout": layout,
+    "@/lib/reader/reader-ai-layout": layout,
     "./reader/reader-constants": { CONTROLS_TIMEOUT: 3000 },
     "./reader/reader-icons": {
       BatteryIcon: "BatteryIcon",
@@ -461,6 +461,24 @@ afterEach(() => {
 });
 
 describe("Reader AI 真实组件集成", () => {
+  it("1000×800 窗口弹出键盘仍保持分栏和组件身份", async () => {
+    const host = setup();
+    await host.mount();
+    const before = host.openFloating();
+    const chatIdentity = host.identity(before, "BookChatContent");
+    const readerIdentity = host.identity(before, "WebView");
+    for (const height of [300, 0]) {
+      host.keyboard.isVisible = height > 0;
+      host.keyboard.rawHeight = height;
+      host.keyboard.height = height;
+      const tree = host.render();
+      expect(host.one(tree, host.ReaderAuxiliaryPane).props.docked).toBe(true);
+      expect(host.identity(tree, "BookChatContent")).toEqual(chatIdentity);
+      expect(host.identity(tree, "WebView")).toEqual(readerIdentity);
+    }
+    expect(host.bridge.openBook).toHaveBeenCalledOnce();
+  });
+
   it("浮动 AI 与 SelectionPopover 都打开当前书籍的同一个辅助区", async () => {
     const host = setup();
     await host.mount();

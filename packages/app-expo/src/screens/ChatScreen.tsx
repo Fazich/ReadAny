@@ -188,7 +188,13 @@ export function ChatScreen() {
 
   // Handlers
   const handleSend = useCallback(
-    async (text: string, deepThinking: boolean, spoilerFree: boolean, quotes?: AttachedQuote[]) => {
+    async (
+      text: string,
+      deepThinking: boolean,
+      spoilerFree: boolean,
+      quotes?: AttachedQuote[],
+      onAccepted?: () => void,
+    ) => {
       // Validate AI config before sending
       const state = useSettingsStore.getState();
       const resolvedAIConfig = await resolveActiveAIConfig(state);
@@ -208,7 +214,15 @@ export function ChatScreen() {
         return;
       }
 
-      await sendMessage(text, undefined, deepThinking, spoilerFree, quotes, resolvedAIConfig);
+      await sendMessage(
+        text,
+        undefined,
+        deepThinking,
+        spoilerFree,
+        quotes,
+        resolvedAIConfig,
+        onAccepted,
+      );
     },
     [sendMessage, navigation, t],
   );

@@ -13,7 +13,7 @@ import { create } from "zustand";
 import {
   DEFAULT_READER_AI_PANEL_RATIO,
   normalizeReaderAIPanelRatio,
-} from "../screens/reader/reader-ai-layout";
+} from "../lib/reader/reader-ai-layout";
 import { deleteSecure, loadSecure, saveSecure, withPersist } from "./persist";
 
 export interface SettingsState {

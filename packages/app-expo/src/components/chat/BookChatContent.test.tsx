@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { URL } from "node:url";
 import { transformSync } from "esbuild";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import type { BookChatContentProps } from "./BookChatContent";
 
 interface NativeProps extends Record<string, unknown> {
@@ -9,10 +9,18 @@ interface NativeProps extends Record<string, unknown> {
   quotes: { id: string; text: string; source?: string }[];
   onPress: () => void;
   onChangeText: (text: string) => void;
+  onContentSizeChange: (event: { nativeEvent: { contentSize: { height: number } } }) => void;
   onFocus: () => void;
   onInputFocusChange: (focused: boolean) => void;
   onRemoveQuote: (id: string) => void;
   onCitationClick: (citation: unknown) => void;
+  onSend: (
+    text: string,
+    deepThinking: boolean,
+    spoilerFree: boolean,
+    quotes?: { id: string; text: string; source?: string }[],
+    onAccepted?: () => void,
+  ) => Promise<void>;
 }
 interface Element {
   type: unknown;
@@ -150,6 +158,7 @@ function styles(style: unknown): Record<string, unknown> {
 }
 
 function setup() {
+  let streaming = true;
   let focused = true;
   let width = 320;
   let keyboardVisible = false;
@@ -157,7 +166,17 @@ function setup() {
   const close = vi.fn();
   const focusChange = vi.fn();
   const blur = vi.fn();
-  const sendMessage = vi.fn();
+  const sendMessage = vi.fn(
+    async (
+      _text: string,
+      _bookId?: string,
+      _deepThinking?: boolean,
+      _spoilerFree?: boolean,
+      _quotes?: { id: string; text: string; source?: string }[],
+      _config?: unknown,
+      onAccepted?: () => void,
+    ) => onAccepted?.(),
+  );
   const stopStream = vi.fn();
   const loadThreads = vi.fn();
   const setBookActiveThread = vi.fn();
@@ -175,6 +194,9 @@ function setup() {
     setActiveEndpoint: vi.fn(),
     setActiveModel: vi.fn(),
   };
+  const resolveActiveAIConfig = vi.fn(
+    async (): Promise<typeof state.aiConfig | null> => state.aiConfig,
+  );
   const useSettingsStore = Object.assign(
     (select: (value: typeof state) => unknown) => select(state),
     {
@@ -264,7 +286,7 @@ function setup() {
     "react-native-safe-area-context": { useSafeAreaInsets: () => ({ top: 24, bottom: 20 }) },
     "@/hooks": {
       useStreamingChat: () => ({
-        isStreaming: true,
+        isStreaming: streaming,
         currentMessage: { threadId: thread.id },
         currentStep: null,
         error: null,
@@ -285,7 +307,7 @@ function setup() {
         },
       }),
     },
-    "@/lib/ai/resolve-active-ai-config": { resolveActiveAIConfig: async () => state.aiConfig },
+    "@/lib/ai/resolve-active-ai-config": { resolveActiveAIConfig },
     "@/stores": { useLibraryStore: () => ({ books: [{ id: "book-1", meta: { title: "Book" } }] }) },
     "@/stores/chat-store": {
       useChatStore: (select: (state: typeof chat) => unknown) => select(chat),
@@ -365,6 +387,10 @@ function setup() {
     loadThreads,
     focusChange,
     citationClick,
+    resolveActiveAIConfig,
+    setStreaming(value: boolean) {
+      streaming = value;
+    },
     setWidth(value: number) {
       width = value;
     },
@@ -380,7 +406,198 @@ function setup() {
   };
 }
 
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((done) => {
+    resolve = done;
+  });
+  return { promise, resolve };
+}
+
+function iconButton(tree: Element, icon: string): Element {
+  const node = elements(tree).find(
+    (element) =>
+      element.type === "TouchableOpacity" &&
+      elements(element.props.children).some((child) => child.type === icon),
+  );
+  if (!node) throw new Error(`Missing icon button ${icon}`);
+  return node;
+}
+
+function setupChatInput() {
+  const book = setup();
+  book.setStreaming(false);
+  book.props.selectionRequest = { id: "a", text: "选区 A" };
+  const input = createHost("./ChatInput.tsx", "ChatInput", book.modules);
+  const render = () => {
+    const props = find(book.render(), "ChatInput").props;
+    return input.render(props, props.ref, (tree) => {
+      find(tree, "TextInput").props.ref.current = { blur: book.blur };
+    });
+  };
+  const draft = () => {
+    find(render(), "TextInput").props.onChangeText("  未发送草稿  ");
+    const tree = render();
+    find(tree, "TextInput").props.onContentSizeChange({
+      nativeEvent: { contentSize: { height: 90 } },
+    });
+    iconButton(tree, "BrainIcon").props.onPress();
+    iconButton(tree, "EyeOffIcon").props.onPress();
+    return render();
+  };
+  return {
+    book,
+    render,
+    draft,
+    unmount() {
+      input.unmount();
+      book.host.unmount();
+    },
+  };
+}
+
+afterEach(() => vi.restoreAllMocks());
+
+describe("发送确认与草稿消费", () => {
+  it.each(["配置缺失", "配置校验异常", "接受前异常", "已有流拒绝"])(
+    "%s 保留正文、选项、高度和引用，解除门禁后可以再次发送",
+    async (outcome) => {
+      const host = setupChatInput();
+      vi.spyOn(console, "error").mockImplementation(() => {});
+      if (outcome === "配置缺失") host.book.resolveActiveAIConfig.mockResolvedValueOnce(null);
+      if (outcome === "配置校验异常")
+        host.book.resolveActiveAIConfig.mockRejectedValueOnce(new Error("config failed"));
+      if (outcome === "接受前异常")
+        host.book.sendMessage.mockRejectedValueOnce(new Error("send failed"));
+      if (outcome === "已有流拒绝") host.book.sendMessage.mockResolvedValueOnce(undefined);
+      const send = iconButton(host.draft(), "SendIcon");
+      const sending = send.props.onPress();
+      const duplicate = send.props.onPress();
+      expect(host.book.resolveActiveAIConfig).toHaveBeenCalledOnce();
+      const pending = host.render();
+      expect(find(pending, "TextInput").props.editable).toBe(false);
+      expect(iconButton(pending, "SendIcon").props.disabled).toBe(true);
+      expect(iconButton(pending, "BrainIcon").props.disabled).toBe(true);
+      expect(iconButton(pending, "EyeOffIcon").props.disabled).toBe(true);
+      await Promise.all([sending, duplicate]);
+      const retained = host.render();
+      expect(find(retained, "TextInput").props.value).toBe("  未发送草稿  ");
+      expect(styles(find(retained, "TextInput").props.style).height).toBe(106);
+      expect(find(retained, "BrainIcon").props.color).toBe("primary");
+      expect(find(retained, "EyeOffIcon").props.color).toBe("primary");
+      expect(find(host.book.render(), "ChatInput").props.quotes.map((quote) => quote.id)).toEqual([
+        "selection-a",
+      ]);
+      expect(find(retained, "TextInput").props.editable).toBe(true);
+      await iconButton(retained, "SendIcon").props.onPress();
+      expect(host.book.sendMessage.mock.lastCall?.slice(0, 4)).toEqual([
+        "未发送草稿",
+        "book-1",
+        true,
+        true,
+      ]);
+      expect(find(host.render(), "TextInput").props.value).toBe("");
+      expect(find(host.book.render(), "ChatInput").props.quotes).toEqual([]);
+      host.unmount();
+    },
+  );
+
+  it.each(["网络失败", "停止"])(
+    "接受时消费发送快照，保留期间新增引用；%s 后不恢复已发送草稿",
+    async (outcome) => {
+      const host = setupChatInput();
+      const config = deferred<Awaited<ReturnType<typeof host.book.resolveActiveAIConfig>>>();
+      const network = deferred<void>();
+      const accepted = vi.fn();
+      host.book.resolveActiveAIConfig.mockReturnValueOnce(config.promise);
+      host.book.sendMessage.mockImplementationOnce(async (...args) => {
+        args[6]?.();
+        accepted();
+        await network.promise;
+        if (outcome === "网络失败") throw new Error("network failed");
+      });
+      host.book.stopStream.mockImplementation(() => network.resolve());
+      vi.spyOn(console, "error").mockImplementation(() => {});
+      const sending = iconButton(host.draft(), "SendIcon").props.onPress();
+      host.book.props.selectionRequest = { id: "b", text: "等待期间新增的 B" };
+      host.render();
+      config.resolve(
+        host.book.modules["@/stores/settings-store"].useSettingsStore.getState().aiConfig,
+      );
+      await vi.waitFor(() => expect(accepted).toHaveBeenCalledOnce());
+      const cleared = host.render();
+      expect(find(cleared, "TextInput").props.value).toBe("");
+      expect(styles(find(cleared, "TextInput").props.style).height).toBe(46);
+      expect(find(cleared, "BrainIcon").props.color).toBe("mutedForeground");
+      expect(find(cleared, "EyeOffIcon").props.color).toBe("mutedForeground");
+      expect(host.book.sendMessage.mock.lastCall?.[4]?.map((quote) => quote.id)).toEqual([
+        "selection-a",
+      ]);
+      expect(find(host.book.render(), "ChatInput").props.quotes.map((quote) => quote.id)).toEqual([
+        "selection-b",
+      ]);
+      if (outcome === "停止") {
+        host.book.setStreaming(true);
+        iconButton(host.render(), "StopCircleIcon").props.onPress();
+        expect(host.book.stopStream).toHaveBeenCalledOnce();
+      } else network.resolve();
+      await sending;
+      host.book.setStreaming(false);
+      host.book.props.visible = false;
+      host.render();
+      host.book.props.visible = true;
+      const reopened = host.render();
+      expect(find(reopened, "TextInput").props.value).toBe("");
+      expect(find(host.book.render(), "ChatInput").props.quotes.map((quote) => quote.id)).toEqual([
+        "selection-b",
+      ]);
+      await iconButton(reopened, "SendIcon").props.onPress();
+      expect(host.book.sendMessage.mock.lastCall?.[4]?.map((quote) => quote.id)).toEqual([
+        "selection-b",
+      ]);
+      expect(find(host.book.render(), "ChatInput").props.quotes).toEqual([]);
+      host.unmount();
+    },
+  );
+
+  it("关闭、调整区域宽度再打开仍保留未发送正文、选项和引用", () => {
+    const host = setupChatInput();
+    host.draft();
+    host.book.props.visible = false;
+    host.render();
+    host.book.setWidth(1000);
+    host.render();
+    host.book.props.visible = true;
+    const reopened = host.render();
+    expect(find(reopened, "TextInput").props.value).toBe("  未发送草稿  ");
+    expect(find(reopened, "BrainIcon").props.color).toBe("primary");
+    expect(find(reopened, "EyeOffIcon").props.color).toBe("primary");
+    expect(find(host.book.render(), "ChatInput").props.quotes.map((quote) => quote.id)).toEqual([
+      "selection-a",
+    ]);
+    expect(host.book.sendMessage).not.toHaveBeenCalled();
+    host.unmount();
+  });
+});
+
 describe("共享书籍对话", () => {
+  it("已发送选区在关闭重开后不混入下一条消息", async () => {
+    const host = setup();
+    host.props.selectionRequest = { id: "a", text: "选区 A" };
+    const first = find(host.render(), "ChatInput");
+    await first.props.onSend("问题 A", false, false, first.props.quotes);
+    host.props.visible = false;
+    host.render();
+    host.props.visible = true;
+    host.props.selectionRequest = { id: "b", text: "选区 B" };
+    const second = find(host.render(), "ChatInput");
+    await second.props.onSend("问题 B", false, false, second.props.quotes);
+    expect(host.sendMessage.mock.calls[0][4]?.map((quote) => quote.text)).toEqual(["选区 A"]);
+    expect(host.sendMessage.mock.calls[1][4]?.map((quote) => quote.text)).toEqual(["选区 B"]);
+    expect(find(host.render(), "ChatInput").props.quotes).toEqual([]);
+    host.host.unmount();
+  });
+
   it("每个选区 ID 只追加一次，同文不同 ID 继续追加且删除后不重新注入", () => {
     const host = setup();
     host.props.selectionRequest = { id: "one", text: "同一段文字", chapterTitle: "第一章" };
@@ -501,12 +718,14 @@ describe("共享书籍对话", () => {
 });
 
 describe("输入和模型的激活生命周期", () => {
-  it("取消激活只 blur 自身，草稿和思考设置保留到再次激活发送", () => {
+  it("取消激活只 blur 自身，草稿和思考设置保留到再次激活发送", async () => {
     const setupHost = setup();
     const host = createHost("./ChatInput.tsx", "ChatInput", setupHost.modules);
     const blur = vi.fn();
     const onInputFocusChange = vi.fn();
-    const onSend = vi.fn();
+    const onSend = vi.fn(async (_text, _thinking, _spoilerFree, _quotes, onAccepted) =>
+      onAccepted(),
+    );
     const ref = { current: null as unknown };
     const props = { onSend, active: true, onInputFocusChange };
     const render = () =>
@@ -532,8 +751,14 @@ describe("输入和模型的激活生命周期", () => {
         node.type === "TouchableOpacity" &&
         elements(node.props.children).some((child) => child.type === "SendIcon"),
     );
-    send?.props.onPress();
-    expect(onSend).toHaveBeenCalledWith("未发送草稿", false, false, undefined);
+    await send?.props.onPress();
+    expect(onSend).toHaveBeenCalledWith(
+      "未发送草稿",
+      false,
+      false,
+      undefined,
+      expect.any(Function),
+    );
     expect(find(render(), "TextInput").props.value).toBe("");
     host.unmount();
   });

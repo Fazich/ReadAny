@@ -311,7 +311,13 @@ export function BookChatContent({
   );
 
   const handleSend = useCallback(
-    async (text: string, deepThinking: boolean, spoilerFree: boolean, quotes?: AttachedQuote[]) => {
+    async (
+      text: string,
+      deepThinking: boolean,
+      spoilerFree: boolean,
+      sentQuotes?: AttachedQuote[],
+      onAccepted?: () => void,
+    ) => {
       const state = useSettingsStore.getState();
       const resolvedAIConfig = await resolveActiveAIConfig(state);
 
@@ -329,7 +335,19 @@ export function BookChatContent({
         );
         return;
       }
-      await sendMessage(text, bookId, deepThinking, spoilerFree, quotes, resolvedAIConfig);
+      const sentQuoteIds = new Set(sentQuotes?.map((quote) => quote.id));
+      await sendMessage(
+        text,
+        bookId,
+        deepThinking,
+        spoilerFree,
+        sentQuotes,
+        resolvedAIConfig,
+        () => {
+          setQuotes((current) => current.filter((quote) => !sentQuoteIds.has(quote.id)));
+          onAccepted?.();
+        },
+      );
     },
     [bookId, onNavigateToSettings, sendMessage, t],
   );

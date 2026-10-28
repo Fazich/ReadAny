@@ -31,8 +31,9 @@ interface ChatInputProps {
     text: string,
     deepThinking: boolean,
     spoilerFree: boolean,
-    quotes?: AttachedQuote[],
-  ) => void;
+    quotes: AttachedQuote[] | undefined,
+    onAccepted: () => void,
+  ) => Promise<void>;
   onStop?: () => void;
   isStreaming?: boolean;
   quotes?: AttachedQuote[];
@@ -69,6 +70,8 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
   const [deepThinking, setDeepThinking] = useState(false);
   const [spoilerFree, setSpoilerFree] = useState(false);
   const [inputHeight, setInputHeight] = useState(SINGLE_LINE_INPUT_HEIGHT);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
   const { t } = useTranslation();
   const colors = useColors();
   const s = makeStyles(colors);
@@ -91,15 +94,32 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
     ? visibleKeyboardPadding
     : Math.max(4, Math.min(keyboardInsets.safeAreaBottom, 8));
 
-  const handleSend = useCallback(() => {
+  const handleSend = useCallback(async () => {
     const trimmed = text.trim();
-    if (!active || (!trimmed && quotes.length === 0)) return;
-    onSend(trimmed, deepThinking, spoilerFree, quotes.length > 0 ? quotes : undefined);
-    setInputHeight(SINGLE_LINE_INPUT_HEIGHT);
-    setText("");
-    setDeepThinking(false);
-    setSpoilerFree(false);
-  }, [active, text, deepThinking, spoilerFree, quotes, onSend]);
+    if (!active || isStreaming || submittingRef.current || (!trimmed && quotes.length === 0))
+      return;
+    submittingRef.current = true;
+    setIsSubmitting(true);
+    try {
+      await onSend(
+        trimmed,
+        deepThinking,
+        spoilerFree,
+        quotes.length > 0 ? quotes : undefined,
+        () => {
+          setInputHeight(SINGLE_LINE_INPUT_HEIGHT);
+          setText("");
+          setDeepThinking(false);
+          setSpoilerFree(false);
+        },
+      );
+    } catch (error) {
+      console.error("[ChatInput] Failed to send message:", error);
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
+    }
+  }, [active, isStreaming, text, deepThinking, spoilerFree, quotes, onSend]);
 
   const handleTextChange = useCallback((nextText: string) => {
     setText(nextText);
@@ -165,7 +185,7 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
           onContentSizeChange={handleContentSizeChange}
           returnKeyType="default"
           blurOnSubmit={false}
-          editable={active && !isStreaming}
+          editable={active && !isStreaming && !isSubmitting}
           onFocus={() => onInputFocusChange?.(true)}
           onBlur={() => onInputFocusChange?.(false)}
         />
@@ -176,6 +196,7 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
             <TouchableOpacity
               style={[s.deepThinkBtn, deepThinking && s.deepThinkBtnActive]}
               onPress={() => setDeepThinking(!deepThinking)}
+              disabled={isSubmitting}
               activeOpacity={0.7}
             >
               <BrainIcon size={13} color={deepThinking ? colors.primary : colors.mutedForeground} />
@@ -187,6 +208,7 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
             <TouchableOpacity
               style={[s.deepThinkBtn, spoilerFree && s.deepThinkBtnActive]}
               onPress={() => setSpoilerFree(!spoilerFree)}
+              disabled={isSubmitting}
               activeOpacity={0.7}
             >
               <EyeOffIcon size={13} color={spoilerFree ? colors.primary : colors.mutedForeground} />
@@ -216,7 +238,7 @@ export const ChatInput = forwardRef<ChatInputHandle, ChatInputProps>(function Ch
               <TouchableOpacity
                 style={[s.sendBtn, canSend && s.sendBtnActive]}
                 onPress={handleSend}
-                disabled={!active || !canSend}
+                disabled={!active || !canSend || isSubmitting}
                 activeOpacity={0.7}
               >
                 <SendIcon

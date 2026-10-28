@@ -14,21 +14,10 @@ export interface ReaderAISplitLayout {
 export interface ReaderAISplitLayoutInput {
   /** 已扣除左右安全区后的窗口宽度。 */
   availableWidth: number;
-  /** 键盘压缩前的窗口宽高，用于确认横屏。 */
+  /** 系统窗口宽高，用于确认横屏。 */
   windowWidth: number;
   windowHeight: number;
   panelRatio: number;
-}
-
-export function getReaderAIWindowHeight(
-  height: number,
-  rawKeyboardHeight: number,
-  isAndroid: boolean,
-): number {
-  const windowHeight = Number.isFinite(height) && height > 0 ? height : 0;
-  const keyboardHeight =
-    Number.isFinite(rawKeyboardHeight) && rawKeyboardHeight > 0 ? rawKeyboardHeight : 0;
-  return windowHeight + (isAndroid ? keyboardHeight : 0);
 }
 
 export function normalizeReaderAIPanelRatio(ratio: number): number {

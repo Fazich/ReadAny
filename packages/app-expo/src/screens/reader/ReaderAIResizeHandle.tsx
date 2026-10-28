@@ -1,7 +1,10 @@
+import {
+  READER_AI_DIVIDER_WIDTH,
+  getReaderAIPanelWidthAfterDrag,
+} from "@/lib/reader/reader-ai-layout";
 import { useColors } from "@/styles/theme";
 import { useLayoutEffect, useRef, useState } from "react";
 import { PanResponder, StyleSheet, View } from "react-native";
-import { READER_AI_DIVIDER_WIDTH, getReaderAIPanelWidthAfterDrag } from "./reader-ai-layout";
 
 export interface ReaderAIResizeHandleProps {
   width: number;

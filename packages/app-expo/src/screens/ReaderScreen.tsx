@@ -23,6 +23,11 @@ import { useReaderBridge } from "@/hooks/use-reader-bridge";
 import type { RelocateEvent, SelectionEvent, VisibleTTSSegment } from "@/hooks/use-reader-bridge";
 import { openMobileBook } from "@/lib/library/open-mobile-book";
 import { startFileServer, stopFileServer } from "@/lib/reader/local-file-server";
+import {
+  clampReaderAIPanelWidth,
+  getReaderAIPanelRatio,
+  getReaderAISplitLayout,
+} from "@/lib/reader/reader-ai-layout";
 import type { RootStackParamList } from "@/navigation/RootNavigator";
 import {
   useAnnotationStore,
@@ -80,12 +85,6 @@ import { ReaderAIResizeHandle } from "./reader/ReaderAIResizeHandle";
 import { ReaderAuxiliaryPane, type ReaderAuxiliaryPanel } from "./reader/ReaderAuxiliaryPane";
 import { ReaderNoteViewModal } from "./reader/ReaderNoteViewModal";
 import { ReaderSearchPanel } from "./reader/ReaderSearchPanel";
-import {
-  clampReaderAIPanelWidth,
-  getReaderAIPanelRatio,
-  getReaderAISplitLayout,
-  getReaderAIWindowHeight,
-} from "./reader/reader-ai-layout";
 
 const REFLOWABLE_CHARACTERS_PER_LOCATION = 1500;
 const MAX_TRACKED_LOCATION_DELTA = 20;
@@ -413,11 +412,7 @@ export function ReaderScreen({ route, navigation }: Props) {
   const aiSplit = getReaderAISplitLayout({
     availableWidth: safeReaderWidth,
     windowWidth,
-    windowHeight: getReaderAIWindowHeight(
-      windowHeight,
-      keyboardInsets.rawHeight,
-      Platform.OS === "android",
-    ),
+    windowHeight,
     panelRatio: readerAiPanelRatio,
   });
   const aiLayoutKey = `${windowWidth}:${windowHeight}:${showAI}`;
