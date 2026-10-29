@@ -90,6 +90,7 @@
     "paginated": "Paginated",
     "scroll": "Scroll",
     "paginatedLayout": "Page Layout",
+    "paginatedLayoutHint": "Only applies in paginated mode",
     "singlePage": "Single Page",
     "doublePage": "Double Page",
     "ai_title": "AI Configuration",

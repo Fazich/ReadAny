@@ -90,6 +90,7 @@
     "paginated": "Paginado",
     "scroll": "Desplazamiento",
     "paginatedLayout": "Diseño de página",
+    "paginatedLayoutHint": "Solo se aplica en modo paginado",
     "singlePage": "Página simple",
     "doublePage": "Doble página",
     "ai_title": "Configuración de IA",

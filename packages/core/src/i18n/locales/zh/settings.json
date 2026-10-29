@@ -90,6 +90,7 @@
     "paginated": "翻页",
     "scroll": "滚动",
     "paginatedLayout": "分页布局",
+    "paginatedLayoutHint": "仅翻页模式生效",
     "singlePage": "单页",
     "doublePage": "双页",
     "ai_title": "AI 配置",

@@ -90,6 +90,7 @@
     "paginated": "Paginé",
     "scroll": "Défilement",
     "paginatedLayout": "Mise en page",
+    "paginatedLayoutHint": "Uniquement en mode paginé",
     "singlePage": "Page simple",
     "doublePage": "Double page",
     "ai_title": "Configuration IA",

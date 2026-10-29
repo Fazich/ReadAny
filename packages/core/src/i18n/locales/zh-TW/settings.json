@@ -90,6 +90,7 @@
     "paginated": "翻頁",
     "scroll": "捲動",
     "paginatedLayout": "分頁排版",
+    "paginatedLayoutHint": "僅翻頁模式生效",
     "singlePage": "單頁",
     "doublePage": "雙頁",
     "ai_title": "AI 設定",

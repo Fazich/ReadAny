@@ -90,6 +90,7 @@
     "paginated": "페이지 넘기기",
     "scroll": "스크롤",
     "paginatedLayout": "페이지 레이아웃",
+    "paginatedLayoutHint": "페이지 넘기기 모드에서만 적용돼요",
     "singlePage": "단일 페이지",
     "doublePage": "두 페이지",
     "ai_title": "AI 설정",

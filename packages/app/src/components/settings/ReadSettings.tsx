@@ -15,7 +15,7 @@ import { useSettingsStore } from "@/stores/settings-store";
 import { useFontStore } from "@readany/core/stores";
 import { type RubyMode, useRubyStore } from "@readany/core/stores/ruby-store";
 import { Download, Loader2, Trash2 } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export function ReadSettingsPanel() {
@@ -26,6 +26,8 @@ export function ReadSettingsPanel() {
   const setSelectedFont = useFontStore((s) => s.setSelectedFont);
 
   const currentFontValue = selectedFontId ?? "system";
+  const isScrollMode = readSettings.viewMode === "scroll";
+  const paginatedLayoutHintId = useId();
 
   const handleFontChange = (v: string) => {
     if (v === "system") {
@@ -60,14 +62,26 @@ export function ReadSettingsPanel() {
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-sm text-foreground">{t("settings.paginatedLayout")}</span>
+            <div>
+              <span className="text-sm text-foreground">{t("settings.paginatedLayout")}</span>
+              {isScrollMode && (
+                <p id={paginatedLayoutHintId} className="mt-0.5 text-xs text-muted-foreground">
+                  {t("settings.paginatedLayoutHint")}
+                </p>
+              )}
+            </div>
             <Select
+              disabled={isScrollMode}
               value={readSettings.paginatedLayout ?? "double"}
               onValueChange={(v) =>
                 updateReadSettings({ paginatedLayout: v as "single" | "double" })
               }
             >
-              <SelectTrigger className="w-[140px]">
+              <SelectTrigger
+                className="w-[140px]"
+                aria-label={t("settings.paginatedLayout")}
+                aria-describedby={isScrollMode ? paginatedLayoutHintId : undefined}
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

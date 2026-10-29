@@ -90,6 +90,7 @@
     "paginated": "ページ送り",
     "scroll": "スクロール",
     "paginatedLayout": "ページレイアウト",
+    "paginatedLayoutHint": "ページ送りモードでのみ有効",
     "singlePage": "1ページ",
     "doublePage": "見開き",
     "ai_title": "AI設定",

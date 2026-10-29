@@ -161,7 +161,7 @@ TXT and UMD are imported by converting them to EPUB for reading, notes, search, 
 
 - 5 font themes (CJK optimized)
 - Light/Dark mode
-- Paginated/Continuous scroll
+- Paginated/Continuous scroll; page layout is disabled in scroll mode with an explanatory hint, and the single/double-page choice is preserved when switching back
 - Keyboard shortcuts
 - English/Chinese interface
 
